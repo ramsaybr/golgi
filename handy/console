@@ -1,0 +1,8 @@
+console.log("in loop: i=" + i);
+		console.log("search terms:");
+		console.log(window.searchResults[i].type);
+		console.log(window.searchResults[i].targetAbbrev);
+		console.log(window.searchResults[i].nomenclature);
+		console.log(region);
+		console.log("===========================");
+		console.log(" ");
