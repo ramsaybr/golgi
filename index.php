@@ -18,7 +18,7 @@ include('php/header.php');
 			<div style="position:absolute; left:10px; width:380px; top:10px; height:60px; font-size:32px;">
 				Try the map now:
 			</div>
-			<a href="140425.php">
+			<a href="golgi.php">
 				<div class="btn btn-success" style="position: absolute; left:0px; top:100px; width:100%; height:70px; line-height: 2; font-size:32px;">Launch Neuraccess</div>
 			</a>
 			<div style="position:absolute; left:10px; width:380px; top:220px; height:60px; font-size:32px; text-align: center;">
