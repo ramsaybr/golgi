@@ -200,8 +200,6 @@
 				<div id="mapDiv">
 					
 					<?php
-						//zoom1: 16, 10
-						//zoom2: 48, 30
 						for($a=1; $a<=2; $a++)
 						{
 							echo "<div class=\"mapColumn\">";
@@ -220,13 +218,13 @@
 		</div>
 
 <?php include_once('php/footer.php'); ?>
-<script src="js/140215.js"></script>
-<script src="js/layer/140217.js"></script>
-<script src="js/regions/140215.js"></script>
-<script src="js/connections/140217.js"></script>
-<script src="js/connections/evidence/140217.js"></script>
-<script src="js/search/140527.js"></script>
+<script src="js/main.js"></script>
+<script src="js/layer/layer.js"></script>
+<script src="js/regions/regions.js"></script>
+<script src="js/connections/connections.js"></script>
+<script src="js/connections/evidence/evidence.js"></script>
+<script src="js/search/search.js"></script>
 <script src="js/search/partsList.js"></script>
-<script src="js/mapdata/140217.js"></script>
+<script src="js/mapdata/mapData.js"></script>
 
 </html>
