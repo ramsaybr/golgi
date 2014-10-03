@@ -12,10 +12,10 @@ error_reporting(E_ALL);
 
 $config = Array(
     'database' => Array(
-        'db_username' => "root",
-        'db_userpassword' => "root",
+        'db_username' => "sql1",
+        'db_userpassword' => "sql1",
         'db_name' => "flatmap",
         'db_host' => "localhost",
-        'db_port' => "8888"
+        'db_port' => "3306"
     )
 );

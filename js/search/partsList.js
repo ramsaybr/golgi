@@ -1,3 +1,4 @@
+window.searchable.push("Nucleus Accumbens (ACB)");
 window.searchable.push("Abducens nucleus (VI)");
 window.searchable.push("Accessory olfactory bulb (AOB)");
 window.searchable.push("Agranular insular area dorsal part (AId)");
