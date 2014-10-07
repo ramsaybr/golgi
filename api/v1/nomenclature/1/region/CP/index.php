@@ -1,6 +1,6 @@
 <?php
 
-
+// echo "!";
 include("../asset/config.php");
 
 $responseArray = array();
@@ -8,8 +8,9 @@ $responseArray = array();
 //get region from database
 //do this by parsing path
 $pathArray = explode("/", dirname(__FILE__));
-$regionQuery = mysql_fetch_assoc(mysql_query("SELECT * FROM region WHERE abbreviation = '" . $pathArray[count($pathArray)-1] . "'"));
-
+// var_dump($pathArray);
+$regionQuery = mysql_fetch_assoc(mysql_query("SELECT * FROM region WHERE abbreviation = '" . $pathArray[count($pathArray)-1] . "'"))or die("A MySQL error has occurred.<br />Your Query: " . $your_query . "<br /> Error: (" . mysql_errno() . ") " . mysql_error());
+// echo "SELECT * FROM region WHERE abbreviation = '" . $pathArray[count($pathArray)-1] . "'";
 $responseArray['type'] = "Region";
 $responseArray['bamsID'] = $regionQuery['regionID'];
 $responseArray['name'] = $regionQuery['name'];

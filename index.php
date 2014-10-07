@@ -1,6 +1,7 @@
 <?php
 
 include('php/header.php');
+phpinfo();
 
 ?>
 
