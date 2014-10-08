@@ -29,9 +29,11 @@ function Connection(bamsID, sourceID, sourceName, sourceAbbrev, targetID, target
 	console.log("in connection constructor: creating new evidence report");
 	for(i=0; i<evidence.length; i++)
 	{
-		console.log("in connection constructor: in loop, i=" + i);
+		console.log("in connection constructor: in loop for evidence, i=" + i);
 		thisReport = evidence[i];
-		this.evidence[this.evidence.length] = new ConnectionEvidence(this.sourceID, this.sourceName, this.sourceAbbrev, this.targetID, this.targetName, this.targetAbbrev, this.nomenclature, thisReport.strength, thisReport.injectionSiteAbbrev, thisReport.injectionSiteName, thisReport.injectionSiteID, thisReport.terminalFieldAbbrev, thisReport.terminalFieldName, thisReport.terminalFieldID, thisReport.technique, thisReport.annotation, thisReport.curatorName, thisReport.curatorEmail, thisReport.referenceName, thisReport.referenceURL);
+		console.log(thisReport);
+
+		this.evidence[this.evidence.length] = new ConnectionEvidence(this.sourceID, this.sourceName, this.sourceAbbrev, this.targetID, this.targetName, this.targetAbbrev, this.nomenclature, thisReport.strengthID, thisReport.injectionLocationID, thisReport.terminalFieldID, thisReport.techniqueID, thisReport.annotation, thisReport.referenceName, thisReport.referenceURL, thisReport.detailsURL);
 	}
 	//the new connection object's ID depends on which array it is added to: is it a searchResult, or a real connection to be added to the map?
 	if(destination == "searchResults")

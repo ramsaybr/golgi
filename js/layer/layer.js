@@ -28,9 +28,9 @@ function Layer (layerID)
 	newLayerHead.id = "layer" + this.id + "Head";
 
 		//arrow for collapse/expand
-		var layerHeadArrow = document.createElement('i');
+		var layerHeadArrow = document.createElement('span');
 		layerHeadArrow.id = "layer" + this.id + "Arrow";
-		layerHeadArrow.className = "icon-chevron-down";
+		layerHeadArrow.className = "glyphicon glyphicon-chevron-down";
 		layerHeadArrow.onclick = function(){layerToggleHead(layerID);};
 		layerHeadArrow.style.cursor = "pointer";
 		layerHeadArrow.style.width = "17px";
@@ -44,27 +44,27 @@ function Layer (layerID)
 		layerHeadName.innerHTML = "Layer " + (this.id + 1);
 		
 		//icon for active or not?
-		var layerHeadActive = document.createElement('i');
+		var layerHeadActive = document.createElement('span');
 		layerHeadActive.id = "layer" + this.id + "Active";
-		layerHeadActive.className = "icon-asterisk";
+		layerHeadActive.className = "glyphicon glyphicon-asterisk";
 		layerHeadActive.onclick = function(){layerActive(layerID);};
 		layerHeadActive.style.cursor = "pointer";
 		layerHeadActive.style.width = "20px";
 		layerHeadActive.title = "Click to make this Layer active";
 
 		//icon for visible or not?
-		var layerHeadVis = document.createElement('i');
+		var layerHeadVis = document.createElement('span');
 		layerHeadVis.id = "layer" + this.id + "Vis";
-		layerHeadVis.className = "icon-eye-open";
+		layerHeadVis.className = "glyphicon glyphicon-eye-open";
 		layerHeadVis.style.cursor = "pointer";
 		layerHeadVis.onclick = function(){toggleLayerVis(layerID);};
 		layerHeadVis.style.width = "20px";
 		layerHeadVis.title = "Click to hide this layer";
 
 		//icon for delete layer
-		var layerHeadDelete = document.createElement('i');
+		var layerHeadDelete = document.createElement('span');
 		layerHeadDelete.id = "layer" + this.id + "Delete";
-		layerHeadDelete.className = "icon-remove";
+		layerHeadDelete.className = "glyphicon glyphicon-remove";
 		layerHeadDelete.style.cursor = "pointer";
 		layerHeadDelete.onclick = function(){deleteLayer(layerID);};
 		layerHeadDelete.style.width = "20px";
@@ -198,7 +198,7 @@ function showLayerDetails(layerCase, layerID)
 					{
 						ellipses = "...";
 					}
-					newRegion.innerHTML = "<div class=\"layerDetailsRegionsName\">(" + window.regions[i].abbrev + ") " + window.regions[i].name.substring(0, 22) + ellipses + "</div><div class=\"layerDetailsRegionsFind btn btn-success btn-small\" onclick=\"layerDetailsFindObject(1, " + i + ")\"><i class=\"icon-screenshot\" style=\"margin-right:5px; margin-left:0px;\"></i>Find</div><div class=\"layerDetailsRegionsView btn btn-warning btn-small\" onclick=\"getRegionDetails(" + window.regions[i].bamsID + ")\"><i class=\"icon-eye-open\" style=\"margin-right:5px; margin-left:0px; color:#424242;\"></i>Details</div>";
+					newRegion.innerHTML = "<div class=\"layerDetailsRegionsName\">(" + window.regions[i].abbrev + ") " + window.regions[i].name.substring(0, 22) + ellipses + "</div><div class=\"layerDetailsRegionsFind btn btn-success btn-small\" onclick=\"layerDetailsFindObject(1, " + i + ")\"><span class=\"glyphicon glyphicon-screenshot\" style=\"margin-right:5px; margin-left:0px;\"></span>Find</div><div class=\"layerDetailsRegionsView btn btn-warning btn-small\" onclick=\"getRegionDetails(" + window.regions[i].bamsID + ")\"><span class=\"glyphicon glyphicon-eye-open\" style=\"margin-right:5px; margin-left:0px; color:#424242;\"></span>Details</div>";
 					$('#layerDetailsRegionsBox').show();
 					document.getElementById('layerDetailsRegionsBox').appendChild(newRegion);
 				}

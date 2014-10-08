@@ -5,19 +5,26 @@ $(function(){
 	
 	$('#intxn').draggable({delay:250, cursor:"move"});
 
-	$("#zoomSlider").slider({	
-      value:2,
-      min: 1,
-      max: 4,
-      step: 1,
-      slide: function(event, ui) {
-        changeZoom(ui.value);
-      }
-    });
+	$("#zoomSlider").bootstrapSlider({
+		value:2,
+		min: 1,
+		max: 4,
+		step: 1
+	}).on('slideStop', changeZoom);
 });
 
-function changeZoom(newValue)
+function changeZoom(newValue, instance)
 {
+	if(instance == "init")
+	{
+		newValue = 2;
+	}
+	else
+	{
+		newValue = $('#zoomSlider').bootstrapSlider('getValue');
+	}
+	// var newValue = ;
+
 	window.currentZoom = newValue;
 	var dimensions = 480 * Math.pow(2, newValue);
 	if(newValue > 1)
@@ -150,4 +157,4 @@ function updateMap(pass)
 	}
 }
 
-changeZoom(2);
+changeZoom(2, "init");

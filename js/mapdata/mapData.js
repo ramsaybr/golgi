@@ -23,7 +23,7 @@ function mapDataOpen()
 	$('#mapDataName').show();
 	$('#mapDataPartDetails').show();
 	//update DOM elements to reflect region data
-	$('#mapDataName').html(region.searchTerm);
+	$('#mapDataName').html(region.searchTerm + "<span style='font-size:14px;'> is currently displaying:</span>");
 	$('#mapDataNomenclature').html(region.nomeclature);
 	$('#mapDataSpecies').html(region.species);
 	var connections = 0;
@@ -60,14 +60,14 @@ function mapDataOpen()
 	}
 	console.log("pin data: " + region.pin.style.left);
 	document.getElementById('mapData').style.left = (((region.coordinateInteraction[0]) * zoomFactor) + (zoomFactor * 25)) + "px";
-	document.getElementById('mapData').style.top = (((region.coordinateInteraction[1]) * zoomFactor) - (zoomFactor * 25)) + "px";
+	document.getElementById('mapData').style.top = (((region.coordinateInteraction[1]) * zoomFactor) - (zoomFactor * 25)-200) + "px";
 	//fade in dialog box
 	$('#mapData').fadeIn(500);
 
 }
 function mapDataAddData()
 {
-	$('.mapDataDefault').fadeOut(100);
+	// $('.mapDataDefault').fadeOut(100);
 	$('#mapData').animate({width:560, height:200},500);
 	$('#regionDetailsAddData').fadeIn(500);
 }
@@ -75,16 +75,20 @@ function mapDataAddData()
 function mapDataAddConnections()
 {
 	console.log("in mapDataAddConnections");
+	$('.mapDataDefault').fadeOut(100);
+
 	var region = document.getElementById('mapData').region;
 	//find connections
 	//find inputs
 	
 	document.getElementById('regionDetailsAddConnectionInputForm').innerHTML="";
 	document.getElementById('regionDetailsAddConnectionOutputForm').innerHTML="";
+	window.outputCount = window.inputCount = 0;
 	for(i=0; i<window.searchResults.length; i++)
 	{
 		if((window.searchResults[i].type == "Connection") && (window.searchResults[i].targetAbbrev == region.abbrev) && (window.searchResults[i].nomeclature == region.nomeclature))
 		{
+			window.inputCount++;
 			//found an input!
 			//add DOM Element to regionDetailsAddConnectionInputView
 
@@ -119,7 +123,7 @@ function mapDataAddConnections()
 			newResultDetail = document.createElement('span');
 			newResultDetail.style.float="left";
 			newResultDetail.style.cursor="pointer";
-			newResultDetail.innerHTML = "<span onclick=\"mapDataViewConnectionEvidence(" + i + ")\"><i class=\"icon-eye-open icon-white\" style=\"margin-right:4px;\"></i> View Details</span>";
+			newResultDetail.innerHTML = "<span onclick=\"mapDataViewConnectionEvidence(" + i + ")\" style='font-size:9px;'><span class=\"glyphicon glyphicon-eye-open\" style=\"margin-right:4px;\"></span> Details</span>";
 
 			newResultDiv.appendChild(newResultCB);
 			newResultDiv.appendChild(newResultLabel);
@@ -135,7 +139,7 @@ function mapDataAddConnections()
 	{
 		if((window.searchResults[i].type == "Connection") && (window.searchResults[i].sourceAbbrev == region.abbrev) && (window.searchResults[i].nomeclature == region.nomeclature))
 		{
-
+			window.outputCount++;
 			//found an output
 			//add DOM Element to regionDetailsAddConnectionOutputView
 			//attach ID number (or array index i?) to each element
@@ -165,7 +169,7 @@ function mapDataAddConnections()
 			newResultDetail = document.createElement('span');
 			newResultDetail.style.float="left";
 			newResultDetail.style.cursor="pointer";
-			newResultDetail.innerHTML = "<span onclick=\"mapDataViewConnectionEvidence(" + i + ")\"><i class=\"icon-eye-open icon-white\" style=\"margin-right:4px;\"></i> View Details</span>";
+			newResultDetail.innerHTML = "<span onclick=\"mapDataViewConnectionEvidence(" + i + ")\" style='font-size:9px;'><span class=\"glyphicon glyphicon-eye-open\" style=\"margin-right:4px;\"></span> Details</span>";
 			// newResultDetail.onclick = function(){ mapDataViewConnectionEvidence(i)};
 
 			newResultDiv.appendChild(newResultCB);
@@ -177,7 +181,8 @@ function mapDataAddConnections()
 	}
 
 	//find outputs
-	$('.regionDetailsAddConnectionRegion').html(region.abbrev);
+	$('#regionDetailsAddConnectionInputCount').html("Inputs to " + region.abbrev + " (" + window.inputCount + " found)");
+	$('#regionDetailsAddConnectionOutputCount').html("Outputs from" + region.abbrev + " (" + window.outputCount + " found)");
 	//display interface
 	$('#regionDetailsAddData').fadeOut(100);
 	$('#mapDataName').fadeOut(100);
@@ -190,9 +195,16 @@ function mapDataAddConnections()
 function mapDataViewConnectionEvidence(connectionNumber)
 {
 	console.log("in mapDataViewConnectionEvidence");
-	document.getElementById('regionDetailsAddConnectionDetails').evidence = window.searchResults[connectionNumber].evidence;
-	document.getElementById('regionDetailsAddConnectionDetailsTitle').innerHTML = document.getElementById('regionDetailsAddConnectionDetails').evidence.length + " Reports for " + document.getElementById('regionDetailsAddConnectionDetails').evidence[0].sourceAbbrev + "->" + document.getElementById('regionDetailsAddConnectionDetails').evidence[0].targetAbbrev;
+	console.log(window.searchResults[connectionNumber].evidence);
 
+	$('#cnxDetails').modal('toggle');
+
+	document.getElementById('regionDetailsAddConnectionDetails').evidence = window.searchResults[connectionNumber].evidence;
+
+	document.getElementById('regionDetailsAddConnectionDetailsSourceAbbrev').innerHTML = document.getElementById('regionDetailsAddConnectionDetails').evidence[0].sourceAbbrev;
+	document.getElementById('regionDetailsAddConnectionDetailsTargetAbbrev').innerHTML = document.getElementById('regionDetailsAddConnectionDetails').evidence[0].targetAbbrev;
+	document.getElementById('regionDetailsAddConnectionDetailsConnectionNames').innerHTML = document.getElementById('regionDetailsAddConnectionDetails').evidence[0].sourceName +  " -> " + document.getElementById('regionDetailsAddConnectionDetails').evidence[0].targetName;
+	
 	//clear box
 	document.getElementById('regionDetailsAddConnectionDetailsReportsBox').innerHTML = "";
 
@@ -200,31 +212,30 @@ function mapDataViewConnectionEvidence(connectionNumber)
 	{
 		console.log(i);
 		var newConnectionReport = document.createElement('div');
-		newConnectionReport.className = "regionDetailsAddConnectionDetailsReports";
-		newConnectionReport.style.paddingBottom = "10px";
-		newConnectionReport.innerHTML = "<span style=\"color:#424242; font-size:10px; font-weight:bold;\" class=\"btn btn-warning btn-small\" onclick=\"mapDataViewConnectionEvidenceViewReport(" + i + ")\"><i class=\"icon-eye-open\" style=\"margin-top:1px;\"></i> View Report " + (i+1) + "</span>";
+		newConnectionReport.className = "regionDetailsAddConnectionDetailsReports btn btn-success btn-sm";
+
+		// appHeader.onclick = function (appID) { return function() { collapseApp(appID, 'click')}; }(appID);
+		newConnectionReport.onclick = function(i) { return function(){ mapDataViewConnectionEvidenceViewReport(i)}; }(i);
+		
+
+		newConnectionReport.innerHTML = "<span class=\"glyphicon glyphicon-eye-open\" style=\"margin-top:1px;\"></span> View Report " + (i+1) + "</span>";
 		document.getElementById('regionDetailsAddConnectionDetailsReportsBox').appendChild(newConnectionReport);
 	}
-	$('#regionDetailsAddConnectionDetails').show();
 }
 
 function mapDataViewConnectionEvidenceViewReport(index)
 {
+	console.log(index);
 	$('#regionDetailsAddConnectionDetailsDescription').fadeIn(500);
 	$('#regionDetailsAddConnectionDetailsImg').fadeIn(500);
 	$('#regionDetailsAddConnectionDetailsDescriptionMetadata').fadeIn(500);
 	var thisEvidence = document.getElementById('regionDetailsAddConnectionDetails').evidence[index];
 	console.log(thisEvidence);
-	document.getElementById('regionDetailsAddConnectionDetailsSourceAbbrev').innerHTML = thisEvidence.sourceAbbrev;
-	document.getElementById('regionDetailsAddConnectionDetailsSourceName').innerHTML = thisEvidence.sourceName;
-	document.getElementById('regionDetailsAddConnectionDetailsTargetAbbrev').innerHTML = thisEvidence.targetAbbrev;
-	document.getElementById('regionDetailsAddConnectionDetailsTargetName').innerHTML = thisEvidence.targetName;
-	document.getElementById('regionDetailsAddConnectionDetailsDescriptionStrength').innerHTML = thisEvidence.strength;
-	document.getElementById('regionDetailsAddConnectionDetailsDescriptionTechnique').innerHTML = thisEvidence.technique;
-	document.getElementById('regionDetailsAddConnectionDetailsDescriptionInjection').innerHTML = thisEvidence.injectionSiteAbbrev;
-	document.getElementById('regionDetailsAddConnectionDetailsDescriptionTerminal').innerHTML = thisEvidence.terminalFieldAbbrev;
-	document.getElementById('regionDetailsAddConnectionDetailsDescriptionCuratorName').innerHTML = "<a href=\"mailto:" + thisEvidence.curatorEmail + "\">" + thisEvidence.curatorName + "</a>";
-	document.getElementById('regionDetailsAddConnectionDetailsDescriptionReferenceName').innerHTML = "<a href=\"" + thisEvidence.referenceURL + "\">" + thisEvidence.referenceName + "</a>";
+
+	document.getElementById('regionDetailsAddConnectionDetailsDescription').innerHTML = "According to <a href='" + thisEvidence.referenceURL + "' target='_blank'>" + thisEvidence.referenceName + "</a>, a connection was found between the " + thisEvidence.sourceAbbrev + " and the " + thisEvidence.targetAbbrev + ". The connection was observed using " + thisEvidence.techniqueID + " tracing in which injections in the " + thisEvidence.injectionSiteID + " which yeilded " + thisEvidence.strengthID + " staining found in the " + thisEvidence.terminalFieldID;
+	// A <span id="regionDetailsAddConnectionDetailsDescriptionStrength"></span> connection was found using <span id="regionDetailsAddConnectionDetailsDescriptionTechnique"></span> injected into the <span id="regionDetailsAddConnectionDetailsDescriptionInjection"></span> with terminal fields found in the <span id="regionDetailsAddConnectionDetailsDescriptionTerminal"></span>.
+	
+	
 }
 
 function mapDataActivateConnection()

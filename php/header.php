@@ -5,10 +5,10 @@
 			Golgi
 		</title>
 		<link href="css/bootstrap.css" rel="stylesheet" type="text/css" />
-		<link href="css/flat-ui.css" rel="stylesheet" type="text/css" />
+		<link href="css/bootstrap-slider.css" rel="stylesheet" type="text/css" />
 		<link href="css/140217.css" rel="stylesheet" type="text/css" />
 		<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300' rel='stylesheet' type='text/css'>
-		<link href='http://fonts.googleapis.com/css?family=Raleway:400italic,400,300,700' rel='stylesheet' type='text/css'>
+		<!-- <link href='http://fonts.googleapis.com/css?family=Raleway:400italic,400,300,700' rel='stylesheet' type='text/css'> -->
 
 		
 	</head>
