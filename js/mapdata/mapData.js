@@ -9,7 +9,7 @@ function mapDataClose()
 {
 	$('#mapData').fadeOut(0);
 	$('.mapDataDefault').fadeIn(0);
-	$('#mapData').animate({width:400, height:250},0);
+	// $('#mapData').animate({width:400, height:250},0);
 	$('#regionDetailsAddData').fadeOut(0);
 	$('#regionDetailsAddConnection').fadeOut(0);
 }
@@ -17,9 +17,10 @@ function mapDataClose()
 
 function mapDataOpen()
 {
+	console.log("in mapDataOpen():");
 	//make region easier to access
 	var region = document.getElementById('mapData').region;
-	console.log(region);
+	document.getElementById('regionCnxDetails').part = region;
 	$('#mapDataName').show();
 	$('#mapDataPartDetails').show();
 	//update DOM elements to reflect region data
@@ -27,17 +28,32 @@ function mapDataOpen()
 	$('#mapDataNomenclature').html(region.nomeclature);
 	$('#mapDataSpecies').html(region.species);
 	var connections = 0;
+	document.getElementById('mapDataDefaultCnxListFlex').innerHTML = "";
 	//find how many connections this region is involved in:
 	for(i=0; i<window.connections.length; i++)
 	{
 		if((window.connections[i].sourceID == region.bamsID)||(window.connections[i].targetID == region.bamsID))
 		{
 			connections++;
+			var newConnection = document.createElement('div');
+			newConnection.innerHTML = window.connections[i].sourceAbbrev + " > " + window.connections[i].targetAbbrev;
+			if(window.connections[i].sourceID == region.bamsID)
+			{
+				// var newOutput = document.createElement('div');
+				newConnection.className = "mapDataDefaultCnxListEntry eff";
+				// newOutput.innerHTML = window.connections[i].sourceAbbrev + " > " + window.connections[i].targetAbbrev;
+				// document.getElementById('mapDataDefaultCnxListFlex').appendChild(newOutput);
+			}
+			if(window.connections[i].targetID == region.bamsID)
+			{
+				newConnection.className = "mapDataDefaultCnxListEntry aff";
+			}
+			document.getElementById('mapDataDefaultCnxListFlex').appendChild(newConnection);
 		}
 	}
 	if(connections > 0)
 	{
-		$('#mapDataActiveCnxBtn').show();
+		$('#mapDataDefaultCnxListViewDetailsBtn').show();
 	}
 	$('#mapDataActiveCnxs').html(connections);
 	$('#mapDataActiveMols').html(region.molecules.length);
@@ -67,8 +83,7 @@ function mapDataOpen()
 }
 function mapDataAddData()
 {
-	// $('.mapDataDefault').fadeOut(100);
-	$('#mapData').animate({width:560, height:200},500);
+	$('.mapDataDefault').fadeOut(0);
 	$('#regionDetailsAddData').fadeIn(500);
 }
 
@@ -197,6 +212,8 @@ function mapDataViewConnectionEvidence(connectionNumber)
 	console.log("in mapDataViewConnectionEvidence");
 	console.log(window.searchResults[connectionNumber].evidence);
 
+	document.getElementById('regionDetailsAddConnectionDetailsDescription').innerHTML = "";
+
 	$('#cnxDetails').modal('toggle');
 
 	document.getElementById('regionDetailsAddConnectionDetails').evidence = window.searchResults[connectionNumber].evidence;
@@ -213,11 +230,7 @@ function mapDataViewConnectionEvidence(connectionNumber)
 		console.log(i);
 		var newConnectionReport = document.createElement('div');
 		newConnectionReport.className = "regionDetailsAddConnectionDetailsReports btn btn-success btn-sm";
-
-		// appHeader.onclick = function (appID) { return function() { collapseApp(appID, 'click')}; }(appID);
 		newConnectionReport.onclick = function(i) { return function(){ mapDataViewConnectionEvidenceViewReport(i)}; }(i);
-		
-
 		newConnectionReport.innerHTML = "<span class=\"glyphicon glyphicon-eye-open\" style=\"margin-top:1px;\"></span> View Report " + (i+1) + "</span>";
 		document.getElementById('regionDetailsAddConnectionDetailsReportsBox').appendChild(newConnectionReport);
 	}
@@ -232,10 +245,158 @@ function mapDataViewConnectionEvidenceViewReport(index)
 	var thisEvidence = document.getElementById('regionDetailsAddConnectionDetails').evidence[index];
 	console.log(thisEvidence);
 
-	document.getElementById('regionDetailsAddConnectionDetailsDescription').innerHTML = "According to <a href='" + thisEvidence.referenceURL + "' target='_blank'>" + thisEvidence.referenceName + "</a>, a connection was found between the " + thisEvidence.sourceAbbrev + " and the " + thisEvidence.targetAbbrev + ". The connection was observed using " + thisEvidence.techniqueID + " tracing in which injections in the " + thisEvidence.injectionSiteID + " which yeilded " + thisEvidence.strengthID + " staining found in the " + thisEvidence.terminalFieldID;
-	// A <span id="regionDetailsAddConnectionDetailsDescriptionStrength"></span> connection was found using <span id="regionDetailsAddConnectionDetailsDescriptionTechnique"></span> injected into the <span id="regionDetailsAddConnectionDetailsDescriptionInjection"></span> with terminal fields found in the <span id="regionDetailsAddConnectionDetailsDescriptionTerminal"></span>.
+	var details = "<i>According to <a href='" + thisEvidence.referenceURL + "' target='_blank'>" + thisEvidence.referenceName + "</a>, a connection was observed between the " + thisEvidence.sourceAbbrev + " and the " + thisEvidence.targetAbbrev + " as traced by " + thisEvidence.techniqueID + ". ";
+
+	if(thisEvidence.strengthID != "not known")
+	{
+		if(thisEvidence.strengthID == "exists")
+		{
+			details = details + "Staining of indeterminant strength was observed";
+		}
+		else
+		{
+			details = details + "Staining of " + thisEvidence.strengthID + " strength was observed";	
+		}
+	}
+	else
+	{
+		details = details + "Staining of indeterminant strength was observed";
+	}
+
+	if(thisEvidence.injectionSiteID == "not known" && thisEvidence.terminalFieldID == "not known")
+	{
+		details = details + " and neither the spatial distribution of tracer in the injection site nor the spatial distribution of tracer in the terminal field are known.";
+	}
+
+	if(thisEvidence.injectionSiteID != "not known" && thisEvidence.terminalFieldID == "not known")
+	{
+		details = details + ", the injection site had a " + thisEvidence.injectionSiteID + " spatial distribution of tracer, but the spatial distribution of tracer in the terminal field was not known.";
+	}
+
+	if(thisEvidence.injectionSiteID == "not known" && thisEvidence.terminalFieldID != "not known")
+	{
+		details = details + ", the terminal field site had a " + thisEvidence.terminalFieldID + " spatial distribution of tracer, but the spatial distribution of tracer in the injection site was not known.";
+	}
+
+	if(thisEvidence.injectionSiteID != "not known" && thisEvidence.terminalFieldID != "not known")
+	{
+		details = details + ", the injection site had a " + thisEvidence.injectionSiteID + " spatial distribution of tracer, and the terminal field had a " + thisEvidence.terminalFieldID + " spatial distribution of tracer.";
+	}
+
+	details = details + " More details can be found <a href='" + thisEvidence.detailsURL + "' target='_blank'>here in BAMS.</a></i> <br><br><span style='font-size:12px;'>The collator has noted:<br>" + thisEvidence.annotation + "</span>";
+
+	document.getElementById('regionDetailsAddConnectionDetailsDescription').innerHTML = details;
+}
+
+function mapDataConnectionsModal()
+{
+	document.getElementById('regionCnxDetailDescription').style.display = "none";
+
+	var part = document.getElementById('regionCnxDetails').part;
+	document.getElementById('regionCnxDetailsName').innerHTML = part.name;
+	var connections = 0;
+	document.getElementById('regionCnxDetailCnxBox').innerHTML = "<span><b>Select a connection:</b></span><br>";
+
+	//find how many connections this region is involved in:
+	for(i=0; i<window.connections.length; i++)
+	{
+		if((window.connections[i].sourceID == part.bamsID)||(window.connections[i].targetID == part.bamsID))
+		{
+			connections++;
+			var newConnection = document.createElement('div');
+			newConnection.innerHTML = window.connections[i].sourceAbbrev + " > " + window.connections[i].targetAbbrev;
+			newConnection.style.cursor = "pointer";
+			newConnection.onclick = function(i) { return function(){ mapDataConnectionsModalViewConnection(i)}; }(i);
+			if(window.connections[i].sourceID == part.bamsID)
+			{
+				newConnection.className = "mapDataDefaultCnxListEntry eff";
+			}
+			if(window.connections[i].targetID == part.bamsID)
+			{
+				newConnection.className = "mapDataDefaultCnxListEntry aff";
+			}
+			document.getElementById('regionCnxDetailCnxBox').appendChild(newConnection);
+		}
+	}
+	$('#regionCnxDetails').modal('toggle');
+}
+
+function mapDataConnectionsModalViewConnection(connectionID)
+{
+	console.log("in mapDataConnectionsModalViewConnection():");
+	var thisConnection = window.connections[connectionID];
+	//update regionCnxDetailReportsBox
 	
+	console.log("Working with: ");
+	console.log(thisConnection);
+
+	document.getElementById('regionCnxDetailReportsBox').innerHTML = "";
+	document.getElementById('regionCnxDetailDescriptionText').innerHTML = "";
+
+	document.getElementById('regionCnxDetailLabelsConnectionAbbrevs').innerHTML = thisConnection.evidence[0].sourceAbbrev + " > " + thisConnection.evidence[0].targetAbbrev;
+	document.getElementById('regionCnxDetailLabelsConnectionNames').innerHTML = thisConnection.evidence[0].sourceName +  " -> " + thisConnection.evidence[0].targetName;
 	
+
+	for (i=0; i<thisConnection.evidence.length; i++)
+	{
+		console.log(i);
+		var thisEvidence = thisConnection.evidence[i];
+
+		var newConnectionReport = document.createElement('div');
+		newConnectionReport.className = "regionDetailsAddConnectionDetailsReports btn btn-success btn-sm";
+		newConnectionReport.onclick = function(thisEvidence) { return function(){ mapDataConnectionsModalViewConnectionEvidence(thisEvidence)}; }(thisEvidence);
+		newConnectionReport.innerHTML = "<span class=\"glyphicon glyphicon-eye-open\" style=\"margin-top:1px;\"></span> View Report " + (i+1) + "</span>";
+		document.getElementById('regionCnxDetailReportsBox').appendChild(newConnectionReport);
+	}
+	document.getElementById('regionCnxDetailDescription').style.display = "inline";
+}
+
+function mapDataConnectionsModalViewConnectionEvidence(thisEvidence)
+{
+	console.log("in mapDataConnectionsModalViewConnectionEvidence():");
+	console.log(thisEvidence);
+
+	var details = "<i>According to <a href='" + thisEvidence.referenceURL + "' target='_blank'>" + thisEvidence.referenceName + "</a>, a connection was observed between the " + thisEvidence.sourceAbbrev + " and the " + thisEvidence.targetAbbrev + " as traced by " + thisEvidence.techniqueID + ". ";
+
+	if(thisEvidence.strengthID != "not known")
+	{
+		if(thisEvidence.strengthID == "exists")
+		{
+			details = details + "Staining of indeterminant strength was observed";
+		}
+		else
+		{
+			details = details + "Staining of " + thisEvidence.strengthID + " strength was observed";	
+		}
+	}
+	else
+	{
+		details = details + "Staining of indeterminant strength was observed";
+	}
+
+	if(thisEvidence.injectionSiteID == "not known" && thisEvidence.terminalFieldID == "not known")
+	{
+		details = details + " and neither the spatial distribution of tracer in the injection site nor the spatial distribution of tracer in the terminal field are known.";
+	}
+
+	if(thisEvidence.injectionSiteID != "not known" && thisEvidence.terminalFieldID == "not known")
+	{
+		details = details + ", the injection site had a " + thisEvidence.injectionSiteID + " spatial distribution of tracer, but the spatial distribution of tracer in the terminal field was not known.";
+	}
+
+	if(thisEvidence.injectionSiteID == "not known" && thisEvidence.terminalFieldID != "not known")
+	{
+		details = details + ", the terminal field site had a " + thisEvidence.terminalFieldID + " spatial distribution of tracer, but the spatial distribution of tracer in the injection site was not known.";
+	}
+
+	if(thisEvidence.injectionSiteID != "not known" && thisEvidence.terminalFieldID != "not known")
+	{
+		details = details + ", the injection site had a " + thisEvidence.injectionSiteID + " spatial distribution of tracer, and the terminal field had a " + thisEvidence.terminalFieldID + " spatial distribution of tracer.";
+	}
+
+	details = details + " More details can be found <a href='" + thisEvidence.detailsURL + "' target='_blank'>here in BAMS.</a></i> <br><br><span style='font-size:12px;'>The collator has noted:<br>" + thisEvidence.annotation + "</span>";
+
+	document.getElementById('regionCnxDetailDescriptionText').innerHTML = details;
 }
 
 function mapDataActivateConnection()
@@ -243,7 +404,7 @@ function mapDataActivateConnection()
 	console.log("in mapDataActivateConnection");
 	document.getElementById('regionDetailsAddConnection').selected = [];
 	//check to make sure at least one connection has been selected
-	// document.getElementById('regionDetailsAddConnection').connections[document.getElementById('regionDetailsAddConnection').connections.length] = window.searchResults[i];
+	
 	var inputBox = document.getElementById('regionDetailsAddConnectionInputForm');
 	for(i=0; i<inputBox.length; i++)
 	{
@@ -261,25 +422,28 @@ function mapDataActivateConnection()
 		}
 	}
 	
-	console.log("in mapDataActivateConnection: " + document.getElementById('regionDetailsAddConnection').selected.length + " connections to add");
-	// console.log(document.getElementById('regionDetailsAddConnection').selected.length);
-	//document.getElementById('regionDetailsAddConnection').selected now contains selected connections to show!
 	if(document.getElementById('regionDetailsAddConnection').selected.length > 0)
 	{
+		var sourceID = window.searchResults[document.getElementById('regionDetailsAddConnection').selected[0]].sourceID;
+		console.log("!@#");
+		console.log(sourceID);
+
+		// document.getElementById(window.layerData[0] + "_" + sourceID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
 		for(ii=0; ii<document.getElementById('regionDetailsAddConnection').selected.length; ii++)
 		{
 			console.log("in mapDataActivateConnection. connection loop: ii=" + ii);
 			//loop thru the selected connections
 			//get this connection
-			// var thisConnection = document.getElementById('regionDetailsAddConnection').connections[i];
-			var thisConnection = window.searchResults[document.getElementById('regionDetailsAddConnection').selected[ii]];
-			// console.log("thisConnection: " + thisConnection);
 			
+			var thisConnection = window.searchResults[document.getElementById('regionDetailsAddConnection').selected[ii]];
+			
+			
+
 			//is this connection already active?
 			var isPresent = 0;
 			if(window.connections.length > 0)
 			{
-				console.log("Connections already active");
+				console.log("At least some connections are already active");
 				for(j=0; j<window.connections.length; j++)
 				{
 					if((window.connections[j].nomeclature == thisConnection.nomeclature) && (window.connections[j].sourceID == thisConnection.sourceID) && (window.connections[j].targetID == thisConnection.targetID))
@@ -325,6 +489,7 @@ function mapDataActivateConnection()
 								//found it! Instantiate new region
 								var newRegion = window.searchResults[kk];
 								window.regions[window.regions.length] = new Region(newRegion.bamsID, newRegion.name, newRegion.abbrev, newRegion.nomenclature, newRegion.species, newRegion.otherNomenclatures, newRegion.dataSets, newRegion.coordinateInteraction, newRegion.dimensions, newRegion.coordinatePlot, newRegion.notes, "regions", false);
+								document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
 							}
 						}
 						if(sourceSavedA == 0)
@@ -359,6 +524,9 @@ function mapDataActivateConnection()
 								//found it! Instantiate new region
 								var newRegion = window.searchResults[ll];
 								window.regions[window.regions.length] = new Region(newRegion.bamsID, newRegion.name, newRegion.abbrev, newRegion.nomenclature, newRegion.species, newRegion.otherNomenclatures, newRegion.dataSets, newRegion.coordinateInteraction, newRegion.dimensions, newRegion.coordinatePlot, newRegion.notes, "regions", false);
+
+								//switch pins for both regions
+								document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
 							}
 						}
 						if(targetSavedA == 0)
@@ -375,7 +543,6 @@ function mapDataActivateConnection()
 			}
 			else
 			{
-				console.log("in mapDataActivateConnection. No active connection yet (around line 327)");
 				//there are no connections yet
 				//is the source region active?
 				var sourcePresent = 0;
@@ -387,7 +554,7 @@ function mapDataActivateConnection()
 						sourcePresent++;
 					}
 				}
-				console.log("in mapDataActivateConnection: Found " + sourcePresent + " source matches");
+				console.log("sourcePresent = " + sourcePresent);
 
 				var sourceSavedB = 0;
 				if(sourcePresent == 0)
@@ -403,6 +570,7 @@ function mapDataActivateConnection()
 							//found it! Instantiate new region
 							var newRegion = window.searchResults[kk];
 							window.regions[window.regions.length] = new Region(newRegion.bamsID, newRegion.name, newRegion.abbrev, newRegion.nomenclature, newRegion.species, newRegion.otherNomenclatures, newRegion.dataSets, newRegion.coordinateInteraction, newRegion.dimensions, newRegion.coordinatePlot, newRegion.notes, "regions", false);
+							document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
 						}
 					}
 					if(sourceSavedB == 0)
@@ -426,6 +594,7 @@ function mapDataActivateConnection()
 
 				//has data about the target even been pulled from the server yet?
 				var targetSavedB = 0;
+				console.log(window.searchResults);
 				if(targetPresent == 0)
 				{
 					console.log("Target is not present");
@@ -441,6 +610,7 @@ function mapDataActivateConnection()
 							//found it! Instantiate new region
 							var newRegion = window.searchResults[ll];
 							window.regions[window.regions.length] = new Region(newRegion.bamsID, newRegion.name, newRegion.abbrev, newRegion.nomenclature, newRegion.species, newRegion.otherNomenclatures, newRegion.dataSets, newRegion.coordinateInteraction, newRegion.dimensions, newRegion.coordinatePlot, newRegion.notes, "regions", false);
+							document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
 						}
 					}
 					if(targetSavedB == 0)
@@ -449,13 +619,12 @@ function mapDataActivateConnection()
 						searchFromMap(thisConnection.targetAbbrev);
 					}
 				}
+
 				//now instantiate connection
-				console.log("in mapDataActivateConnection: about to instantiate connection to map");
-				console.log("in mapDataActivateConnection: evidence=" + thisConnection.evidence);
+
 				var instantiatedConnection = new Connection(thisConnection.bamsID, thisConnection.sourceID, thisConnection.sourceName, thisConnection.sourceAbbrev, thisConnection.targetID, thisConnection.targetName, thisConnection.targetAbbrev, thisConnection.nomenclature, thisConnection.species, thisConnection.dimensions, thisConnection.coordinatePlot, thisConnection.notes, thisConnection.evidence, "connections", false);
-				// Connection(bamsID, sourceID, sourceName, sourceAbbrev, targetID, targetName, targetAbbrev, nomenclature, species, dimensions, coordinatePlot, notes, evidence, destination, otherLayers)
+				
 				window.connections[window.connections.length] = instantiatedConnection;
-				//return instantiatedConnection;
 			}
 			console.log("end of loop. ii=" + ii);
 		}
@@ -466,4 +635,130 @@ function mapDataActivateConnection()
 	{
 		alert("Please select at least one connection.");
 	}
+}
+
+//
+//
+//
+//	Molecules! (Finally..)
+//
+//
+//
+
+function mapDataAddMolecules()
+{
+	console.log("in mapDataAddConnections");
+	$('.mapDataDefault').fadeOut(100);
+
+	var region = document.getElementById('mapData').region;
+	
+	document.getElementById('regionDetailsAddConnectionInputForm').innerHTML="";
+	window.outputCount = window.inputCount = 0;
+	//
+	// for(i=0; i<window.searchResults.length; i++)
+	// {
+	// 	if((window.searchResults[i].type == "Connection") && (window.searchResults[i].targetAbbrev == region.abbrev) && (window.searchResults[i].nomeclature == region.nomeclature))
+	// 	{
+	// 		window.inputCount++;
+	// 		//found an input!
+
+	// 		//add DOM Element to regionDetailsAddConnectionInputView
+	// 		newResultDiv = document.createElement('div');
+	// 		newResultDiv.style.position = "relative";
+	// 		newResultDiv.style.marginBottom = "10px";
+	// 		newResultDiv.style.width = "100%";
+	// 		newResultDiv.style.height = "16px";
+	// 		newResultDiv.style.left = "0px;" 
+
+	// 		newResultCB = document.createElement('input');
+	// 		newResultCB.type = "checkbox";
+	// 		newResultCB.name = "connections";
+	// 		newResultCB.class = "connectionCB";
+	// 		// newResultCB.value = document.getElementById('regionDetailsAddConnection').connections.length;
+	// 		newResultCB.value = i;
+	// 		newResultCB.style.float="left";
+	// 		newResultCB.style.width="20px";
+	// 		newResultCB.id = window.searchResults[i].sourceAbbrev + ">" + region.abbrev;
+
+	// 		newResultLabel = document.createElement('label')
+	// 		newResultLabel.style.float="left";
+	// 		newResultLabel.style.marginRight="10px";
+	// 		newResultLabel.htmlFor = window.searchResults[i].sourceAbbrev + ">" + region.abbrev;
+	// 		newResultLabel.appendChild(document.createTextNode(window.searchResults[i].sourceAbbrev + ">" + region.abbrev));
+
+	// 		// newResultDetail = document.createElement('span')
+	// 		// newResultDetail.style.float="left";
+	// 		// newResultDetail.innerHTML = "<i class=\"icon-eye-open icon-white\" style=\"margin-right:4px;\"></i> View Details";
+	// 		// newResultDetail.connectionResult = i;
+	// 		// newResultDetail.onclick = function(){mapDataViewConnectionEvidence(newResultDetail.connectionResult);};
+	// 		newResultDetail = document.createElement('span');
+	// 		newResultDetail.style.float="left";
+	// 		newResultDetail.style.cursor="pointer";
+	// 		newResultDetail.innerHTML = "<span onclick=\"mapDataViewConnectionEvidence(" + i + ")\" style='font-size:9px;'><span class=\"glyphicon glyphicon-eye-open\" style=\"margin-right:4px;\"></span> Details</span>";
+
+	// 		newResultDiv.appendChild(newResultCB);
+	// 		newResultDiv.appendChild(newResultLabel);
+	// 		newResultDiv.appendChild(newResultDetail);
+
+	// 		//add to regionDetailsAddConnection.connections[]
+	// 		// document.getElementById('regionDetailsAddConnection').connections[document.getElementById('regionDetailsAddConnection').connections.length] = window.searchResults[i];
+	// 		document.getElementById('regionDetailsAddConnectionInputForm').appendChild(newResultDiv);
+	// 	}
+	// }
+
+	// for(i=0; i<window.searchResults.length; i++)
+	// {
+	// 	if((window.searchResults[i].type == "Connection") && (window.searchResults[i].sourceAbbrev == region.abbrev) && (window.searchResults[i].nomeclature == region.nomeclature))
+	// 	{
+	// 		window.outputCount++;
+	// 		//found an output
+	// 		//add DOM Element to regionDetailsAddConnectionOutputView
+	// 		//attach ID number (or array index i?) to each element
+
+	// 		newResultDiv = document.createElement('div');
+	// 		newResultDiv.style.position = "relative";
+	// 		newResultDiv.style.marginBottom = "10px";
+	// 		newResultDiv.style.width = "100%";
+	// 		newResultDiv.style.height = "16px";
+
+	// 		newResultCB = document.createElement('input');
+	// 		newResultCB.type = "checkbox";
+	// 		newResultCB.name = "connections";
+	// 		newResultCB.class = "connectionCB";
+	// 		// newResultCB.value = document.getElementById('regionDetailsAddConnection').connections.length;
+	// 		newResultCB.value = i;
+	// 		newResultCB.style.float="left";
+	// 		newResultCB.style.width="40px";
+	// 		newResultCB.id = region.abbrev + ">" + window.searchResults[i].targetAbbrev;
+
+	// 		newResultLabel = document.createElement('label');
+	// 		newResultLabel.style.float="left";
+	// 		newResultLabel.style.marginRight="10px";
+	// 		newResultLabel.htmlFor = region.abbrev + ">" + window.searchResults[i].targetAbbrev;
+	// 		newResultLabel.appendChild(document.createTextNode(region.abbrev + ">" + window.searchResults[i].targetAbbrev));
+
+	// 		newResultDetail = document.createElement('span');
+	// 		newResultDetail.style.float="left";
+	// 		newResultDetail.style.cursor="pointer";
+	// 		newResultDetail.innerHTML = "<span onclick=\"mapDataViewConnectionEvidence(" + i + ")\" style='font-size:9px;'><span class=\"glyphicon glyphicon-eye-open\" style=\"margin-right:4px;\"></span> Details</span>";
+	// 		// newResultDetail.onclick = function(){ mapDataViewConnectionEvidence(i)};
+
+	// 		newResultDiv.appendChild(newResultCB);
+	// 		newResultDiv.appendChild(newResultLabel);
+	// 		newResultDiv.appendChild(newResultDetail);
+
+	// 		document.getElementById('regionDetailsAddConnectionOutputForm').appendChild(newResultDiv);
+	// 	}
+	// }
+
+	// //find outputs
+	// $('#regionDetailsAddConnectionInputCount').html("Inputs to " + region.abbrev + " (" + window.inputCount + " found)");
+	// $('#regionDetailsAddConnectionOutputCount').html("Outputs from" + region.abbrev + " (" + window.outputCount + " found)");
+	// //display interface
+	// $('#regionDetailsAddData').fadeOut(100);
+	// $('#mapDataName').fadeOut(100);
+	// $('#mapDataPartDetails').fadeOut(100);
+	// //prep Add Connection view
+
+	$('#regionDetailsAddMolecule').fadeIn(500);
 }

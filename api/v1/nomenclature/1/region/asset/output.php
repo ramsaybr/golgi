@@ -12,14 +12,14 @@ while($thisRegion = mysql_fetch_assoc($query))
 		// if(copy('region2.php', '../' . $thisRegion['abbreviation'] . '/index.php'))
 		// {
 			// echo "copied index, ";
-			// if(mkdir('../' . $thisRegion['abbreviation'] . "/connection"))
+			// if(mkdir('../' . $thisRegion['abbreviation'] . "/molecule"))
 			// {
-				// echo "made connection dir,";
-				// if(copy('connection.php', '../' . $thisRegion['abbreviation'] . '/connection/index.php'))
+			// 	echo "made molecule dir,";
+				// if(copy('molecule.php', '../' . $thisRegion['abbreviation'] . '/molecule/index.php'))
 				// {
-				// 	echo "copied connection!<br>";
+				// 	echo "copied molecule!<br>";
 				// }
-	// 		}
+			// }
 	// 	}
 	// }
 }

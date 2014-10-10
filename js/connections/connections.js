@@ -5,7 +5,6 @@ window.connections = [];
 function Connection(bamsID, sourceID, sourceName, sourceAbbrev, targetID, targetName, targetAbbrev, nomenclature, species, dimensions, coordinatePlot, notes, evidence, destination, otherLayers)
 {
 	console.log("in connection constructor. New connection initializing");
-
 	//declare properties, set from construction arguments
 	this.type = "Connection";
 	this.bamsID = bamsID;
@@ -27,13 +26,13 @@ function Connection(bamsID, sourceID, sourceName, sourceAbbrev, targetID, target
 	this.evidence = [];
 	//instantiate evidence reports for this connection
 	console.log("in connection constructor: creating new evidence report");
+	// console.log()
 	for(i=0; i<evidence.length; i++)
 	{
 		console.log("in connection constructor: in loop for evidence, i=" + i);
 		thisReport = evidence[i];
-		console.log(thisReport);
-
-		this.evidence[this.evidence.length] = new ConnectionEvidence(this.sourceID, this.sourceName, this.sourceAbbrev, this.targetID, this.targetName, this.targetAbbrev, this.nomenclature, thisReport.strengthID, thisReport.injectionLocationID, thisReport.terminalFieldID, thisReport.techniqueID, thisReport.annotation, thisReport.referenceName, thisReport.referenceURL, thisReport.detailsURL);
+		
+		this.evidence[this.evidence.length] = new ConnectionEvidence(this.sourceID, this.sourceName, this.sourceAbbrev, this.targetID, this.targetName, this.targetAbbrev, this.nomenclature, thisReport.strengthID, thisReport.injectionSiteID, thisReport.terminalFieldID, thisReport.techniqueID, thisReport.annotation, thisReport.referenceName, thisReport.referenceURL, thisReport.detailsURL);
 	}
 	//the new connection object's ID depends on which array it is added to: is it a searchResult, or a real connection to be added to the map?
 	if(destination == "searchResults")
@@ -86,10 +85,8 @@ function Connection(bamsID, sourceID, sourceName, sourceAbbrev, targetID, target
 
 		//only add the DOM element if it is not already present in another layer
 		document.getElementById('connections').appendChild(this.domElement);
-		console.log(this);
-		
+		// console.log(this);
 	}
-
 }
 
 function clickedConnection(connection)

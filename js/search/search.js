@@ -88,8 +88,32 @@ function search(mapValue)
 					var cnxUrl = "api/v1/nomenclature/1/region/" + url2[0] + "/connection/";
 					xmlHttp2.open("GET",cnxUrl,false);
 					xmlHttp2.send();
-				}
 
+					//
+					//Needs a request for molecules
+					//
+					console.log("in search: calling API for molecules");
+					xmlHttp3 = new XMLHttpRequest();
+					xmlHttp3.onreadystatechange = function()
+					{
+						if (xmlHttp3.readyState==4 && xmlHttp3.status==200)
+						{
+							console.log("in search: molecule raw response: " + xmlHttp3.responseText);
+							var Response = JSON.parse(xmlHttp3.responseText);
+							for(i=0; i<Response.length; i++)
+							{
+								MoleculeResponse = Response[i];
+								console.log("in search: creating new molecule");
+								
+								window.searchResults[window.searchResults.length] = new Molecule(MoleculeResponse.bamsID, MoleculeResponse.name, MoleculeResponse.regionID, MoleculeResponse.regionName, MoleculeResponse.regionAbbrev, MoleculeResponse.distribution, MoleculeResponse.strength, MoleculeResponse.annotation, MoleculeResponse.referenceName, MoleculeResponse.referenceURL, MoleculeResponse.detailsURL, "searchResults", false);
+								console.log(window.searchResults);
+							}
+						}
+					};
+					var moleculeUrl = "api/v1/nomenclature/1/region/" + url2[0] + "/molecule/";
+					xmlHttp3.open("GET",moleculeUrl,false);
+					xmlHttp3.send();
+				}
 			}
 		};
 		//find abbreviation
@@ -130,7 +154,7 @@ function searchFromMap(mapValue)
 			console.log("in searchFromMap: result from server");
 			if (xmlHttp.readyState==4 && xmlHttp.status==200)
 			{
-				console.log("in searchFromMap: Raw Response: " + xmlHttp.responseText);
+				// console.log("in searchFromMap: Raw Response: " + xmlHttp.responseText);
 				//unpack JSON response
 				//make new searchResults[] object, add to searchResults
 				var newResult = JSON.parse(xmlHttp.responseText);
@@ -140,6 +164,8 @@ function searchFromMap(mapValue)
 						console.log("in searchFromMap: instantiating new region for direct display on the map");
 						var newObject = new Region(newResult.bamsID, newResult.name, newResult.abbreviation, newResult.nomenclature, newResult.species, newResult.otherNomenclatures, newResult.dataSets, newResult.coordinateInteraction, newResult.dimensions, newResult.coordinatePlot, newResult.notes, "regions", false);
 							window.regions[window.regions.length] = newObject;
+						document.getElementById(window.layerData[0] + "_" + newResult.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
+						
 						break;
 					case "Connection":
 						break;
@@ -155,13 +181,13 @@ function searchFromMap(mapValue)
 				//if search returned a Region, find its connections
 				if(newResult.type == "Region")
 				{
-					console.log("in searchFromMap: calling API for connections");
+					// console.log("in searchFromMap: calling API for connections");
 					xmlHttp2 = new XMLHttpRequest();
 					xmlHttp2.onreadystatechange = function()
 					{
 						if (xmlHttp2.readyState==4 && xmlHttp2.status==200)
 						{
-							console.log(xmlHttp2.responseText);
+							// console.log(xmlHttp2.responseText);
 							var Response = JSON.parse(xmlHttp2.responseText);
 							for(i=0; i<Response.length; i++)
 							{

@@ -47,6 +47,7 @@ function Region(bamsID, name, abbreviation, nomenclature, species, otherNomencla
 		this.regionDOM.src=this.fileToDraw1;
 		
 		this.pin = document.createElement('img');
+		this.pin.id = window.layerData[0] + "_" + this.bamsID;
 
 		this.pin.src = "img/ui/pin/" + window.currentZoom + "_r.png";
 		this.pin.width = 10 * window.currentZoom;

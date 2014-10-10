@@ -70,6 +70,7 @@
 							</div>
 						</div>
 					</div>
+
 					<div id="layerDetails" style="display:none;">
 							<img src="img/ui/connection-40x60.png" width="40" height="60" style="position:absolute; left:0px; top:0px;" id="layerDetailsIcon"/>
 							<div id="layerDetailsHeader">Connections in Layer 1</div>
@@ -77,6 +78,7 @@
 							<div id="layerDetailsConnectionsBox" style="display:none"></div>
 							<div id="layerDetailsClose" onclick="hideDetails()"><span class="glyphicon glyphicon-remove"></span></div>
 					</div>
+
 					<div id="regionDetails" style="display:none;">
 						<div id="regionDetailsHeader"></div>
 						<div id="regionDetailsActiveConnections">The <span id="regionDetailsActiveConnectionsName"></span> is in <span id="regionDetailsActiveConnectionsCount"></span> connections in this layer:</div>
@@ -107,38 +109,34 @@
 					<div id="mapDataName">
 					</div>
 
-					<!-- <div id="mapDataCurrentlyDisplaying" class="mapDataDefault">
-						Currently displaying:
-					</div> -->
-					
 					<div id="mapDataDefaultCnx" class="mapDataDefault">
 						<img src="img/ui/connection-40x60.png" width="20" height="30" class="mapDataIcon"/>
 						<span id="mapDataActiveCnxs"></span> Connection(s) 
 						<div id="mapDataDefaultCnxList">
 							<div id="mapDataDefaultCnxListFlex">
-								<div class="mapDataDefaultCnxListEntry aff">
-									X > CP
-								</div>
-								<div class="mapDataDefaultCnxListEntry eff">
-									CP > YD
-								</div>
-								<div class="mapDataDefaultCnxListEntry aff">
-									AWE > CP
-								</div>
 							</div>
-							<div class="mapDataDefaultCnxListBtn btn btn-warning yellowBtn">
+							<div class="mapDataDefaultCnxListBtn btn btn-warning yellowBtn" onclick="mapDataConnectionsModal()" style="display:none;" id="mapDataDefaultCnxListViewDetailsBtn">
 								View Details
 							</div>
 							<div class="mapDataDefaultCnxListBtn btn btn-success" onclick="mapDataAddConnections()">
 								Add new +
 							</div>
 						</div>
-						<!-- <span class="btn btn-small btn-warning mapDataViewDetails" style="display:none;" onclick="showLayerDetails(2, window.layerData[0])" id="mapDataActiveCnxBtn"><i class="icon-eye-open" style="margin-right:3px; margin-top:1px;"></i>View Details</span> -->
 					</div>
 
 					<div id="mapDataDefaultMols" class="mapDataDefault">
 						<img src="img/ui/molecule-40x60.png" width="20" height="30" class="mapDataIcon"/>
-						<span id="mapDataActiveMols"></span> molecules
+						<span id="mapDataActiveMols"></span> molecule(s)
+						<div id="mapDataDefaultMolsList">
+							<div id="mapDataDefaultMolsListFlex">
+							</div>
+							<div class="mapDataDefaultCnxListBtn btn btn-warning yellowBtn" onclick="mapDataMoleculesModal()" style="display:none;" id="mapDataDefaultMolsListViewDetailsBtn">
+								View Details
+							</div>
+							<div class="mapDataDefaultCnxListBtn btn btn-success" onclick="mapDataAddMolecules()">
+								Add new +
+							</div>
+						</div>
 					</div>
 
 					<div id="mapDataDefaultCells" class="mapDataDefault">
@@ -146,14 +144,13 @@
 						<span id="mapDataActiveCells">0</span> Cell Types
 					</div>
 
-					<!-- <div class="btn btn-success mapDataDefault" id="mapDataDefaultAddData" onclick="mapDataAddData()">
-						Add Data to Map
-					</div> -->
-
 					<div id="mapDataClose" onclick="mapDataClose()">
 						<span class="glyphicon glyphicon-remove"></span>
 					</div>
 
+<!-- 
+					//141008: might be deleted
+					//
 					<div id="regionDetailsAddData" style="display:none;">
 						<div id="mapDataAddCnx">
 							<img src="img/ui/connection.png" width="52.8" height="80" class="mapDataAddIcon"/>
@@ -181,6 +178,10 @@
 							</div>
 						</div>
 					</div>
+					//
+					// END 141008
+
+ -->
 					<div id="regionDetailsAddConnection" style="display:none;">
 						<div id="regionDetailsAddConnectionTitle">Check connections to display:
 						</div>
@@ -200,16 +201,23 @@
 						</div>
 						<div class="btn btn-success" id="regionDetailsAddConnectionBtn" onclick="mapDataActivateConnection()">Add Selected to Map</div>
 						<div id="regionDetailsAddConnectionDetails" style="display:none;">
-							<div id="regionDetailsAddConnectionDetailsTitle"></div>
-							<!-- <div id="regionDetailsAddConnectionDetailsReportsBox"></div> -->
-							<!-- <div id="regionDetailsAddConnectionDetailsImg" style="display:none;"><img src="img/ui/longConnection.png"/></div>
-							
-							<div id="regionDetailsAddConnectionDetailsDescription" style="display:none;">A <span id="regionDetailsAddConnectionDetailsDescriptionStrength"></span> connection was found using <span id="regionDetailsAddConnectionDetailsDescriptionTechnique"></span> injected into the <span id="regionDetailsAddConnectionDetailsDescriptionInjection"></span> with terminal fields found in the <span id="regionDetailsAddConnectionDetailsDescriptionTerminal"></span>.</div>
-							<div id="regionDetailsAddConnectionDetailsDescriptionMetadata" style="display:none">Curated by <span id="regionDetailsAddConnectionDetailsDescriptionCuratorName"></span> from "<span id="regionDetailsAddConnectionDetailsDescriptionReferenceName"></span>"</div> -->
-
-
 						</div>
 					</div>
+
+					<div id="regionDetailsAddMolecule" style="display:none;">
+						<div id="regionDetailsAddMoleculeTitle">
+							<img src="img/ui/molecule-40x60.png" style="width:20px; height:30px; float:left; margin-right:10px;"/>
+							<span id="regionDetailsAddMoleculeInputCount"></span>
+						</div>
+						<div id="regionDetailsAddMoleculeInputView">
+							<form id="regionDetailsAddMoleculeInputForm"></form>
+						</div>
+						
+						<div class="btn btn-success" id="regionDetailsAddMoleculeBtn" onclick="mapDataActivateMolecule()">Add Selected to Map</div>
+						<div id="regionDetailsAddMoleculeDetails" style="display:none;">
+						</div>
+					</div>
+
 				</div>
 
 				<div id="pins"></div>
@@ -239,6 +247,7 @@
 
 		<!-- end master div -->
 		</div>
+
 		<div class="modal fade" id="cnxDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog">
 		    <div class="modal-content">
@@ -249,6 +258,7 @@
 		      <div class="modal-body">
 		      	<div id="regionDetailsAddConnectionDetailsReportsBox">
 		      	</div>
+		      	<br>
 		        <center>
 	        		<img src="img/ui/longConnection.png"/>
 	        		<div id="regionDetailsAddConnectionDetailsLabels">
@@ -258,12 +268,46 @@
 	        		</div>
         		</center>
 				<div id="regionDetailsAddConnectionDetailsDescription">
-					Rubber baby buggy bumpers
 				</div>
 		      </div>
 		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		
+		<div class="modal fade" id="regionCnxDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" style="width:900px; height:600px;">
+		    <div class="modal-content" style="height:600px;">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Connectivity currently displayed for <span id="regionCnxDetailsName"></span>:</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<div id="regionCnxDetailCnxBox">
+		      	</div>
+		      	<div id="regionCnxDetailDescription" style="display:none;">
+		      		<div id="regionCnxDetailReportsBox">
+			      	</div>
+			      	<br>
+			        <center>
+		        		<img src="img/ui/longConnection.png"/>
+		        		<div id="regionCnxDetailLabels">
+		        			<div id="regionCnxDetailLabelsConnectionAbbrevs"></div>
+							<div id="regionCnxDetailLabelsConnectionNames"></div>
+		        		</div>
+	        		</center>
+					<div id="regionCnxDetailDescriptionText">
+					</div>
+		      	</div>
+		      	<div id="regionCnxDetailNotes">
+		      	</div>
+		      </div>
+		      <!-- <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div> -->
 		    </div>
 		  </div>
 		</div>
@@ -274,6 +318,7 @@
 <script src="js/regions/regions.js"></script>
 <script src="js/connections/connections.js"></script>
 <script src="js/connections/evidence/evidence.js"></script>
+<script src="js/molecules/molecules.js"></script>
 <script src="js/search/search.js"></script>
 <script src="js/search/partsList.js"></script>
 <script src="js/mapdata/mapData.js"></script>

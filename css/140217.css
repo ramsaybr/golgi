@@ -24,6 +24,7 @@
 	font-family: 'Open Sans' !important;
 	font-weight: 300;
 }
+
 #searchInputIcon{
 	position: absolute;
 	z-index:10;
@@ -647,6 +648,33 @@
 	height:30px;
 }
 
+#mapDataDefaultMolsList
+{
+	position: absolute;
+	left:6px;
+	top:40px;
+	height: 300px;
+	width:160px;
+	
+}
+
+#mapDataDefaultMolsListFlex
+{
+	position: relative;
+	top:0px;
+	width: 100%;
+	height:auto;
+	max-height: 220px;
+	overflow-y: scroll;
+}
+
+.mapDataDefaultMolsListEntry
+{
+	position: relative;
+	height:20px;
+	width:80px;
+}
+
 #mapDataDefaultCells
 {
 	position:absolute;
@@ -659,6 +687,7 @@
 {
 	margin-left:10px; color:#424242; font-size:10px; font-weight: bold;
 }
+
 #mapDataDefaultAddData
 {
 	position:absolute;
@@ -810,8 +839,8 @@
 	top:40px;
 	width:250px;
 	height:30px;
-	
 }
+
 #regionDetailsAddConnectionInputView
 {
 	position:absolute;
@@ -845,7 +874,7 @@
 	right:10px;
 	bottom:5px;
 	width:250px;
-	height:16px;
+	height:32px;
 }
 
 #regionDetailsAddConnectionDetails
@@ -866,12 +895,12 @@
 
 #regionDetailsAddConnectionDetailsReportsBox
 {
-	position: relative; left:0%; width:100%; top:0px;
+	position: relative; left:0%; width:100%; top:0px; margin-bottom: 20px;
 }
 
 .regionDetailsAddConnectionDetailsReports
 {
-	float:left; padding-bottom:3px; width:100px; margin-right:3px; font-size: 10px;
+	float:left; margin-bottom:3px; width:100px; margin-right:3px; font-size: 10px;
 }
 
 #regionDetailsAddConnectionDetailsLabels
@@ -896,13 +925,156 @@
 
 #regionDetailsAddConnectionDetailsDescription
 {
-	position:relative; left:0%; top:20px; width:100%; font-size:14px; height:auto; margin-bottom: 100px; background-color: #F00;
+	position:relative; left:0%; top:20px; width:100%; font-size:16px; height:auto; margin-bottom: 100px;
 }
 
-#regionDetailsAddConnectionDetailsDescriptionMetadata
+
+#regionCnxDetailCnxBox
 {
-	position:absolute; left:200px; top:250px; width:500px; font-size:14px;
+	float:left; top:0px; height:400px; width:169px; border-right:1px solid #DDD; overflow-y:scroll;
 }
+
+#regionCnxDetailDescription
+{
+	float:left; top:0px; height:400px; width:400px; margin: 5px;
+}
+
+#regionCnxDetailNotes
+{
+	float:left; top:0px; height:400px; width:290px;
+}
+
+#regionCnxDetailReportsBox
+{
+	position: relative; left:0%; width:100%; top:0px; margin-bottom: 20px;
+}
+
+.regionCnxDetailReports
+{
+	float:left; width:100px; margin-right:3px; margin-bottom:3px; font-size: 10px;
+}
+
+#regionCnxDetailLabels
+{
+	position: relative; left:0px; top:0px; height:30px; width:100%;
+}
+
+#regionCnxDetailLabelsConnectionAbbrevs
+{
+	position:relative; left:0px; top:0px; font-size:22px; font-weight:bold; width: 100%; text-align: center;
+}
+
+#regionCnxDetailLabelsConnectionNames
+{
+	position:relative; left:0px; top:0px; width:100%; font-size:12px; text-align: center;
+}
+
+#regionCnxDetailDescriptionText
+{
+	position:relative; left:0%; top:20px; width:100%; font-size:14px; height:auto; margin-bottom: 100px;
+}
+
+/*
+//
+//
+//
+//
+//
+Molecules
+//
+//
+//
+//
+//
+*/
+
+#regionDetailsAddMoleculeTitle
+{
+	position:absolute;
+	left:10px;
+	top:40px;
+	width:250px;
+	height:30px;
+	background-color: #F00;
+}
+
+#regionDetailsAddMoleculeInputView
+{
+	position:absolute;
+	left:10px;
+	top:80px;
+	width:250px;
+	height:270px;
+	overflow-y:scroll;
+	background-color: #F00;
+}
+#regionDetailsAddMoleculeOutputTitle
+{
+	position:absolute;
+	left:300px;
+	top:40px;
+	width:250px;
+	height:30px;
+	background-color: #F00;
+	
+}
+#regionDetailsAddMoleculeOutputView
+{
+	position:absolute;
+	left:300px;
+	top:80px;
+	width:250px;
+	height:270px;
+	background-color: #F00;
+}
+
+#regionDetailsAddMoleculeBtn
+{
+	position: absolute;
+	right:10px;
+	bottom:5px;
+	width:250px;
+	height:32px;
+}
+
+#regionDetailsAddMoleculeDetails
+{
+	position:absolute;
+	top:195px;
+	left:0px;
+	width:800px;
+	height:300px;
+	background-color: #3D3C42;
+	border-radius:0px 5px 5px 5px;
+	background-color: #F00;
+}
+
+#regionDetailsAddMoleculeDetailsTitle
+{
+	position:absolute; left:20px; top:10px; font-size:18px; font-weight: bold;
+}
+
+#regionDetailsAddMoleculeDetailsLabels
+{
+	position: relative; left:0px; top:0px; height:60px; width:100%;
+}
+
+#regionDetailsAddMoleculeDetailsSourceAbbrev
+{
+	position:absolute; left:150px; top:0px; font-size:22px; font-weight:bold;
+}
+
+#regionDetailsAddMoleculeDetailsConnectionNames
+{
+	position:absolute; left:0px; top:30px; width:100%; font-size:12px; text-align: center;
+}
+
+#regionDetailsAddMoleculeDetailsDescription
+{
+	position:relative; left:0%; top:20px; width:100%; font-size:16px; height:auto; margin-bottom: 100px;
+}
+
+
 
 #intxn{
 	position: absolute; 

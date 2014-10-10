@@ -51,7 +51,7 @@ while($thisConnection = mysql_fetch_array($connectionQuery))
 		//find strength, technique, injection location, terminal field locations
 		$report['strengthID'] = $thisReport['strengthID'];
 		$report['techniqueID'] = $thisReport['techniqueID'];	
-		$report['injectionLocationID'] = $thisReport['injectionLocationID'];
+		$report['injectionSiteID'] = $thisReport['injectionSiteID'];
 		$report['terminalFieldID'] = $thisReport['terminalFieldID'];
 
 		//find reference, curator
