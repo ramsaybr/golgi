@@ -148,40 +148,6 @@
 						<span class="glyphicon glyphicon-remove"></span>
 					</div>
 
-<!-- 
-					//141008: might be deleted
-					//
-					<div id="regionDetailsAddData" style="display:none;">
-						<div id="mapDataAddCnx">
-							<img src="img/ui/connection.png" width="52.8" height="80" class="mapDataAddIcon"/>
-							<div class="btn btn-success" id="mapDataAddCnxBtn" onclick="mapDataAddConnections()">
-								Add Connections
-							</div>
-						</div>
-
-						<div id="mapDataAddMol">
-							<img src="img/ui/molecule.png" width="52.8" height="80" class="mapDataAddIcon"/>
-							<div class="btn btn-success" id="mapDataAddMolBtn">
-								Add Molecules
-							</div>
-						</div>
-						<div id="mapDataAddCell">
-							<img src="img/ui/cellType.png" width="52.8" height="80" class="mapDataAddIcon"/>
-							<div class="btn btn-success" id="mapDataAddCellBtn">
-								Add Cell Types
-							</div>
-						</div>
-						<div id="mapDataViewPaper">
-							<img src="img/ui/paper.png" width="52.8" height="80" class="mapDataAddIcon"/>
-							<div class="btn btn-success" id="mapDataViewPaperBtn">
-								View Papers
-							</div>
-						</div>
-					</div>
-					//
-					// END 141008
-
- -->
 					<div id="regionDetailsAddConnection" style="display:none;">
 						<div id="regionDetailsAddConnectionTitle">Check connections to display:
 						</div>
@@ -205,7 +171,9 @@
 					</div>
 
 					<div id="regionDetailsAddMolecule" style="display:none;">
-						<div id="regionDetailsAddMoleculeTitle">
+						<div id="regionDetailsAddMoleculeTitle">Check molecules to display:
+						</div>
+						<div id="regionDetailsAddMoleculeHeader">
 							<img src="img/ui/molecule-40x60.png" style="width:20px; height:30px; float:left; margin-right:10px;"/>
 							<span id="regionDetailsAddMoleculeInputCount"></span>
 						</div>
@@ -305,9 +273,60 @@
 		      	<div id="regionCnxDetailNotes">
 		      	</div>
 		      </div>
-		      <!-- <div class="modal-footer">
+		    </div>
+		  </div>
+		</div>
+
+		<!-- Molecule details modals -->
+
+		<div class="modal fade" id="molDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Molecule Details</h4>
+		      </div>
+		      <div class="modal-body">
+		        <center>
+	        		<img src="img/ui/molecule.png" width="100" height="150"/>
+	        		<div id="regionDetailsAddMoleculeDetailsLabel">
+						<div id="regionDetailsAddMoleculeName"></div>
+	        		</div>
+        		</center>
+				<div id="regionDetailsAddMoleculeDescription">
+				</div>
+		      </div>
+		      <div class="modal-footer">
 		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-		      </div> -->
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- All Molecules Details -->
+		<div class="modal fade" id="regionMolsDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" style="width:900px; height:600px;">
+		    <div class="modal-content" style="height:600px;">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Molecules currently displayed for <span id="regionMolsDetailsName"></span>:</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<div id="regionMolsDetailMolsBox">
+		      	</div>
+		      	<div id="regionMolsDetailDescription" style="display:none;">
+			        <center>
+		        		<img src="img/ui/molecule.png" width="100" height="150"/>
+		        		<div id="regionMolsDetailLabels">
+							<div id="regionMolsDetailLabelsName"></div>
+		        		</div>
+	        		</center>
+					<div id="regionMolsDetailDescriptionText">
+					</div>
+		      	</div>
+		      	<div id="regionMolsDetailNotes">
+		      	</div>
+		      </div>
 		    </div>
 		  </div>
 		</div>

@@ -12,6 +12,7 @@ function mapDataClose()
 	// $('#mapData').animate({width:400, height:250},0);
 	$('#regionDetailsAddData').fadeOut(0);
 	$('#regionDetailsAddConnection').fadeOut(0);
+	$('#regionDetailsAddMolecule').fadeOut(0);
 }
 
 
@@ -27,22 +28,20 @@ function mapDataOpen()
 	$('#mapDataName').html(region.searchTerm + "<span style='font-size:14px;'> is currently displaying:</span>");
 	$('#mapDataNomenclature').html(region.nomeclature);
 	$('#mapDataSpecies').html(region.species);
-	var connections = 0;
+	var connectionCount = moleculeCount = 0;
 	document.getElementById('mapDataDefaultCnxListFlex').innerHTML = "";
+	document.getElementById('mapDataDefaultMolsListFlex').innerHTML = "";
 	//find how many connections this region is involved in:
 	for(i=0; i<window.connections.length; i++)
 	{
 		if((window.connections[i].sourceID == region.bamsID)||(window.connections[i].targetID == region.bamsID))
 		{
-			connections++;
+			connectionCount++;
 			var newConnection = document.createElement('div');
 			newConnection.innerHTML = window.connections[i].sourceAbbrev + " > " + window.connections[i].targetAbbrev;
 			if(window.connections[i].sourceID == region.bamsID)
 			{
-				// var newOutput = document.createElement('div');
 				newConnection.className = "mapDataDefaultCnxListEntry eff";
-				// newOutput.innerHTML = window.connections[i].sourceAbbrev + " > " + window.connections[i].targetAbbrev;
-				// document.getElementById('mapDataDefaultCnxListFlex').appendChild(newOutput);
 			}
 			if(window.connections[i].targetID == region.bamsID)
 			{
@@ -51,12 +50,29 @@ function mapDataOpen()
 			document.getElementById('mapDataDefaultCnxListFlex').appendChild(newConnection);
 		}
 	}
-	if(connections > 0)
+	if(connectionCount > 0)
 	{
 		$('#mapDataDefaultCnxListViewDetailsBtn').show();
 	}
-	$('#mapDataActiveCnxs').html(connections);
-	$('#mapDataActiveMols').html(region.molecules.length);
+	//Molecules
+	for(i=0; i<window.molecules.length; i++)
+	{
+		if((window.molecules[i].regionID == region.bamsID))
+		{
+			moleculeCount++;
+			var newMolecule = document.createElement('div');
+			newMolecule.innerHTML = window.molecules[i].name;
+			newMolecule.className = "mapDataDefaultMolsListEntry";
+			document.getElementById('mapDataDefaultMolsListFlex').appendChild(newMolecule);
+		}
+	}
+	if(moleculeCount > 0)
+	{
+		$('#mapDataDefaultMolsListViewDetailsBtn').show();
+	}
+
+	$('#mapDataActiveCnxs').html(connectionCount);
+	$('#mapDataActiveMols').html(moleculeCount);
 	$('#mapDataActiveCells').html(region.cells.length);
 
 	switch(window.currentZoom)
@@ -489,7 +505,8 @@ function mapDataActivateConnection()
 								//found it! Instantiate new region
 								var newRegion = window.searchResults[kk];
 								window.regions[window.regions.length] = new Region(newRegion.bamsID, newRegion.name, newRegion.abbrev, newRegion.nomenclature, newRegion.species, newRegion.otherNomenclatures, newRegion.dataSets, newRegion.coordinateInteraction, newRegion.dimensions, newRegion.coordinatePlot, newRegion.notes, "regions", false);
-								document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
+								// document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
+								mapCheckPinStatus(newRegion.bamsID);
 							}
 						}
 						if(sourceSavedA == 0)
@@ -526,7 +543,8 @@ function mapDataActivateConnection()
 								window.regions[window.regions.length] = new Region(newRegion.bamsID, newRegion.name, newRegion.abbrev, newRegion.nomenclature, newRegion.species, newRegion.otherNomenclatures, newRegion.dataSets, newRegion.coordinateInteraction, newRegion.dimensions, newRegion.coordinatePlot, newRegion.notes, "regions", false);
 
 								//switch pins for both regions
-								document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
+								// document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
+								mapCheckPinStatus(newRegion.bamsID);
 							}
 						}
 						if(targetSavedA == 0)
@@ -570,7 +588,8 @@ function mapDataActivateConnection()
 							//found it! Instantiate new region
 							var newRegion = window.searchResults[kk];
 							window.regions[window.regions.length] = new Region(newRegion.bamsID, newRegion.name, newRegion.abbrev, newRegion.nomenclature, newRegion.species, newRegion.otherNomenclatures, newRegion.dataSets, newRegion.coordinateInteraction, newRegion.dimensions, newRegion.coordinatePlot, newRegion.notes, "regions", false);
-							document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
+							// document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
+							mapCheckPinStatus(newRegion.bamsID);
 						}
 					}
 					if(sourceSavedB == 0)
@@ -610,7 +629,8 @@ function mapDataActivateConnection()
 							//found it! Instantiate new region
 							var newRegion = window.searchResults[ll];
 							window.regions[window.regions.length] = new Region(newRegion.bamsID, newRegion.name, newRegion.abbrev, newRegion.nomenclature, newRegion.species, newRegion.otherNomenclatures, newRegion.dataSets, newRegion.coordinateInteraction, newRegion.dimensions, newRegion.coordinatePlot, newRegion.notes, "regions", false);
-							document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
+							// document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
+							mapCheckPinStatus(newRegion.bamsID);
 						}
 					}
 					if(targetSavedB == 0)
@@ -624,10 +644,16 @@ function mapDataActivateConnection()
 
 				var instantiatedConnection = new Connection(thisConnection.bamsID, thisConnection.sourceID, thisConnection.sourceName, thisConnection.sourceAbbrev, thisConnection.targetID, thisConnection.targetName, thisConnection.targetAbbrev, thisConnection.nomenclature, thisConnection.species, thisConnection.dimensions, thisConnection.coordinatePlot, thisConnection.notes, thisConnection.evidence, "connections", false);
 				
+				// mapCheckPinStatus(sourceID);
+				// mapCheckPinStatus(thisConnection.targetID);
+				
 				window.connections[window.connections.length] = instantiatedConnection;
 			}
 			console.log("end of loop. ii=" + ii);
+			// console.log(window.connections);
+			mapCheckPinStatus(1);
 		}
+
 		//close dialog
 		mapDataClose();
 	}
@@ -652,113 +678,215 @@ function mapDataAddMolecules()
 
 	var region = document.getElementById('mapData').region;
 	
-	document.getElementById('regionDetailsAddConnectionInputForm').innerHTML="";
-	window.outputCount = window.inputCount = 0;
-	//
-	// for(i=0; i<window.searchResults.length; i++)
-	// {
-	// 	if((window.searchResults[i].type == "Connection") && (window.searchResults[i].targetAbbrev == region.abbrev) && (window.searchResults[i].nomeclature == region.nomeclature))
-	// 	{
-	// 		window.inputCount++;
-	// 		//found an input!
+	document.getElementById('regionDetailsAddMoleculeInputForm').innerHTML="";
+	window.moleculeCount = 0;
+	
+	for(i=0; i<window.searchResults.length; i++)
+	{
+		if((window.searchResults[i].type == "Molecule") && (window.searchResults[i].regionAbbrev == region.abbrev))
+		{
+			window.moleculeCount++;
 
-	// 		//add DOM Element to regionDetailsAddConnectionInputView
-	// 		newResultDiv = document.createElement('div');
-	// 		newResultDiv.style.position = "relative";
-	// 		newResultDiv.style.marginBottom = "10px";
-	// 		newResultDiv.style.width = "100%";
-	// 		newResultDiv.style.height = "16px";
-	// 		newResultDiv.style.left = "0px;" 
+			newResultDiv = document.createElement('div');
+			newResultDiv.style.position = "relative";
+			newResultDiv.style.marginBottom = "10px";
+			newResultDiv.style.width = "100%";
+			newResultDiv.style.height = "16px";
+			newResultDiv.style.left = "0px;" 
 
-	// 		newResultCB = document.createElement('input');
-	// 		newResultCB.type = "checkbox";
-	// 		newResultCB.name = "connections";
-	// 		newResultCB.class = "connectionCB";
-	// 		// newResultCB.value = document.getElementById('regionDetailsAddConnection').connections.length;
-	// 		newResultCB.value = i;
-	// 		newResultCB.style.float="left";
-	// 		newResultCB.style.width="20px";
-	// 		newResultCB.id = window.searchResults[i].sourceAbbrev + ">" + region.abbrev;
+			newResultCB = document.createElement('input');
+			newResultCB.type = "checkbox";
+			newResultCB.name = "molecules";
+			newResultCB.class = "moleculeCB";
+			newResultCB.value = i;
+			newResultCB.style.float="left";
+			newResultCB.style.width="20px";
+			newResultCB.id = region.abbrev + ":" + window.searchResults[i].bamsID;
 
-	// 		newResultLabel = document.createElement('label')
-	// 		newResultLabel.style.float="left";
-	// 		newResultLabel.style.marginRight="10px";
-	// 		newResultLabel.htmlFor = window.searchResults[i].sourceAbbrev + ">" + region.abbrev;
-	// 		newResultLabel.appendChild(document.createTextNode(window.searchResults[i].sourceAbbrev + ">" + region.abbrev));
+			newResultLabel = document.createElement('label')
+			newResultLabel.style.float="left";
+			newResultLabel.style.marginRight="10px";
+			newResultLabel.htmlFor = window.searchResults[i].name;
+			newResultLabel.appendChild(document.createTextNode(window.searchResults[i].name));
 
-	// 		// newResultDetail = document.createElement('span')
-	// 		// newResultDetail.style.float="left";
-	// 		// newResultDetail.innerHTML = "<i class=\"icon-eye-open icon-white\" style=\"margin-right:4px;\"></i> View Details";
-	// 		// newResultDetail.connectionResult = i;
-	// 		// newResultDetail.onclick = function(){mapDataViewConnectionEvidence(newResultDetail.connectionResult);};
-	// 		newResultDetail = document.createElement('span');
-	// 		newResultDetail.style.float="left";
-	// 		newResultDetail.style.cursor="pointer";
-	// 		newResultDetail.innerHTML = "<span onclick=\"mapDataViewConnectionEvidence(" + i + ")\" style='font-size:9px;'><span class=\"glyphicon glyphicon-eye-open\" style=\"margin-right:4px;\"></span> Details</span>";
+			newResultDetail = document.createElement('span');
+			newResultDetail.style.float="left";
+			newResultDetail.style.cursor="pointer";
+			newResultDetail.innerHTML = "<span onclick=\"mapDataViewMoleculeEvidence(" + i + ")\" style='font-size:9px;'><span class=\"glyphicon glyphicon-eye-open\" style=\"margin-right:4px;\"></span> Details</span>";
 
-	// 		newResultDiv.appendChild(newResultCB);
-	// 		newResultDiv.appendChild(newResultLabel);
-	// 		newResultDiv.appendChild(newResultDetail);
+			newResultDiv.appendChild(newResultCB);
+			newResultDiv.appendChild(newResultLabel);
+			newResultDiv.appendChild(newResultDetail);
 
-	// 		//add to regionDetailsAddConnection.connections[]
-	// 		// document.getElementById('regionDetailsAddConnection').connections[document.getElementById('regionDetailsAddConnection').connections.length] = window.searchResults[i];
-	// 		document.getElementById('regionDetailsAddConnectionInputForm').appendChild(newResultDiv);
-	// 	}
-	// }
+			document.getElementById('regionDetailsAddMoleculeInputForm').appendChild(newResultDiv);
+		}
+	}
 
-	// for(i=0; i<window.searchResults.length; i++)
-	// {
-	// 	if((window.searchResults[i].type == "Connection") && (window.searchResults[i].sourceAbbrev == region.abbrev) && (window.searchResults[i].nomeclature == region.nomeclature))
-	// 	{
-	// 		window.outputCount++;
-	// 		//found an output
-	// 		//add DOM Element to regionDetailsAddConnectionOutputView
-	// 		//attach ID number (or array index i?) to each element
+	document.getElementById('regionDetailsAddMoleculeInputCount').innerHTML = window.moleculeCount + " molecules found";
 
-	// 		newResultDiv = document.createElement('div');
-	// 		newResultDiv.style.position = "relative";
-	// 		newResultDiv.style.marginBottom = "10px";
-	// 		newResultDiv.style.width = "100%";
-	// 		newResultDiv.style.height = "16px";
-
-	// 		newResultCB = document.createElement('input');
-	// 		newResultCB.type = "checkbox";
-	// 		newResultCB.name = "connections";
-	// 		newResultCB.class = "connectionCB";
-	// 		// newResultCB.value = document.getElementById('regionDetailsAddConnection').connections.length;
-	// 		newResultCB.value = i;
-	// 		newResultCB.style.float="left";
-	// 		newResultCB.style.width="40px";
-	// 		newResultCB.id = region.abbrev + ">" + window.searchResults[i].targetAbbrev;
-
-	// 		newResultLabel = document.createElement('label');
-	// 		newResultLabel.style.float="left";
-	// 		newResultLabel.style.marginRight="10px";
-	// 		newResultLabel.htmlFor = region.abbrev + ">" + window.searchResults[i].targetAbbrev;
-	// 		newResultLabel.appendChild(document.createTextNode(region.abbrev + ">" + window.searchResults[i].targetAbbrev));
-
-	// 		newResultDetail = document.createElement('span');
-	// 		newResultDetail.style.float="left";
-	// 		newResultDetail.style.cursor="pointer";
-	// 		newResultDetail.innerHTML = "<span onclick=\"mapDataViewConnectionEvidence(" + i + ")\" style='font-size:9px;'><span class=\"glyphicon glyphicon-eye-open\" style=\"margin-right:4px;\"></span> Details</span>";
-	// 		// newResultDetail.onclick = function(){ mapDataViewConnectionEvidence(i)};
-
-	// 		newResultDiv.appendChild(newResultCB);
-	// 		newResultDiv.appendChild(newResultLabel);
-	// 		newResultDiv.appendChild(newResultDetail);
-
-	// 		document.getElementById('regionDetailsAddConnectionOutputForm').appendChild(newResultDiv);
-	// 	}
-	// }
-
-	// //find outputs
-	// $('#regionDetailsAddConnectionInputCount').html("Inputs to " + region.abbrev + " (" + window.inputCount + " found)");
-	// $('#regionDetailsAddConnectionOutputCount').html("Outputs from" + region.abbrev + " (" + window.outputCount + " found)");
 	// //display interface
-	// $('#regionDetailsAddData').fadeOut(100);
-	// $('#mapDataName').fadeOut(100);
-	// $('#mapDataPartDetails').fadeOut(100);
-	// //prep Add Connection view
+	$('#regionDetailsAddData').fadeOut(100);
+	$('#mapDataName').fadeOut(100);
+	$('#mapDataPartDetails').fadeOut(100);
+	
 
 	$('#regionDetailsAddMolecule').fadeIn(500);
+}
+
+
+function mapDataActivateMolecule()
+{
+	console.log("in mapDataActivateMolecule");
+	document.getElementById('regionDetailsAddMolecule').selected = [];
+	//check to make sure at least one connection has been selected
+	
+	var inputBox = document.getElementById('regionDetailsAddMoleculeInputForm');
+	for(i=0; i<inputBox.length; i++)
+	{
+		if(inputBox[i].checked)
+		{
+			document.getElementById('regionDetailsAddMolecule').selected[document.getElementById('regionDetailsAddMolecule').selected.length] = inputBox[i].value;
+		}
+	}
+
+	console.log(document.getElementById('regionDetailsAddMolecule').selected);
+	console.log(window.searchResults[document.getElementById('regionDetailsAddMolecule').selected[0]]);
+
+	if(document.getElementById('regionDetailsAddMolecule').selected.length > 0)
+	{
+
+		for(ii=0; ii<document.getElementById('regionDetailsAddMolecule').selected.length; ii++)
+		{
+			
+			var thisMolecule = window.searchResults[document.getElementById('regionDetailsAddMolecule').selected[ii]];
+			
+			//is this molecule already active?
+			var isPresent = 0;
+			
+			for(j=0; j<window.molecules.length; j++)
+			{
+				if((window.molecules[j].bamsID == thisMolecule.bamsID) && (window.molecules[j].regionID == thisMolecule.regionID))
+				{
+					console.log(thisMolecule);
+					//found this molecule already active in this region in this layer.
+					isPresent++;
+				}
+			}
+			if(!(isPresent))
+			{
+				//instantiate molecule
+				var instantiatedMolecule = new Molecule(thisMolecule.bamsID, thisMolecule.name, thisMolecule.regionID, thisMolecule.regionName, thisMolecule.regionAbbrev, thisMolecule.distribution, thisMolecule.strength, thisMolecule.annotation, thisMolecule.referenceName, thisMolecule.referenceURL, thisMolecule.detailsURL, "molecules", false);
+				window.molecules.push(instantiatedMolecule);
+				mapCheckPinStatus(thisMolecule.regionID);
+			}
+		}
+		//close dialog
+		mapDataClose();
+	}
+	else
+	{
+		alert("Please select at least one molecule.");
+	}
+}
+
+function mapDataViewMoleculeEvidence(moleculeNumber)
+{
+	var thisMolecule = window.searchResults[moleculeNumber];
+
+	document.getElementById('regionDetailsAddMoleculeName').innerHTML = thisMolecule.name;
+	
+	var detailsText = "According to <a href='" + thisMolecule.referenceURL + "'>" + thisMolecule.referenceName + "</a>, " + thisMolecule.name + " can be observed with ";
+
+	if(thisMolecule.strength == "not known" || thisMolecule.strength == "" || thisMolecule.strength === undefined)
+	{
+		detailsText = detailsText + "indeterminant";
+	}
+	else
+	{
+		detailsText = detailsText + thisMolecule.strength;
+	}
+
+	detailsText = detailsText + " staining strength in ";
+
+	if(thisMolecule.distribution == "not known" || thisMolecule.distribution == "" || thisMolecule.distribution === undefined)
+	{
+		detailsText = detailsText + "an indeterminant";
+	}
+	else
+	{
+		detailsText = detailsText + "a " + thisMolecule.distribution;
+	}
+
+	detailsText = detailsText + " distribution in the " + thisMolecule.regionName + ". Specific case details <a href='" + thisMolecule.detailsURL + "'>can be found here.</a>";
+
+	document.getElementById('regionDetailsAddMoleculeDescription').innerHTML = detailsText;
+
+	$('#molDetails').modal('toggle');
+}
+
+function mapDataMoleculesModal()
+{
+	document.getElementById('regionMolsDetailDescription').style.display = "none";
+
+	var part = document.getElementById('regionCnxDetails').part;
+
+	document.getElementById('regionMolsDetailsName').innerHTML = part.name;
+	var moleculeCount = 0;
+	document.getElementById('regionMolsDetailMolsBox').innerHTML = "<span><b>Select a molecule:</b></span><br>";
+
+	//find how many molecules this region is involved in:
+	for(i=0; i<window.molecules.length; i++)
+	{
+		if((window.molecules[i].regionID == part.bamsID))
+		{
+			moleculeCount++;
+			var newMolecule = document.createElement('div');
+			newMolecule.innerHTML = "<li>" + window.molecules[i].name + "</li>";
+			newMolecule.style.cursor = "pointer";
+			newMolecule.onclick = function(i) { return function(){ mapDataMoleculesModalViewMolecule(i)}; }(i);
+			newMolecule.className = "mapDataDefaultMolsListEntry";
+			document.getElementById('regionMolsDetailMolsBox').appendChild(newMolecule);
+		}
+	}
+	$('#regionMolsDetails').modal('toggle');
+}
+
+function mapDataMoleculesModalViewMolecule(moleculeID)
+{
+	console.log("in mapDataMoleculesModalViewMolecule():");
+	var thisMolecule = window.molecules[moleculeID];
+	
+	console.log("Working with: ");
+	console.log(thisMolecule);
+
+	var detailsText = "According to <a href='" + thisMolecule.referenceURL + "'>" + thisMolecule.referenceName + "</a>, " + thisMolecule.name + " can be observed with ";
+
+	if(thisMolecule.strength == "not known" || thisMolecule.strength == "" || thisMolecule.strength === undefined)
+	{
+		detailsText = detailsText + "indeterminant";
+	}
+	else
+	{
+		detailsText = detailsText + thisMolecule.strength;
+	}
+
+	detailsText = detailsText + " staining strength in ";
+
+	if(thisMolecule.distribution == "not known" || thisMolecule.distribution == "" || thisMolecule.distribution === undefined)
+	{
+		detailsText = detailsText + "an indeterminant";
+	}
+	else
+	{
+		detailsText = detailsText + "a " + thisMolecule.distribution;
+	}
+
+	detailsText = detailsText + " distribution in the " + thisMolecule.regionName + ". Specific case details <a href='" + thisMolecule.detailsURL + "'>can be found here.</a>";
+
+
+	document.getElementById('regionMolsDetailDescriptionText').innerHTML = detailsText;
+	document.getElementById('regionMolsDetailLabelsName').innerHTML = thisMolecule.name;
+	document.getElementById('regionMolsDetailDescription').style.display = "inline";
+
+
 }

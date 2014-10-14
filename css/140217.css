@@ -671,8 +671,10 @@
 .mapDataDefaultMolsListEntry
 {
 	position: relative;
-	height:20px;
+	height:30px;
 	width:80px;
+	font-size: 10px;
+	margin-bottom: 5px;
 }
 
 #mapDataDefaultCells
@@ -992,10 +994,20 @@ Molecules
 {
 	position:absolute;
 	left:10px;
+	top:5px;
+	width:500px;
+	height:30px;
+	font-size: 24px;
+	color:#FFF;
+}
+
+#regionDetailsAddMoleculeHeader
+{
+	position:absolute;
+	left:10px;
 	top:40px;
 	width:250px;
 	height:30px;
-	background-color: #F00;
 }
 
 #regionDetailsAddMoleculeInputView
@@ -1003,10 +1015,9 @@ Molecules
 	position:absolute;
 	left:10px;
 	top:80px;
-	width:250px;
+	width:400px;
 	height:270px;
 	overflow-y:scroll;
-	background-color: #F00;
 }
 #regionDetailsAddMoleculeOutputTitle
 {
@@ -1059,21 +1070,49 @@ Molecules
 	position: relative; left:0px; top:0px; height:60px; width:100%;
 }
 
-#regionDetailsAddMoleculeDetailsSourceAbbrev
+#regionDetailsAddMoleculeName
 {
-	position:absolute; left:150px; top:0px; font-size:22px; font-weight:bold;
+	position:relative; left:0px; top:30px; width:100%; font-size:24px; text-align: center; margin-bottom: 20px; font-weight: 700;
 }
 
-#regionDetailsAddMoleculeDetailsConnectionNames
-{
-	position:absolute; left:0px; top:30px; width:100%; font-size:12px; text-align: center;
-}
-
-#regionDetailsAddMoleculeDetailsDescription
+#regionDetailsAddMoleculeDescription
 {
 	position:relative; left:0%; top:20px; width:100%; font-size:16px; height:auto; margin-bottom: 100px;
 }
 
+/*//
+//
+//*/
+
+#regionMolsDetailMolsBox
+{
+	float:left; top:0px; height:400px; width:169px; border-right:1px solid #DDD; overflow-y:scroll;
+}
+
+#regionMolsDetailDescription
+{
+	float:left; top:0px; height:400px; width:400px; margin: 5px;
+}
+
+#regionMolsDetailNotes
+{
+	float:left; top:0px; height:400px; width:290px;
+}
+
+#regionMolsDetailLabels
+{
+	position: relative; left:0px; top:0px; height:30px; width:100%;
+}
+
+#regionMolsDetailLabelsName
+{
+	position:relative; left:0px; top:0px; width:100%; font-size:24px; text-align: center; font-weight: 700;
+}
+
+#regionCnxDetailDescriptionText
+{
+	position:relative; left:0%; top:20px; width:100%; font-size:14px; height:auto; margin-bottom: 100px;
+}
 
 
 #intxn{

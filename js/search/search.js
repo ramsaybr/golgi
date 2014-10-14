@@ -106,7 +106,6 @@ function search(mapValue)
 								console.log("in search: creating new molecule");
 								
 								window.searchResults[window.searchResults.length] = new Molecule(MoleculeResponse.bamsID, MoleculeResponse.name, MoleculeResponse.regionID, MoleculeResponse.regionName, MoleculeResponse.regionAbbrev, MoleculeResponse.distribution, MoleculeResponse.strength, MoleculeResponse.annotation, MoleculeResponse.referenceName, MoleculeResponse.referenceURL, MoleculeResponse.detailsURL, "searchResults", false);
-								console.log(window.searchResults);
 							}
 						}
 					};
@@ -164,7 +163,8 @@ function searchFromMap(mapValue)
 						console.log("in searchFromMap: instantiating new region for direct display on the map");
 						var newObject = new Region(newResult.bamsID, newResult.name, newResult.abbreviation, newResult.nomenclature, newResult.species, newResult.otherNomenclatures, newResult.dataSets, newResult.coordinateInteraction, newResult.dimensions, newResult.coordinatePlot, newResult.notes, "regions", false);
 							window.regions[window.regions.length] = newObject;
-						document.getElementById(window.layerData[0] + "_" + newResult.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
+						// document.getElementById(window.layerData[0] + "_" + newResult.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
+						// mapCheckPinStatus(newResult.bamsID);
 						
 						break;
 					case "Connection":

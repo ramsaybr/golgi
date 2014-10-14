@@ -57,41 +57,6 @@ function changeZoom(newValue, instance)
 	{
 		console.log("scaling regions. i=" + i);
 		console.log("curentZoom = " + currentZoom);
-		// switch(currentZoom)
-		// {
-		// 	case(1):
-		// 		console.log("Zoom 1");
-		// 		// window.regions[i].regionDOM.src = window.regions[i].fileToDraw1;
-		// 		window.regions[i].pin.src = "img/ui/pin1.png";
-		// 		window.regions[i].pin.width = "10";
-		// 		window.regions[i].pin.height = "30";
-		// 		var zoomFactor = 1;
-		// 	break;
-		// 	case(2):
-		// 		console.log("Zoom 2");
-		// 		// window.regions[i].regionDOM.src = window.regions[i].fileToDraw1;
-		// 		window.regions[i].pin.src = "img/ui/pin2.png";
-		// 		window.regions[i].pin.width = "20";
-		// 		window.regions[i].pin.height = "60";
-		// 		var zoomFactor = 2;
-		// 	break;
-		// 	case(3):
-		// 		console.log("Zoom 3");
-		// 		// window.regions[i].regionDOM.src = window.regions[i].fileToDraw1;
-		// 		window.regions[i].pin.src = "img/ui/pin3.png";
-		// 		window.regions[i].pin.width = "30";
-		// 		window.regions[i].pin.height = "90";
-		// 		var zoomFactor = 4;
-		// 	break;
-		// 	case(4):
-		// 		// window.regions[i].regionDOM.src = window.regions[i].fileToDraw1;
-		// 		window.regions[i].pin.src = "img/ui/pin4.png";
-		// 		window.regions[i].pin.width = "40";
-		// 		window.regions[i].pin.height = "120";
-		// 		var zoomFactor = 8;
-		// 	break;
-		// }
-
 		window.regions[i].pin.src = "img/ui/pin/" + currentZoom + "_r.png";
 		window.regions[i].pin.width = 10 * currentZoom;
 		window.regions[i].pin.height = 30 * currentZoom;
@@ -108,6 +73,9 @@ function changeZoom(newValue, instance)
 		window.regions[i].pin.style.left = ((window.regions[i].coordinateInteraction[0] * zoomFactor) - window.regions[i].pin.width/2) + "px";
 		window.regions[i].pin.style.top = ((window.regions[i].coordinateInteraction[1] * zoomFactor) - window.regions[i].pin.height) + "px";
 	}
+
+	//update all pins to reflect data displayed:
+	mapCheckPinStatus(0);
 
 	//	change connections DOM to match zoomlevel, move accordingly.
 	for(i=0; i<window.connections.length; i++)
@@ -156,5 +124,54 @@ function updateMap(pass)
 		document.getElementById('mapDiv').innerHTML = document.getElementById('mapDiv').innerHTML + "</div>";
 	}
 }
+
+
+function mapCheckPinStatus(regionID)
+{
+	console.log("in mapCheckPinStatus(): ");
+	for(var j=0; j<window.regions.length; j++)
+	{
+		var thisRegion = window.regions[j];
+		hasConnections = hasMolecules = hasCells = 0;
+		for(var i=0; i<window.connections.length; i++)
+		{
+			var thisConnection = window.connections[i];
+			if((thisConnection.sourceID == thisRegion.bamsID || thisConnection.targetID == thisRegion.bamsID) && (thisConnection.layer == window.layerData[0]))
+			{
+				hasConnections++;
+			}
+		}
+
+		
+		for(var i=0; i<window.molecules.length; i++)
+		{
+			var thisMolecule = window.molecules[i];
+			if((thisMolecule.regionID == thisRegion.bamsID) && (thisMolecule.layer == window.layerData[0]))
+			{
+				hasMolecules++;
+			}
+		}
+
+		var pin = "img/ui/pin/" + window.currentZoom + "_r";
+		if(hasCells > 0)
+		{
+			pin = pin + "_c";
+		}
+		if(hasConnections > 0)
+		{
+			pin = pin + "_x";
+		}
+		if(hasMolecules > 0)
+		{
+			pin = pin + "_m";
+		}
+
+		pin = pin + ".png";
+		console.log(pin);
+
+		document.getElementById(window.layerData[0] + "_" + thisRegion.bamsID).src = pin;
+	}
+}
+
 
 changeZoom(2, "init");
