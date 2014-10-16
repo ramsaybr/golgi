@@ -1,4 +1,25 @@
-<?php include_once('php/header.php'); ?>
+<?php 
+session_start();
+if (isset($_COOKIE['UID'])) 
+{
+	if($_COOKIE['UID'] != "")
+	{
+		$identity = true;
+	    $identityEmail = $_COOKIE['email'];
+	    // $default = "http://www.somewhere.com/homestar.jpg";
+	    $grav_url = "http://www.gravatar.com/avatar/" . md5( strtolower( trim( $identityEmail ) ) ) . "?d=" . urlencode( $default ) . "&s=40";
+	}
+	else
+	{
+		$identity = false;	
+	}
+} else {
+	$identity = false;
+}
+
+include_once('php/header.php'); 
+
+?>
 
 		<div id="masterDiv">
 		<!-- Begin master div -->
@@ -19,7 +40,7 @@
 						<div id="searchResultsType">
 						</div>
 						<div id="searchAddToMap">
-							<img id="searchAddToMapIcon" src="img/ui/pin/4_r_c_x_m.png" width="20" height="60"/>
+							<img id="searchAddToMapIcon" src="img/ui/pin/2_r_x_c_m.png" width="30" height="90"/>
 							<div id="searchAddToMapBtn" class="btn btn-success" onclick="addRegion()"></div>
 						</div>
 						<div id="searchFoundData">
@@ -44,8 +65,57 @@
 					</div>
 
 					<div id="userDiv">
-						<span class="glyphicon glyphicon-user" style="padding-right:10px;"></span>Logged in as <a>Ramsay Brown</a>
+						
+						<?php 
+							if($identity)
+							{
+								echo "<img src='" . $grav_url . "'/> Logged in as <a style='cursor:pointer' onclick='showAccountInfo()'>" . $identityEmail . "</a>";
+							}
+							else
+							{
+								echo '<div style="padding-top:10px;"><span class="glyphicon glyphicon-user" style="padding-right:10px;"></span><a style="cursor:pointer" onclick="showCredentials()">Log in or sign up free</a></div>';
+							}
+						?>
+
 					</div>
+
+					<div id="credentials">
+						<p><span style="float:right; cursor:pointer;" class="glyphicon glyphicon-remove" onclick="hideCredentials()"></span></p>
+						<div id="credentialsSignInDiv">
+							<p>Returning users: </p>
+							<input type="text" class="form-control credentialsItem" id="credentialsEmail" placeholder="Email"/>
+							<input type="password" class="form-control credentialsItem" id="credentialsEmail" placeholder="Password"/>
+							<button class="btn btn-warning btn-small credentialsItem" style="width:18%; line-height: 0;">Sign in</button>
+							<br><br>
+						</div>
+						<div id="credentialsSignUpDiv">
+							<h3 id="credentialsSignUpHeader">It's fast and free to sign up</h3>
+							<p id="credentialsSignUpDivText">Save your private notes on regions, connections, molecules and cells. <br>It's like scrawling your brilliant ideas in the margin of a paper. But the future.</p>
+							<button class="btn btn-success btn-large" id="credentialsSignUp" onclick="signupShow()">Sign up</button>
+							<input type="text" class="form-control credentialsSignUpHidden" id="credentialsSignUpEmail" placeholder="Email"/>
+							<input type="password" class="form-control credentialsSignUpHidden" id="credentialsSignUpPwd1" placeholder="Password"/>
+							<input type="password" class="form-control credentialsSignUpHidden" id="credentialsSignUpPwd2" placeholder="Password again (y'know - for good measure)"/>
+							<div class="alert alert-danger credentialsSignUpHidden" id="credentialsSignUpAlert">
+								Oops! That account is already in use. If this error persists or you think there's a mistake, please email us at usegolgi@gmail.com
+							</div>
+							<button class="btn btn-success btn-large credentialsSignUpHidden" id="credentialsSignUpSubmit" onclick="signupSubmit()">Create my account</button>
+							
+						</div>
+					</div>
+
+					<div id="accountInfo" style="display:none;">
+						<button class="btn btn-sm btn-success accountInfoBtn" id="accountInfoViewNotebook">
+							<span class="glyphicon glyphicon-eye-open"></span> View my notebook
+						</button><br>
+						<button class="btn btn-xs btn-default accountInfoBtn" id="accountInfoChangePwd">
+							<span class="glyphicon glyphicon-pencil"></span> Change password
+						</button><br>
+						<button class="btn btn-xs btn-danger accountInfoBtn" id="accountInfoLogout" onclick="accountLogout()">
+							Logout
+						</button>
+					</div>
+
+
 					<div id="mapCtrl">
 						<span id="zoomSliderIcon" class="glyphicon glyphicon-zoom-in btn-lg"></span>
 						<div id="zoomSlider">
@@ -53,14 +123,14 @@
 						
 					</div>
 					<div id="layers">
-						<div style="position:relative; left:0px; background-color: #3D3C42; top:0px; height:26px; width:100%; border-radius: 0px 0px 0px 4px;">
+						<div style="position:relative; left:0px; background-color: #3D3C42; top:0px; height:26px; width:100%; border-radius: 0px 0px 0px 4px; box-shadow:-1px 1px 1px 0px #222;">
 							<div id="layersHeader">
 								Active Data Layer: <span id="currentLayer">Layer 1</span>
 							</div>
 						</div>
 						<div id="layerContainer">
 						</div>
-						<div style="position:relative; top:0px; background-color:#3D3C42; left:0px; width:100%; height:auto; padding-bottom:20px; border-radius: 4px 0px 0px 4px;">
+						<div style="position:relative; top:0px; background-color:#3D3C42; left:0px; width:100%; height:auto; padding-bottom:20px; border-radius: 4px 0px 0px 4px; box-shadow: -1px 1px 1px 0px #222;">
 							<div id="layerAddLayer" class="btn btn-success" onclick="newLayer()">
 								Add Layer <span class="glyphicon glyphicon-plus"></span>
 							</div>
@@ -141,12 +211,24 @@
 
 					<div id="mapDataDefaultCells" class="mapDataDefault">
 						<img src="img/ui/cellType-40x60.png" width="20" height="30" class="mapDataIcon"/>
-						<span id="mapDataActiveCells">0</span> Cell Types
+						<span id="mapDataActiveCells"></span> cell(s)
+						<div id="mapDataDefaultCellsList">
+							<div id="mapDataDefaultCellsListFlex">
+							</div>
+							<div class="mapDataDefaultCellsListBtn btn btn-warning yellowBtn" onclick="mapDataCellsModal()" style="display:none;" id="mapDataDefaultCellsListViewDetailsBtn">
+								View Details
+							</div>
+							<div class="mapDataDefaultCellListBtn btn btn-success" onclick="mapDataAddCells()">
+								Add new +
+							</div>
+						</div>
 					</div>
 
 					<div id="mapDataClose" onclick="mapDataClose()">
 						<span class="glyphicon glyphicon-remove"></span>
 					</div>
+
+					<!-- Add Connection -->
 
 					<div id="regionDetailsAddConnection" style="display:none;">
 						<div id="regionDetailsAddConnectionTitle">Check connections to display:
@@ -170,6 +252,8 @@
 						</div>
 					</div>
 
+					<!-- Add Molecule -->
+
 					<div id="regionDetailsAddMolecule" style="display:none;">
 						<div id="regionDetailsAddMoleculeTitle">Check molecules to display:
 						</div>
@@ -183,6 +267,24 @@
 						
 						<div class="btn btn-success" id="regionDetailsAddMoleculeBtn" onclick="mapDataActivateMolecule()">Add Selected to Map</div>
 						<div id="regionDetailsAddMoleculeDetails" style="display:none;">
+						</div>
+					</div>
+
+					<!-- Add Cell -->
+
+					<div id="regionDetailsAddCell" style="display:none;">
+						<div id="regionDetailsAddCellTitle">Check cell types to display:
+						</div>
+						<div id="regionDetailsAddCellHeader">
+							<img src="img/ui/cellType-40x60.png" style="width:20px; height:30px; float:left; margin-right:10px;"/>
+							<span id="regionDetailsAddCellCount"></span>
+						</div>
+						<div id="regionDetailsAddCellInputView">
+							<form id="regionDetailsAddCellInputForm"></form>
+						</div>
+						
+						<div class="btn btn-success" id="regionDetailsAddCellBtn" onclick="mapDataActivateCells()">Add Selected to Map</div>
+						<div id="regionDetailsAddCellDetails" style="display:none;">
 						</div>
 					</div>
 
@@ -331,6 +433,60 @@
 		  </div>
 		</div>
 
+		<!-- Cell details modals -->
+
+		<div class="modal fade" id="cellDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Cell Details</h4>
+		      </div>
+		      <div class="modal-body">
+		        <center>
+	        		<img src="img/ui/cellType.png" width="100" height="150"/>
+	        		<div id="regionDetailsAddCellDetailsLabel">
+						<div id="regionDetailsAddCellName"></div>
+	        		</div>
+        		</center>
+				<div id="regionDetailsAddCellDescription">
+				</div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
+		<!-- All Cells Details -->
+		<div class="modal fade" id="regionCellsDetails" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog" style="width:900px; height:600px;">
+		    <div class="modal-content" style="height:600px;">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+		        <h4 class="modal-title" id="myModalLabel">Cells currently displayed for <span id="regionCellsDetailsName"></span>:</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<div id="regionCellsDetailCellsBox">
+		      	</div>
+		      	<div id="regionCellsDetailDescription" style="display:none;">
+			        <center>
+		        		<img src="img/ui/cellType.png" width="100" height="150"/>
+		        		<div id="regionCellsDetailLabels">
+							<div id="regionCellsDetailLabelsName"></div>
+		        		</div>
+	        		</center>
+					<div id="regionCellsDetailDescriptionText">
+					</div>
+		      	</div>
+		      	<div id="regionCellsDetailNotes">
+		      	</div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+
 <?php include_once('php/footer.php'); ?>
 <script src="js/main.js"></script>
 <script src="js/layer/layer.js"></script>
@@ -338,8 +494,13 @@
 <script src="js/connections/connections.js"></script>
 <script src="js/connections/evidence/evidence.js"></script>
 <script src="js/molecules/molecules.js"></script>
+<script src="js/cells/cells.js"></script>
 <script src="js/search/search.js"></script>
 <script src="js/search/partsList.js"></script>
 <script src="js/mapdata/mapData.js"></script>
-
+<script src="js/user/utf8_encode.js"></script>
+<script src="js/user/sha1.js"></script>
+<script src="js/user/md5.js"></script>
+<script src="js/user/signup.js"></script>
+<script src="js/user/account.js"></script>
 </html>

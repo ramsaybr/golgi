@@ -1,9 +1,6 @@
-//window.searchResults contains instantiated region, connection, molecule, or cell type objects that were returned from a user search and its interactions with the database. 
-
-//131119: Once a region has been added, an AJAX call should be made to pull up its input/output connections, cells, and molecules and place them in searchResults for faster return when the user wants them
 window.searchResults = [];
-//window.searchable contains a list of all searchable terms. This will probably need to be contained in a separate file (it will get unruly large)
-// window.searchable = ["Nucleus Accumbens (ACB)", "Infralimbic Area (ILA)", "Substantia Innominata, dorsomedial tip receiving region (SIdmtr)", "Lateral Hypothalamic Area, anterior region intermediate zone (LHAai)", "Interfascicular Nucleus (IF)", "Dorsal Raphe Nucleus (DR)", "Caudoputamen (CP)", "Globus Pallidus, external segment (GPe)", "Globus Pallidus, internal segment (GPi)", "Primary Motor Cortex (MOp)", "Substantia Nigra pars reticula (SNr)", "Substantia Nigra pars compacta (SNc)", "Subthalamic Nucleus (STN)", "Ventral anterior lateral Thalamus (VAl)", "Motor system, spinal cord (MOT)"];
+
+window.searchOpen = false;
 
 window.searchable = [];
 
@@ -22,106 +19,151 @@ function clearSearch()
 
 function search(mapValue)
 {
-	//check if this item is in searchResults[]
-	//if it is not, make AJAX $.GET to retrieve it.
-	//	process JSON, instantiate new Region() object into searchResults['regions']
-	//	update Search Results DOM with new data. Set transient DOM properties preparing for further user interaction (ie: adding the region to the map, querying for connections, molecules, cells, other nomenclatures..)
 
-	//...some sweet AJAX is happening right here...
 	if(document.getElementById('searchInput').value != "" && document.getElementById('searchInput').value != "Search to add data to the map")
 	{
-		
+
 		var url1 = document.getElementById('searchInput').value.split("(");
 		var	url2 = url1[1].split(")");
 		var url = "api/v1/nomenclature/1/region/" + url2[0];
 
-		//make API call to find region
-		xmlHttp = new XMLHttpRequest();
-		xmlHttp.onreadystatechange = function()
+		//has this region been previously searched for?
+		var alreadyHere = false;
+		var regionIndex = -1;
+		for(var i=0; i<window.searchResults.length; i++)
 		{
-			if (xmlHttp.readyState==4 && xmlHttp.status==200)
+			if(window.searchResults[i].type=="Brain Region")
 			{
-				console.log("in search: region raw response: " + xmlHttp.responseText);
-				//unpack JSON response
-				//make new searchResults[] object, add to searchResults
-				var newResult = JSON.parse(xmlHttp.responseText);
-				switch(newResult.type)
+				if(window.searchResults[i].abbrev == url2[0])
 				{
-					case "Region":
-						console.log("in search: making newObject for region (searchResults)");
-						var newObject = new Region(newResult.bamsID, newResult.name, newResult.abbreviation, newResult.nomenclature, newResult.species, newResult.otherNomenclatures, newResult.dataSets, newResult.coordinateInteraction, newResult.dimensions, newResult.coordinatePlot, newResult.notes, "searchResults", false);
-						break;
-					case "Connection":
-						break;
-				}
-
-				window.searchResults[window.searchResults.length] = newObject;
-				var newIndex = window.searchResults.length-1;
-				var i = newIndex;
-				$('#searchResultsName').html(window.searchResults[i].name);
-				$('#searchResultsType').html(window.searchResults[i].type + ", " + window.searchResults[i].nomenclature + " (" + window.searchResults[i].species + ")");
-				$('#searchOtherResults').html("Also found in <a>" + window.searchResults[i].otherNomenclatures + "</a> other nomenclatures");
-				$('#searchAddToMapBtn').html("Add " + window.searchResults[i].abbrev + " to the Map");
-				$('#searhcFoundNumber').html(window.searchResults[i].dataSets.length);
-				$('#searchFoundName').html(window.searchResults[i].abbrev);
-				document.getElementById('searchResultsDiv').currentResult = window.searchResults[i];
-
-				//if search returned a Region, find its connections
-				if(newResult.type == "Region")
-				{
-					console.log("in search: calling API for connections");
-					xmlHttp2 = new XMLHttpRequest();
-					xmlHttp2.onreadystatechange = function()
-					{
-						if (xmlHttp2.readyState==4 && xmlHttp2.status==200)
-						{
-							console.log("in search: connection raw response: " + xmlHttp2.responseText);
-							var Response = JSON.parse(xmlHttp2.responseText);
-							for(i=0; i<Response.length; i++)
-							{
-								CnxResponse = Response[i];
-								console.log("in search: creating new connection");
-								window.searchResults[window.searchResults.length] = new Connection(CnxResponse.bamsID, CnxResponse.sourceID, CnxResponse.sourceName, CnxResponse.sourceAbbrev, CnxResponse.targetID, CnxResponse.targetName, CnxResponse.targetAbbrev, CnxResponse.nomenclature, CnxResponse.species, CnxResponse.dimensions, CnxResponse.coordinatePlot, CnxResponse.notes, CnxResponse.evidence, "searchResults", false);
-							}
-						}
-					};
-					var cnxUrl = "api/v1/nomenclature/1/region/" + url2[0] + "/connection/";
-					xmlHttp2.open("GET",cnxUrl,false);
-					xmlHttp2.send();
-
-					//
-					//Needs a request for molecules
-					//
-					console.log("in search: calling API for molecules");
-					xmlHttp3 = new XMLHttpRequest();
-					xmlHttp3.onreadystatechange = function()
-					{
-						if (xmlHttp3.readyState==4 && xmlHttp3.status==200)
-						{
-							console.log("in search: molecule raw response: " + xmlHttp3.responseText);
-							var Response = JSON.parse(xmlHttp3.responseText);
-							for(i=0; i<Response.length; i++)
-							{
-								MoleculeResponse = Response[i];
-								console.log("in search: creating new molecule");
-								
-								window.searchResults[window.searchResults.length] = new Molecule(MoleculeResponse.bamsID, MoleculeResponse.name, MoleculeResponse.regionID, MoleculeResponse.regionName, MoleculeResponse.regionAbbrev, MoleculeResponse.distribution, MoleculeResponse.strength, MoleculeResponse.annotation, MoleculeResponse.referenceName, MoleculeResponse.referenceURL, MoleculeResponse.detailsURL, "searchResults", false);
-							}
-						}
-					};
-					var moleculeUrl = "api/v1/nomenclature/1/region/" + url2[0] + "/molecule/";
-					xmlHttp3.open("GET",moleculeUrl,false);
-					xmlHttp3.send();
+					alreadyHere = true;
+					regionIndex = i;
 				}
 			}
-		};
-		//find abbreviation
-		xmlHttp.open("GET",url,false);
-		xmlHttp.send();
+		}
 
-		// $('#searchResultsDiv').fadeIn(250);
-		$('#intxn').animate({left:'+=400'}, 500);
-		$('#searchResultsDiv').animate({left:'0px'}, 500);
+		if(!(alreadyHere))
+		{
+			//make API call to find region
+			xmlHttp = new XMLHttpRequest();
+			xmlHttp.onreadystatechange = function()
+			{
+				if (xmlHttp.readyState==4 && xmlHttp.status==200)
+				{
+					console.log("in search: region raw response: " + xmlHttp.responseText);
+					//unpack JSON response
+					//make new searchResults[] object, add to searchResults
+					var newResult = JSON.parse(xmlHttp.responseText);
+					switch(newResult.type)
+					{
+						case "Region":
+							console.log("in search: making newObject for region (searchResults)");
+							var newObject = new Region(newResult.bamsID, newResult.name, newResult.abbreviation, newResult.nomenclature, newResult.species, newResult.otherNomenclatures, newResult.dataSets, newResult.coordinateInteraction, newResult.dimensions, newResult.coordinatePlot, newResult.notes, "searchResults", false);
+							break;
+						case "Connection":
+							break;
+					}
+
+					window.searchResults[window.searchResults.length] = newObject;
+					var newIndex = window.searchResults.length-1;
+					var i = newIndex;
+					$('#searchResultsName').html(window.searchResults[i].name);
+					$('#searchResultsType').html(window.searchResults[i].type + ", " + window.searchResults[i].nomenclature + " (" + window.searchResults[i].species + ")");
+					$('#searchOtherResults').html("Also found in <a>" + window.searchResults[i].otherNomenclatures + "</a> other nomenclatures");
+					$('#searchAddToMapBtn').html("Add " + window.searchResults[i].abbrev + " to the Map");
+					$('#searhcFoundNumber').html(window.searchResults[i].dataSets.length);
+					$('#searchFoundName').html(window.searchResults[i].abbrev);
+					document.getElementById('searchResultsDiv').currentResult = window.searchResults[i];
+
+					//if search returned a Region, find its data
+					if(newResult.type == "Region")
+					{
+						console.log("in search: calling API for connections");
+						xmlHttp2 = new XMLHttpRequest();
+						xmlHttp2.onreadystatechange = function()
+						{
+							if (xmlHttp2.readyState==4 && xmlHttp2.status==200)
+							{
+								console.log("in search: connection raw response: " + xmlHttp2.responseText);
+								var Response = JSON.parse(xmlHttp2.responseText);
+								for(i=0; i<Response.length; i++)
+								{
+									CnxResponse = Response[i];
+									console.log("in search: creating new connection");
+									window.searchResults[window.searchResults.length] = new Connection(CnxResponse.bamsID, CnxResponse.sourceID, CnxResponse.sourceName, CnxResponse.sourceAbbrev, CnxResponse.targetID, CnxResponse.targetName, CnxResponse.targetAbbrev, CnxResponse.nomenclature, CnxResponse.species, CnxResponse.dimensions, CnxResponse.coordinatePlot, CnxResponse.notes, CnxResponse.evidence, "searchResults", false);
+								}
+							}
+						};
+						var cnxUrl = "api/v1/nomenclature/1/region/" + url2[0] + "/connection/";
+						xmlHttp2.open("GET",cnxUrl,false);
+						xmlHttp2.send();
+
+						//request molecules
+						console.log("in search: calling API for molecules");
+						xmlHttp3 = new XMLHttpRequest();
+						xmlHttp3.onreadystatechange = function()
+						{
+							if (xmlHttp3.readyState==4 && xmlHttp3.status==200)
+							{
+								console.log("in search: molecule raw response: " + xmlHttp3.responseText);
+								var Response = JSON.parse(xmlHttp3.responseText);
+								for(i=0; i<Response.length; i++)
+								{
+									MoleculeResponse = Response[i];
+									console.log("in search: creating new molecule");
+									
+									window.searchResults[window.searchResults.length] = new Molecule(MoleculeResponse.bamsID, MoleculeResponse.name, MoleculeResponse.regionID, MoleculeResponse.regionName, MoleculeResponse.regionAbbrev, MoleculeResponse.distribution, MoleculeResponse.strength, MoleculeResponse.annotation, MoleculeResponse.referenceName, MoleculeResponse.referenceURL, MoleculeResponse.detailsURL, "searchResults", false);
+								}
+							}
+						};
+						var moleculeUrl = "api/v1/nomenclature/1/region/" + url2[0] + "/molecule/";
+						xmlHttp3.open("GET",moleculeUrl,false);
+						xmlHttp3.send();
+
+						//
+						//request molecules
+						console.log("in search: calling API for cells");
+						xmlHttp4 = new XMLHttpRequest();
+						xmlHttp4.onreadystatechange = function()
+						{
+							if (xmlHttp4.readyState==4 && xmlHttp4.status==200)
+							{
+								console.log("in search: molecule raw response: " + xmlHttp4.responseText);
+								var Response = JSON.parse(xmlHttp4.responseText);
+								for(i=0; i<Response.length; i++)
+								{
+									CellResponse = Response[i];
+									window.searchResults[window.searchResults.length] = new Cell(CellResponse.bamsID, CellResponse.name, CellResponse.regionID, CellResponse.regionName, CellResponse.regionAbbrev, CellResponse.detailsURL, "searchResults", false);
+								}
+							}
+						};
+						var cellUrl = "api/v1/nomenclature/1/region/" + url2[0] + "/cell/";
+						xmlHttp4.open("GET",cellUrl,false);
+						xmlHttp4.send();
+					}
+				}
+			};
+			//find abbreviation
+			xmlHttp.open("GET",url,false);
+			xmlHttp.send();
+		}
+		else
+		{
+			console.log("This region has already been loaded:");
+			$('#searchResultsName').html(window.searchResults[regionIndex].name);
+			$('#searchResultsType').html(window.searchResults[regionIndex].type + ", " + window.searchResults[regionIndex].nomenclature + " (" + window.searchResults[regionIndex].species + ")");
+			$('#searchAddToMapBtn').html("Add " + window.searchResults[regionIndex].abbrev + " to the Map");
+			$('#searhcFoundNumber').html(window.searchResults[regionIndex].dataSets.length);
+			$('#searchFoundName').html(window.searchResults[regionIndex].abbrev);
+			document.getElementById('searchResultsDiv').currentResult = window.searchResults[regionIndex];
+		}
+
+		if(!(window.searchOpen))
+		{
+			$('#intxn').animate({left:'+=400'}, 500);
+			$('#searchResultsDiv').delay(100).animate({left:'0px'}, 500);
+			window.searchOpen = true;
+		}
 	}
 }
 
@@ -232,8 +274,9 @@ function searchFromMap(mapValue)
 
 function closeSearch()
 {
-	$('#intxn').animate({left:'-=400'}, 500);
-	$('#searchResultsDiv').animate({left:'-410px'}, 500);	
+	$('#intxn').delay(100).animate({left:'-=400'}, 500);
+	$('#searchResultsDiv').animate({left:'-410px'}, 500);
+	window.searchOpen = false;
 }
 
 function addRegion()

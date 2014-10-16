@@ -28,13 +28,14 @@ function changeZoom(newValue, instance)
 	window.currentZoom = newValue;
 	var dimensions = 480 * Math.pow(2, newValue);
 	if(newValue > 1)
-		{
-			var offset = -((960 * (Math.pow(2,(newValue-3)))));
-		}
-		else
-		{
-			var offset = 0;
-		}
+	{
+		var offset = -((960 * (Math.pow(2,(newValue-3)))));
+	}
+	else
+	{
+		var offset = 0;
+	}
+
 	document.getElementById('mapDiv').innerHTML="";
 	document.getElementById('intxn').style.left=offset;
 	document.getElementById('intxn').style.top=offset;
@@ -57,9 +58,12 @@ function changeZoom(newValue, instance)
 	{
 		console.log("scaling regions. i=" + i);
 		console.log("curentZoom = " + currentZoom);
-		window.regions[i].pin.src = "img/ui/pin/" + currentZoom + "_r.png";
-		window.regions[i].pin.width = 10 * currentZoom;
-		window.regions[i].pin.height = 30 * currentZoom;
+		// window.regions[i].pin.src = "img/ui/pin/" + currentZoom + "_r.png";
+		window.regions[i].pin.src = "img/ui/pin/2_r.png";
+		// window.regions[i].pin.width = 10 * currentZoom;
+		// window.regions[i].pin.height = 30 * currentZoom;
+		window.regions[i].pin.width = 20 * currentZoom;
+		window.regions[i].pin.height = 60 * currentZoom;
 		zoomFactor = Math.pow(2, currentZoom-1);
 
 		window.regions[i].domElement.style.left = window.regions[i].coordinatePlot[0] * zoomFactor;
@@ -152,24 +156,41 @@ function mapCheckPinStatus(regionID)
 			}
 		}
 
-		var pin = "img/ui/pin/" + window.currentZoom + "_r";
-		if(hasCells > 0)
+		for(var i=0; i<window.cells.length; i++)
 		{
-			pin = pin + "_c";
+			var thisCell = window.cells[i];
+			if((thisCell.regionID == thisRegion.bamsID) && (thisCell.layer == window.layerData[0]))
+			{
+				hasCells++;
+			}
 		}
+
+		var pin = "img/ui/pin/2_r";
+		var pinTitle = thisRegion.name + ": ";
+		
 		if(hasConnections > 0)
 		{
 			pin = pin + "_x";
+			pinTitle = pinTitle + " " + hasConnections + " connections ";
 		}
+
+		if(hasCells > 0)
+		{
+			pin = pin + "_c";
+			pinTitle = pinTitle + " " + hasCells + " cells";
+		}
+
 		if(hasMolecules > 0)
 		{
 			pin = pin + "_m";
+			pinTitle = pinTitle + " " + hasMolecules + " molecules";
 		}
 
 		pin = pin + ".png";
 		console.log(pin);
 
 		document.getElementById(window.layerData[0] + "_" + thisRegion.bamsID).src = pin;
+		document.getElementById(window.layerData[0] + "_" + thisRegion.bamsID).title = pinTitle;
 	}
 }
 

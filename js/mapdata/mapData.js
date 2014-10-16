@@ -13,6 +13,7 @@ function mapDataClose()
 	$('#regionDetailsAddData').fadeOut(0);
 	$('#regionDetailsAddConnection').fadeOut(0);
 	$('#regionDetailsAddMolecule').fadeOut(0);
+	$('#regionDetailsAddCell').fadeOut(0);
 }
 
 
@@ -28,9 +29,10 @@ function mapDataOpen()
 	$('#mapDataName').html(region.searchTerm + "<span style='font-size:14px;'> is currently displaying:</span>");
 	$('#mapDataNomenclature').html(region.nomeclature);
 	$('#mapDataSpecies').html(region.species);
-	var connectionCount = moleculeCount = 0;
+	var connectionCount = moleculeCount = cellCount = 0;
 	document.getElementById('mapDataDefaultCnxListFlex').innerHTML = "";
 	document.getElementById('mapDataDefaultMolsListFlex').innerHTML = "";
+	document.getElementById('mapDataDefaultCellsListFlex').innerHTML = "";
 	//find how many connections this region is involved in:
 	for(i=0; i<window.connections.length; i++)
 	{
@@ -54,6 +56,7 @@ function mapDataOpen()
 	{
 		$('#mapDataDefaultCnxListViewDetailsBtn').show();
 	}
+	
 	//Molecules
 	for(i=0; i<window.molecules.length; i++)
 	{
@@ -71,9 +74,26 @@ function mapDataOpen()
 		$('#mapDataDefaultMolsListViewDetailsBtn').show();
 	}
 
+	//Cells
+	for(i=0; i<window.cells.length; i++)
+	{
+		if((window.cells[i].regionID == region.bamsID))
+		{
+			cellCount++;
+			var newCell = document.createElement('div');
+			newCell.innerHTML = window.cells[i].name;
+			newCell.className = "mapDataDefaultCellsListEntry";
+			document.getElementById('mapDataDefaultCellsListFlex').appendChild(newCell);
+		}
+	}
+	if(cellCount > 0)
+	{
+		$('#mapDataDefaultCellsListViewDetailsBtn').show();
+	}
+
 	$('#mapDataActiveCnxs').html(connectionCount);
 	$('#mapDataActiveMols').html(moleculeCount);
-	$('#mapDataActiveCells').html(region.cells.length);
+	$('#mapDataActiveCells').html(cellCount);
 
 	switch(window.currentZoom)
 	{
@@ -663,13 +683,7 @@ function mapDataActivateConnection()
 	}
 }
 
-//
-//
-//
 //	Molecules! (Finally..)
-//
-//
-//
 
 function mapDataAddMolecules()
 {
@@ -817,7 +831,7 @@ function mapDataViewMoleculeEvidence(moleculeNumber)
 		detailsText = detailsText + "a " + thisMolecule.distribution;
 	}
 
-	detailsText = detailsText + " distribution in the " + thisMolecule.regionName + ". Specific case details <a href='" + thisMolecule.detailsURL + "'>can be found here.</a>";
+	detailsText = detailsText + " distribution in the " + thisMolecule.regionName + ". Specific case details <a target='_blank' href='" + thisMolecule.detailsURL + "'>can be found here.</a>";
 
 	document.getElementById('regionDetailsAddMoleculeDescription').innerHTML = detailsText;
 
@@ -881,12 +895,187 @@ function mapDataMoleculesModalViewMolecule(moleculeID)
 		detailsText = detailsText + "a " + thisMolecule.distribution;
 	}
 
-	detailsText = detailsText + " distribution in the " + thisMolecule.regionName + ". Specific case details <a href='" + thisMolecule.detailsURL + "'>can be found here.</a>";
+	detailsText = detailsText + " distribution in the " + thisMolecule.regionName + ". Specific case details <a target='_blank' href='" + thisMolecule.detailsURL + "'>can be found here.</a>";
 
 
 	document.getElementById('regionMolsDetailDescriptionText').innerHTML = detailsText;
 	document.getElementById('regionMolsDetailLabelsName').innerHTML = thisMolecule.name;
 	document.getElementById('regionMolsDetailDescription').style.display = "inline";
+}
+
+//	Cells! (Finally..)
+
+function mapDataAddCells()
+{
+	console.log("in mapDataAddCells");
+	$('.mapDataDefault').fadeOut(100);
+
+	var region = document.getElementById('mapData').region;
+	
+	document.getElementById('regionDetailsAddCellInputForm').innerHTML="";
+	window.cellCount = 0;
+	
+	for(i=0; i<window.searchResults.length; i++)
+	{
+		console.log(window.searchResults[i]);
+		if((window.searchResults[i].type == "Cell") && (window.searchResults[i].regionAbbrev == region.abbrev))
+		{
+			console.log(window.searchResults[i]);
+			window.cellCount++;
+
+			newResultDiv = document.createElement('div');
+			newResultDiv.style.position = "relative";
+			newResultDiv.style.marginBottom = "10px";
+			newResultDiv.style.width = "100%";
+			newResultDiv.style.height = "16px";
+			newResultDiv.style.left = "0px;" 
+
+			newResultCB = document.createElement('input');
+			newResultCB.type = "checkbox";
+			newResultCB.name = "cells";
+			newResultCB.class = "cellCB";
+			newResultCB.value = i;
+			newResultCB.style.float="left";
+			newResultCB.style.width="20px";
+			newResultCB.id = region.abbrev + ":" + window.searchResults[i].bamsID;
+
+			newResultLabel = document.createElement('label')
+			newResultLabel.style.float="left";
+			newResultLabel.style.marginRight="10px";
+			newResultLabel.htmlFor = window.searchResults[i].name;
+			newResultLabel.appendChild(document.createTextNode(window.searchResults[i].name));
+
+			newResultDetail = document.createElement('span');
+			newResultDetail.style.float="left";
+			newResultDetail.style.cursor="pointer";
+			newResultDetail.innerHTML = "<span onclick=\"mapDataViewCellEvidence(" + i + ")\" style='font-size:9px;'><span class=\"glyphicon glyphicon-eye-open\" style=\"margin-right:4px;\"></span> Details</span>";
+
+			newResultDiv.appendChild(newResultCB);
+			newResultDiv.appendChild(newResultLabel);
+			newResultDiv.appendChild(newResultDetail);
+
+			document.getElementById('regionDetailsAddCellInputForm').appendChild(newResultDiv);
+		}
+	}
+
+	document.getElementById('regionDetailsAddCellCount').innerHTML = window.cellCount + " cells found";
+
+	// //display interface
+	$('#regionDetailsAddData').fadeOut(100);
+	$('#mapDataName').fadeOut(100);
+	$('#mapDataPartDetails').fadeOut(100);
+	
+
+	$('#regionDetailsAddCell').fadeIn(500);
+}
+
+function mapDataActivateCells()
+{
+	console.log("in mapDataActivateCells");
+	document.getElementById('regionDetailsAddCell').selected = [];
+	//check to make sure at least one connection has been selected
+	
+	var inputBox = document.getElementById('regionDetailsAddCellInputForm');
+	for(i=0; i<inputBox.length; i++)
+	{
+		if(inputBox[i].checked)
+		{
+			document.getElementById('regionDetailsAddCell').selected[document.getElementById('regionDetailsAddCell').selected.length] = inputBox[i].value;
+		}
+	}
+
+	console.log(document.getElementById('regionDetailsAddCell').selected);
+	console.log(window.searchResults[document.getElementById('regionDetailsAddCell').selected[0]]);
+
+	if(document.getElementById('regionDetailsAddCell').selected.length > 0)
+	{
+
+		for(ii=0; ii<document.getElementById('regionDetailsAddCell').selected.length; ii++)
+		{
+			
+			var thisCell = window.searchResults[document.getElementById('regionDetailsAddCell').selected[ii]];
+			
+			//is this molecule already active?
+			var isPresent = 0;
+			
+			for(j=0; j<window.cells.length; j++)
+			{
+				if((window.cells[j].bamsID == thisCell.bamsID) && (window.molecules[j].regionID == thisCell.regionID))
+				{
+					console.log(thisCell);
+					//found this molecule already active in this region in this layer.
+					isPresent++;
+				}
+			}
+			if(!(isPresent))
+			{
+				//instantiate molecule
+				var instantiatedCell = new Cell(thisCell.bamsID, thisCell.name, thisCell.regionID, thisCell.regionName, thisCell.regionAbbrev, thisCell.detailsURL, "cells", false);
+				window.cells.push(instantiatedCell);
+				mapCheckPinStatus(thisCell.regionID);
+			}
+		}
+		//close dialog
+		mapDataClose();
+	}
+	else
+	{
+		alert("Please select at least one molecule.");
+	}
+}
+
+function mapDataViewCellEvidence(cellNumber)
+{
+	var thisCell = window.searchResults[cellNumber];
+
+	document.getElementById('regionDetailsAddCellName').innerHTML = thisCell.name;
+	
+	var detailsText = "The " + thisCell.name + " has been observed within the " + thisCell.regionName + ". Specific details including nomenclature and references <a target='_blank' href='" + thisCell.detailsURL + "'>can be found here.</a>";
+
+	document.getElementById('regionDetailsAddCellDescription').innerHTML = detailsText;
+
+	$('#cellDetails').modal('toggle');
+}
+
+function mapDataCellsModal()
+{
+	document.getElementById('regionCellsDetailDescription').style.display = "none";
+
+	var part = document.getElementById('regionCnxDetails').part;
+
+	document.getElementById('regionCellsDetailsName').innerHTML = part.name;
+	var moleculeCount = 0;
+	document.getElementById('regionCellsDetailCellsBox').innerHTML = "<span><b>Select a cell:</b></span><br>";
+
+	//find how many molecules this region is involved in:
+	for(i=0; i<window.cells.length; i++)
+	{
+		if((window.cells[i].regionID == part.bamsID))
+		{
+			cellCount++;
+			var newCell = document.createElement('div');
+			newCell.innerHTML = "<li>" + window.cells[i].name + "</li>";
+			newCell.style.cursor = "pointer";
+			newCell.onclick = function(i) { return function(){ mapDataCellsModalViewCell(i)}; }(i);
+			newCell.className = "mapDataDefaultCellsListEntry";
+			document.getElementById('regionCellsDetailCellsBox').appendChild(newCell);
+		}
+	}
+	$('#regionCellsDetails').modal('toggle');
+}
+
+function mapDataCellsModalViewCell(cellID)
+{
+	console.log("in mapDataCellsModalViewCell():");
+	var thisCell = window.cells[cellID];
+	
+	console.log("Working with: ");
+	console.log(thisCell);
+
+	var detailsText = "The " + thisCell.name + " has been observed within the " + thisCell.regionName + ". Specific details including nomenclature and references <a target='_blank' href='" + thisCell.detailsURL + "'>can be found here.</a>";
 
 
+	document.getElementById('regionCellsDetailDescriptionText').innerHTML = detailsText;
+	document.getElementById('regionCellsDetailLabelsName').innerHTML = thisCell.name;
+	document.getElementById('regionCellsDetailDescription').style.display = "inline";
 }

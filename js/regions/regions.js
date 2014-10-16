@@ -49,9 +49,12 @@ function Region(bamsID, name, abbreviation, nomenclature, species, otherNomencla
 		this.pin = document.createElement('img');
 		this.pin.id = window.layerData[0] + "_" + this.bamsID;
 
-		this.pin.src = "img/ui/pin/" + window.currentZoom + "_r.png";
-		this.pin.width = 10 * window.currentZoom;
-		this.pin.height = 30 * window.currentZoom;
+		// this.pin.src = "img/ui/pin/" + window.currentZoom + "_r.png";
+		this.pin.src = "img/ui/pin/2_r.png";
+		// this.pin.width = 10 * window.currentZoom;
+		// this.pin.height = 30 * window.currentZoom;
+		this.pin.width = 20 * window.currentZoom;
+		this.pin.height = 60 * window.currentZoom;
 		thisZoom = Math.pow(2, window.currentZoom-1);
 		
 
@@ -63,6 +66,8 @@ function Region(bamsID, name, abbreviation, nomenclature, species, otherNomencla
 		this.regionDOM.height = this.dimensions[1] * thisZoom;
 		this.pin.style.left = ((this.coordinateInteraction[0] * thisZoom) - this.pin.width/2 )+ "px";
 		this.pin.style.top = ((this.coordinateInteraction[1] * thisZoom) - this.pin.height) + "px";
+
+		this.pin.title = this.name + ": no data visualized yet";
 
 		this.domElement.title=this.searchTerm;
 		var thisRegion = this;

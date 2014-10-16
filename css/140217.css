@@ -7,6 +7,7 @@
 /*	background-color:#ECF0F1;
 */	z-index:8;
 	background-color:#3D3C42;
+	box-shadow: 0px 2px 2px 0px #222;
 
 }
 
@@ -53,7 +54,8 @@
 	background-color:#3D3C42;
 	z-index:8;
 	color:#ecf0f1;
-	border-right:4px solid #211b0d;
+	/*border-right:4px solid #211b0d;*/
+	box-shadow: 1px 0px 2px 0px #222;
 }
 
 #searchResultsClose{
@@ -85,7 +87,7 @@
 #searchAddToMapIcon{
 	position: absolute;
 	left:10px;
-	top:-16px;
+	top:-26px;
 }
 #searchAddToMapBtn{
 	position: absolute;
@@ -179,7 +181,7 @@
 #userDiv{
 	position:absolute;
 	left:550px;
-	top:10px;
+	top:0px;
 	color:#FFF;
 }
 
@@ -469,7 +471,7 @@
 	position:relative;
 	left:10px;
 	width:180px;
-	top:0px;
+	top:5px;
 	background-color:#FFF;
 	height:auto;
 	/*margin-bottom:10px;*/
@@ -677,6 +679,7 @@
 	margin-bottom: 5px;
 }
 
+
 #mapDataDefaultCells
 {
 	position:absolute;
@@ -684,6 +687,37 @@
 	top:50px;
 	height:30px;
 }
+
+#mapDataDefaultCellsList
+{
+	position: absolute;
+	left:6px;
+	top:40px;
+	height: 300px;
+	width:160px;
+	
+}
+
+#mapDataDefaultCellsListFlex
+{
+	position: relative;
+	top:0px;
+	width: 100%;
+	height:auto;
+	max-height: 220px;
+	overflow-y: scroll;
+}
+
+.mapDataDefaultCellsListEntry
+{
+	position: relative;
+	height:30px;
+	width:80px;
+	font-size: 10px;
+	margin-bottom: 5px;
+}
+
+
 
 .mapDataViewDetails
 {
@@ -868,6 +902,7 @@
 	top:80px;
 	width:250px;
 	height:270px;
+	overflow-y:scroll;
 }
 
 #regionDetailsAddConnectionBtn
@@ -1109,9 +1144,138 @@ Molecules
 	position:relative; left:0px; top:0px; width:100%; font-size:24px; text-align: center; font-weight: 700;
 }
 
-#regionCnxDetailDescriptionText
+
+/*
+//
+//
+//
+//
+//
+Cells
+//
+//
+//
+//
+//
+*/
+
+#regionDetailsAddCellTitle
 {
-	position:relative; left:0%; top:20px; width:100%; font-size:14px; height:auto; margin-bottom: 100px;
+	position:absolute;
+	left:10px;
+	top:5px;
+	width:500px;
+	height:30px;
+	font-size: 24px;
+	color:#FFF;
+}
+
+#regionDetailsAddCellHeader
+{
+	position:absolute;
+	left:10px;
+	top:40px;
+	width:250px;
+	height:30px;
+}
+
+#regionDetailsAddCellInputView
+{
+	position:absolute;
+	left:10px;
+	top:80px;
+	width:400px;
+	height:270px;
+	overflow-y:scroll;
+}
+#regionDetailsAddCellOutputTitle
+{
+	position:absolute;
+	left:300px;
+	top:40px;
+	width:250px;
+	height:30px;
+	background-color: #F00;
+	
+}
+#regionDetailsAddCellOutputView
+{
+	position:absolute;
+	left:300px;
+	top:80px;
+	width:250px;
+	height:270px;
+	background-color: #F00;
+}
+
+#regionDetailsAddCellBtn
+{
+	position: absolute;
+	right:10px;
+	bottom:5px;
+	width:250px;
+	height:32px;
+}
+
+#regionDetailsAddCellDetails
+{
+	position:absolute;
+	top:195px;
+	left:0px;
+	width:800px;
+	height:300px;
+	background-color: #3D3C42;
+	border-radius:0px 5px 5px 5px;
+	background-color: #F00;
+}
+
+#regionDetailsAddCellDetailsTitle
+{
+	position:absolute; left:20px; top:10px; font-size:18px; font-weight: bold;
+}
+
+#regionDetailsAddCellDetailsLabels
+{
+	position: relative; left:0px; top:0px; height:60px; width:100%;
+}
+
+#regionDetailsAddCellName
+{
+	position:relative; left:0px; top:30px; width:100%; font-size:24px; text-align: center; margin-bottom: 20px; font-weight: 700;
+}
+
+#regionDetailsAddCellDescription
+{
+	position:relative; left:0%; top:20px; width:100%; font-size:16px; height:auto; margin-bottom: 100px;
+}
+
+/*//
+//
+//*/
+
+#regionCellsDetailCellsBox
+{
+	float:left; top:0px; height:400px; width:169px; border-right:1px solid #DDD; overflow-y:scroll;
+}
+
+#regionCellsDetailDescription
+{
+	float:left; top:0px; height:400px; width:400px; margin: 5px;
+}
+
+#regionCellsDetailNotes
+{
+	float:left; top:0px; height:400px; width:290px;
+}
+
+#regionCellsDetailLabels
+{
+	position: relative; left:0px; top:0px; height:30px; width:100%;
+}
+
+#regionCellsDetailLabelsName
+{
+	position:relative; left:0px; top:0px; width:100%; font-size:24px; text-align: center; font-weight: 700;
 }
 
 
@@ -1199,4 +1363,44 @@ Molecules
 .mapColumn
 {
 	position: relative; width:480px; top:0px; float:left;
+}
+
+#credentials
+{
+	position: absolute; top:40px; left:569px; width:500px; height:245px; background-color:#3D3C42; box-shadow: 0px 2px 2px 0px #222; color:#FFF; padding:10px; border-radius: 0px 0px 5px 5px; display: none;
+}
+
+.credentialsItem
+{
+	width:39%; font-size: 12px; height: 24px; float:left; margin-right:5px;
+}
+
+#credentialsSignUp
+{
+	width:200px; height:40px;
+}
+
+.credentialsSignUpHidden
+{
+	display: none; margin-bottom: 4px;
+}
+
+#credentialsSignUpAlert
+{
+	float:left; font-size:10px; width:270px; height:auto;
+}
+
+#credentialsSignUpSubmit
+{
+	float: right; width:200px; height:50px; margin-top: 10px;
+}
+
+#accountInfo
+{
+	position: absolute; top:40px; left:550px; width:320px; height:130px; background-color:#3D3C42; box-shadow: 0px 2px 2px 0px #222; color:#FFF; padding:10px; border-radius: 0px 0px 5px 5px;
+}
+
+.accountInfoBtn
+{
+	position:relative; margin-top: 10px; width:300px;
 }

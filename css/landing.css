@@ -1,0 +1,187 @@
+body{
+	font-family: 'Oxygen', sans-serif; font-weight: 300; background-color: #FFF; color:#424242;
+}
+
+#header{
+	position: fixed; top:0px; left:0px; width:100%; height:40px; border-bottom:1px solid #CCC; z-index:10000; color:#CCC; background-color: rgba(44,62,80, .85);
+}
+
+#headerContent
+{
+	position: relative;	margin-right: auto; margin-left: auto; width:1000px; top:0px; height:50px;
+}
+
+#headerImg
+{
+	position: relative; top:3px;
+}
+
+#headerTitle
+{
+	padding-left:5px; position: relative; top:5px; font-size:16px; padding-right: 750px;
+}
+
+.headerCrumb
+{
+	position:relative; padding-right: 12px; font-size: 12px; color: #428bca; cursor: pointer; top:3px;
+}
+
+.frame
+{
+	position: relative; margin-left: auto; margin-right: auto; width:1000px; top:70px; height:900px; margin-bottom: 20px;
+}
+
+#mainCTA
+{
+	position: relative; left:50px; top:170px; width:370px; height:60px; font-size: 34px;
+}
+
+#mainArrow
+{
+	position: absolute; left:930px; top:540px; width:60px;
+}
+
+#APICode
+{
+	/*17303D	0A1B23	061920*/
+	
+	position: absolute; left:0px; top:0px; font-size: 12px; color:#061316; font-family:"Courier New", Courier, mono; z-index:0; width:100%;
+}
+
+#introSent
+{
+	position: absolute; left:0px; width:1000px; top:340px; font-size:29px; 
+}
+
+#introBottom
+{
+	position: absolute; left:0px; width:100%; bottom:130px; font-size:16px; text-align: center; 
+}
+
+#molecule1
+{
+	position: absolute; left:500px; top:-100px;
+}
+
+#whyText{
+	position: absolute; left:0px; width:550px; top:120px; font-size:24px;
+}
+
+#whyChart
+{
+	position: absolute; left:650px; top:50px;
+}
+
+#whyBottom
+{
+	position: absolute; left:0px; width:100%; bottom:180px; font-size:16px; text-align: center; 
+}
+
+.cta
+{
+	position: absolute; left:0px; top:300px; width:200px;
+}
+
+.ctaRight
+{
+	position: absolute; left:450px; top:380px;
+}
+
+#howText{
+	position: absolute; left:450px; width:550px; top:0px; font-size:16px; line-height: 1.5;
+}
+
+#howCodeBlock
+{
+	position: absolute; left:0px; width:400px; top:76px; height: 320px; 
+}
+
+#howCodeBlockLangs
+{
+	position: absolute; left:0px; width:100%; top:0px; height:20px; font-size:10px;
+}
+
+.howCodeBlockLangsItem
+{
+	float: left; width:65px; cursor: pointer;
+}
+
+#howCodeBlockExample
+{
+	border-radius: 5px;
+	border:1px solid #111;
+	position: absolute;
+	left:0px;
+	width:400px;
+	top:30px;
+	height:200px;
+	font-family: "Courier New", Courier, mono;
+	font-size: 14px;
+}
+
+.boldOption
+{
+	font-weight: 700;
+}
+
+#howCodeBlockGHBtn
+{
+	position: absolute;
+	left:0px;
+	top:240px;
+	width:200px;
+	height: 30px;
+}
+
+#howBottom
+{
+	position: absolute; left:0px; width:100%; bottom:250px; font-size:14px; text-align: center; 
+}
+
+#scheduleText{
+	position: absolute; left:0px; width:500px; top:60px; font-size:16px; line-height: 1.5;
+}
+
+#scheduleImg
+{
+	position: absolute; left:650px; top:0px;
+}
+
+#pricingText
+{
+	position: absolute; left:0px; top:0px; font-size: 36px;
+}
+
+#pricingTable
+{
+	position: absolute; left:50px; width:900px; top:100px; height:500px;
+}
+
+.pricingTableRow
+{
+	position: relative; left:0px; width:100%; height:50px;
+}
+
+.pricingTableColumn
+{
+	float:left; width:450px; top:0px; height:50px; text-align: right; font-size:16px; line-height: 3;
+}
+
+.light
+{
+	background-color: rgba(255,255,255,.02);
+}
+
+#finalCTA
+{
+	position: absolute; right:50px; top:600px; width:400px; height:60px; font-size: 32px;
+}
+
+#player{
+	position: relative;
+}
+
+#overlay
+{
+	z-index:100; background-color: rgba(44,62,80, .95); color:#FFF; position: absolute; top:100px; width:1280px; height:728px; padding:30px;
+}
