@@ -2,7 +2,7 @@
 window.molecules = [];
 
 //Molecule 'class' constructor function
-function Molecule(bamsID, name, regionID, regionName, regionAbbrev, distribution, strength, annotation, referenceName, referenceURL, detailsURL, destination, otherLayers)
+function Molecule(bamsID, name, regionID, regionName, regionAbbrev, distribution, strength, annotation, referenceName, referenceURL, detailsURL, notes, destination, otherLayers)
 {
 
 	console.log("in molecule constructor. New molecule initializing");
@@ -20,6 +20,7 @@ function Molecule(bamsID, name, regionID, regionName, regionAbbrev, distribution
 	this.referenceURL = referenceURL;
 	this.detailsURL = detailsURL;
 	this.layer = window.layerData[0];
+	this.notes = notes;
 	//do we still need coordinateInteraction?
 	
 	if(destination == "searchResults")
@@ -35,10 +36,6 @@ function Molecule(bamsID, name, regionID, regionName, regionAbbrev, distribution
 	{
 		this.id = window.molecules.length;
 	}
-}
 
-// function clickedConnection(connection)
-// {
-// 	document.getElementById('connectionDetail').connection = connection;
-// 	connectionDetailOpen();
-// }
+	console.log(this);
+}

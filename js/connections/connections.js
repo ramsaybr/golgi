@@ -21,6 +21,7 @@ function Connection(bamsID, sourceID, sourceName, sourceAbbrev, targetID, target
 	//do we still need coordinateInteraction?
 	this.coordinatePlot = coordinatePlot;
 	this.dimensions = dimensions;
+	this.notes = notes;
 	this.fileToDraw1 = "img/connections/zoom1/" + this.sourceAbbrev + "-" + this.targetAbbrev + ".svg";
 	
 	this.evidence = [];

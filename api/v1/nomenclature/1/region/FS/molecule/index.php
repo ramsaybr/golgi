@@ -1,5 +1,6 @@
 <?php
 
+session_start();
 
 include("../../asset/config.php");
 
@@ -28,6 +29,28 @@ while($thisMolecule = mysql_fetch_array($moleculeQuery))
 	$thisResponse['referenceURL'] = $thisMolecule['referenceURL'];
 	$thisResponse['detailsURL'] = $thisMolecule['detailsURL'];
 
+	//find notes this user has if user is logged in
+	$thisResponse['notes'] = array();
+	if(isset($_COOKIE['UID']))
+	{
+		if($_COOKIE['UID'] != "")
+		{
+			//user is logged in. find notes
+			$notesQuery = mysql_query("SELECT * FROM note WHERE UID='" . $_COOKIE['UID'] . "' AND itemType=3 AND itemID=" . $thisResponse['bamsID'] . " ORDER BY dateTime DESC");
+			while($thisNote = mysql_fetch_assoc($notesQuery))
+			{
+				$newNote = array();
+				$newNote['id'] = $thisNote['id'];
+				$newNote['UID'] = $thisNote['UID'];
+				$newNote['itemType'] = $thisNote['itemType'];
+				$newNote['itemID'] = $thisNote['itemID'];
+				$newNote['note'] = $thisNote['note'];
+				$newNote['dateTime'] = $thisNote['dateTime'];
+
+				array_push($thisResponse['notes'], $newNote);
+			}
+		}
+	}
 
 	$responseArray[count($responseArray)] = $thisResponse;
 }

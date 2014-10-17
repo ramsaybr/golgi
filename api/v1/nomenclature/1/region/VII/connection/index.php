@@ -33,7 +33,6 @@ while($thisConnection = mysql_fetch_array($connectionQuery))
 	$thisResponse['nomenclature'] = $nomenclatureQ['name'];
 	$thisResponse['dimensions'] = array($thisConnection['width'], $thisConnection['height']);
 	$thisResponse['coordinatePlot'] = array($thisConnection['X'], $thisConnection['Y']);
-	$thisResponse['notes'] = "My notes from the last experiment";
 	$thisResponse['destination'] = "searchResults";
 	$thisResponse['otherLayers'] = false;
 	
@@ -63,9 +62,33 @@ while($thisConnection = mysql_fetch_array($connectionQuery))
 		$thisResponse['evidence'][count($thisResponse['evidence'])] = $report;
 	}
 
+	//find notes this user has if user is logged in
+	$thisResponse['notes'] = array();
+	if(isset($_COOKIE['UID']))
+	{
+		if($_COOKIE['UID'] != "")
+		{
+			//user is logged in. find notes
+			$notesQuery = mysql_query("SELECT * FROM note WHERE UID='" . $_COOKIE['UID'] . "' AND itemType=2 AND itemID=" . $thisResponse['bamsID'] . " ORDER BY dateTime DESC");
+			while($thisNote = mysql_fetch_assoc($notesQuery))
+			{
+				$newNote = array();
+				$newNote['id'] = $thisNote['id'];
+				$newNote['UID'] = $thisNote['UID'];
+				$newNote['itemType'] = $thisNote['itemType'];
+				$newNote['itemID'] = $thisNote['itemID'];
+				$newNote['note'] = $thisNote['note'];
+				$newNote['dateTime'] = $thisNote['dateTime'];
+
+				array_push($thisResponse['notes'], $newNote);
+			}
+		}
+	}
+
 	$responseArray[count($responseArray)] = $thisResponse;
 }
 
 echo json_encode($responseArray);
+
 
 ?>

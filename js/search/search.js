@@ -22,7 +22,7 @@ function search(mapValue)
 
 	if(document.getElementById('searchInput').value != "" && document.getElementById('searchInput').value != "Search to add data to the map")
 	{
-
+		document.getElementById('searchMyNotebookFlex').innerHTML = "";
 		var url1 = document.getElementById('searchInput').value.split("(");
 		var	url2 = url1[1].split(")");
 		var url = "api/v1/nomenclature/1/region/" + url2[0];
@@ -50,15 +50,35 @@ function search(mapValue)
 			{
 				if (xmlHttp.readyState==4 && xmlHttp.status==200)
 				{
-					console.log("in search: region raw response: " + xmlHttp.responseText);
-					//unpack JSON response
-					//make new searchResults[] object, add to searchResults
 					var newResult = JSON.parse(xmlHttp.responseText);
 					switch(newResult.type)
 					{
 						case "Region":
-							console.log("in search: making newObject for region (searchResults)");
 							var newObject = new Region(newResult.bamsID, newResult.name, newResult.abbreviation, newResult.nomenclature, newResult.species, newResult.otherNomenclatures, newResult.dataSets, newResult.coordinateInteraction, newResult.dimensions, newResult.coordinatePlot, newResult.notes, "searchResults", false);
+
+							if(window.logged)
+							{
+								$('#searchMyNotebookNew').show();
+								$('#searchMyNotebookNewBtn').show();
+								//display notes if stored
+								for(var j=0; j<newResult.notes.length; j++)
+								{
+									var thisNote = newObject.notes[j];
+									console.log(thisNote);
+									var newNote = document.createElement('div');
+									newNote.className = "searchMyNotebookItem";
+									newNote.id = thisNote.id;
+									newNote.innerHTML = "On " + thisNote.dateTime + ", you recorded: <br>" + thisNote.note;
+									document.getElementById('searchMyNotebookFlex').appendChild(newNote);
+								}	
+							}
+							else
+							{
+								var newNote = document.createElement('div');
+								newNote.innerHTML = "<center><img src='img/brainMap.png' width='60' height='60'/></center><br>To save notes, <a style='cursor:pointer;' onclick='showCredentials()'>log in or create an account.</a>";
+								document.getElementById('searchMyNotebookFlex').appendChild(newNote);	
+							}
+							
 							break;
 						case "Connection":
 							break;
@@ -84,12 +104,10 @@ function search(mapValue)
 						{
 							if (xmlHttp2.readyState==4 && xmlHttp2.status==200)
 							{
-								console.log("in search: connection raw response: " + xmlHttp2.responseText);
 								var Response = JSON.parse(xmlHttp2.responseText);
 								for(i=0; i<Response.length; i++)
 								{
 									CnxResponse = Response[i];
-									console.log("in search: creating new connection");
 									window.searchResults[window.searchResults.length] = new Connection(CnxResponse.bamsID, CnxResponse.sourceID, CnxResponse.sourceName, CnxResponse.sourceAbbrev, CnxResponse.targetID, CnxResponse.targetName, CnxResponse.targetAbbrev, CnxResponse.nomenclature, CnxResponse.species, CnxResponse.dimensions, CnxResponse.coordinatePlot, CnxResponse.notes, CnxResponse.evidence, "searchResults", false);
 								}
 							}
@@ -105,14 +123,12 @@ function search(mapValue)
 						{
 							if (xmlHttp3.readyState==4 && xmlHttp3.status==200)
 							{
-								console.log("in search: molecule raw response: " + xmlHttp3.responseText);
 								var Response = JSON.parse(xmlHttp3.responseText);
 								for(i=0; i<Response.length; i++)
 								{
 									MoleculeResponse = Response[i];
-									console.log("in search: creating new molecule");
-									
-									window.searchResults[window.searchResults.length] = new Molecule(MoleculeResponse.bamsID, MoleculeResponse.name, MoleculeResponse.regionID, MoleculeResponse.regionName, MoleculeResponse.regionAbbrev, MoleculeResponse.distribution, MoleculeResponse.strength, MoleculeResponse.annotation, MoleculeResponse.referenceName, MoleculeResponse.referenceURL, MoleculeResponse.detailsURL, "searchResults", false);
+									console.log(MoleculeResponse);
+									window.searchResults[window.searchResults.length] = new Molecule(MoleculeResponse.bamsID, MoleculeResponse.name, MoleculeResponse.regionID, MoleculeResponse.regionName, MoleculeResponse.regionAbbrev, MoleculeResponse.distribution, MoleculeResponse.strength, MoleculeResponse.annotation, MoleculeResponse.referenceName, MoleculeResponse.referenceURL, MoleculeResponse.detailsURL, MoleculeResponse.notes, "searchResults", false);
 								}
 							}
 						};
@@ -128,12 +144,12 @@ function search(mapValue)
 						{
 							if (xmlHttp4.readyState==4 && xmlHttp4.status==200)
 							{
-								console.log("in search: molecule raw response: " + xmlHttp4.responseText);
 								var Response = JSON.parse(xmlHttp4.responseText);
 								for(i=0; i<Response.length; i++)
 								{
 									CellResponse = Response[i];
-									window.searchResults[window.searchResults.length] = new Cell(CellResponse.bamsID, CellResponse.name, CellResponse.regionID, CellResponse.regionName, CellResponse.regionAbbrev, CellResponse.detailsURL, "searchResults", false);
+									console.log(CellResponse);
+									window.searchResults[window.searchResults.length] = new Cell(CellResponse.bamsID, CellResponse.name, CellResponse.regionID, CellResponse.regionName, CellResponse.regionAbbrev, CellResponse.detailsURL, CellResponse.notes, "searchResults", false);
 								}
 							}
 						};
@@ -153,15 +169,29 @@ function search(mapValue)
 			$('#searchResultsName').html(window.searchResults[regionIndex].name);
 			$('#searchResultsType').html(window.searchResults[regionIndex].type + ", " + window.searchResults[regionIndex].nomenclature + " (" + window.searchResults[regionIndex].species + ")");
 			$('#searchAddToMapBtn').html("Add " + window.searchResults[regionIndex].abbrev + " to the Map");
-			$('#searhcFoundNumber').html(window.searchResults[regionIndex].dataSets.length);
 			$('#searchFoundName').html(window.searchResults[regionIndex].abbrev);
 			document.getElementById('searchResultsDiv').currentResult = window.searchResults[regionIndex];
+			
+
+			//
+			//
+			document.getElementById('searchMyNotebookFlex').innerHTML = "";
+			for(j=0; j<window.searchResults[regionIndex].notes.length; j++)
+			{
+				var thisNote = window.searchResults[regionIndex].notes[j];
+				console.log(thisNote);
+				var newNote = document.createElement('div');
+				newNote.className = "searchMyNotebookItem";
+				newNote.id = thisNote.id;
+				newNote.innerHTML = "On " + thisNote.dateTime + ", you recorded: <br>" + thisNote.note;
+				document.getElementById('searchMyNotebookFlex').appendChild(newNote);
+			}
 		}
 
 		if(!(window.searchOpen))
 		{
-			$('#intxn').animate({left:'+=400'}, 500);
-			$('#searchResultsDiv').delay(100).animate({left:'0px'}, 500);
+			$('#intxn').animate({left:'+=410'}, 500);
+			$('#searchResultsDiv').delay(100).animate({left:'11px'}, 500);
 			window.searchOpen = true;
 		}
 	}
@@ -332,4 +362,70 @@ function searchViewCnxs()
 	clickedRegion(addRegion());
 	mapDataAddData();
 	mapDataAddConnections();
+}
+
+function searchSaveNote()
+{
+	if(window.logged)
+	{
+		if(scrub(document.getElementById("searchMyNotebookNew").value))
+		{
+			var payload = {
+				note : document.getElementById("searchMyNotebookNew").value,
+				itemID: document.getElementById('searchResultsDiv').currentResult.bamsID
+			};
+
+			$.post( "../php/account/notebook/region/", payload)
+			.done(function( data ) {
+				var response = JSON.parse(data);
+				if(response.status == 200)
+				{
+					//success. Add to list
+					var newNote = document.createElement('div');
+					newNote.className = "searchMyNotebookItem";
+					newNote.innerHTML = "Newly added: <br>" + payload.note;
+					document.getElementById('searchMyNotebookFlex').insertBefore(newNote,document.getElementById('searchMyNotebookFlex').firstChild);
+
+					//save note to region (searchResult)
+					for(var i=0; i<window.searchResults.length; i++)
+					{
+						if(window.searchResults[i].bamsID == payload.itemID && window.searchResults[i].type == "Brain Region")
+						{
+							var newNoteObj = {
+								UID: response.UID,
+								dateTime: response.dateTime,
+								id: response.noteID,
+								itemID: payload.itemID,
+								itemType: 1,
+								note: payload.note
+							};
+							window.searchResults[i].notes.unshift(newNoteObj);
+						}
+					}
+
+					//save note to region if already instantiated
+					for(var i=0; i<window.regions.length; i++)
+					{
+						if(window.regions[i].bamsID == payload.itemID)
+						{
+							var newNoteObj = {
+								UID: response.UID,
+								dateTime: response.dateTime,
+								id: response.noteID,
+								itemID: payload.itemID,
+								itemType: 1,
+								note: payload.note
+							};
+							window.regions[i].notes.unshift(newNoteObj);
+						}
+					}
+					console.log(window.regions);
+				}
+			});
+		}
+		else
+		{
+			alert("The note you've entered contains none of the following characters: ' \" / \\ ; & $ : ! # % ( ) { }. Please remove all illegals characters and resubmit.");
+		}
+	}
 }

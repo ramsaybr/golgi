@@ -1,7 +1,6 @@
 <?php
 
 	session_start();
-	include('../../config/config.php');
 
 	setcookie("UID", "", time()-3600, '/');
 	setcookie("email", "", time()-3600, '/');

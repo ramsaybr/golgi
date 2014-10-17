@@ -5,6 +5,7 @@ function signupShow()
 	$('#credentialsSignInDiv').hide();
 	$('#credentialsSignUpHeader').hide();
 	$('.credentialsSignUpHidden').show();
+	$('#credentialsSignUpAlert').hide();
 }
 
 function scrub(value)
@@ -83,9 +84,11 @@ function signupSubmit()
 					case(200):
 						hideCredentials();
 						updateAccount(payload.email);
+						window.logged = true;
 						//successful signup
 						break;
 					case(409):
+						$('#credentialsSignUpAlert').show();
 						//already in use
 						break;
 					case(418):

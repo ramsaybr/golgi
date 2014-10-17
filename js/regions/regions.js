@@ -19,6 +19,7 @@ function Region(bamsID, name, abbreviation, nomenclature, species, otherNomencla
 	this.layer = window.layerData[0];
 	this.coordinateInteraction = coordinateInteraction;
 	this.dimensions = dimensions;
+	this.notes = notes;
 	this.coordinatePlot = coordinatePlot;
 	this.fileToDraw1 = "img/regions/zoom1/" + this.abbrev + ".svg";
 	

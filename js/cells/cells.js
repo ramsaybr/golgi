@@ -2,7 +2,7 @@
 window.cells = [];
 
 //Molecule 'class' constructor function
-function Cell(bamsID, name, regionID, regionName, regionAbbrev, detailsURL, destination, otherLayers)
+function Cell(bamsID, name, regionID, regionName, regionAbbrev, detailsURL, notes, destination, otherLayers)
 {
 
 	console.log("in cell constructor. New cell initializing");
@@ -14,6 +14,7 @@ function Cell(bamsID, name, regionID, regionName, regionAbbrev, detailsURL, dest
 	this.regionName = regionName;
 	this.regionAbbrev = regionAbbrev;
 	this.detailsURL = detailsURL;
+	this.notes = notes;
 	this.layer = window.layerData[0];
 	//do we still need coordinateInteraction?
 	

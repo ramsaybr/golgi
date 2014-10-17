@@ -354,13 +354,16 @@ function mapDataConnectionsModal()
 			document.getElementById('regionCnxDetailCnxBox').appendChild(newConnection);
 		}
 	}
+	$('#regionCnxDetailNotes').hide();
 	$('#regionCnxDetails').modal('toggle');
+
 }
 
 function mapDataConnectionsModalViewConnection(connectionID)
 {
 	console.log("in mapDataConnectionsModalViewConnection():");
 	var thisConnection = window.connections[connectionID];
+	document.getElementById('regionCnxDetailNotes').connection = thisConnection;
 	//update regionCnxDetailReportsBox
 	
 	console.log("Working with: ");
@@ -384,7 +387,35 @@ function mapDataConnectionsModalViewConnection(connectionID)
 		newConnectionReport.innerHTML = "<span class=\"glyphicon glyphicon-eye-open\" style=\"margin-top:1px;\"></span> View Report " + (i+1) + "</span>";
 		document.getElementById('regionCnxDetailReportsBox').appendChild(newConnectionReport);
 	}
-	document.getElementById('regionCnxDetailDescription').style.display = "inline";
+	$('#regionCnxDetailDescription').show();
+
+	document.getElementById('regionCnxDetailNotesMyNotebookFlex').innerHTML = "";
+
+	if(window.logged)
+	{
+		for(j=0; j<thisConnection.notes.length; j++)
+		{
+			var thisNote = thisConnection.notes[j];
+			console.log(thisNote);
+			var newNote = document.createElement('div');
+			newNote.className = "searchMyNotebookItem";
+			newNote.id = thisNote.id;
+			newNote.innerHTML = "On " + thisNote.dateTime + ", you recorded: <br>" + thisNote.note;
+			document.getElementById('regionCnxDetailNotesMyNotebookFlex').appendChild(newNote);
+		}
+		$('#regionCnxDetailNotesMyNotebookNew').show();
+		$('#regionCnxDetailNotesMyNotebookNewBtn').show();
+		document.getElementById('regionCnxDetailNotesMyNotebookNew').placeholder = "Record a note about " + thisConnection.searchTerm;
+	}
+	else
+	{
+		document.getElementById('regionCnxDetailNotesMyNotebook').innerHTML = "To save notes, log in or create an account.";
+	}
+
+	
+
+	$('#regionCnxDetailNotes').show();
+
 }
 
 function mapDataConnectionsModalViewConnectionEvidence(thisEvidence)
@@ -433,6 +464,53 @@ function mapDataConnectionsModalViewConnectionEvidence(thisEvidence)
 	details = details + " More details can be found <a href='" + thisEvidence.detailsURL + "' target='_blank'>here in BAMS.</a></i> <br><br><span style='font-size:12px;'>The collator has noted:<br>" + thisEvidence.annotation + "</span>";
 
 	document.getElementById('regionCnxDetailDescriptionText').innerHTML = details;
+}
+
+function regionCnxDetailNotesSaveNote()
+{
+	if(window.logged)
+	{
+		if(scrub(document.getElementById("regionCnxDetailNotesMyNotebookNew").value))
+		{
+			var payload = {
+				note : document.getElementById("regionCnxDetailNotesMyNotebookNew").value,
+				itemID: document.getElementById('regionCnxDetailNotes').connection.bamsID
+			};
+			$.post( "../php/account/notebook/connection/", payload)
+			.done(function( data ) {
+				var response = JSON.parse(data);
+				if(response.status == 200)
+				{
+					//success. Add to list
+					var newNote = document.createElement('div');
+					newNote.className = "searchMyNotebookItem";
+					newNote.innerHTML = "Newly added: <br>" + payload.note;
+					document.getElementById('regionCnxDetailNotesMyNotebookFlex').insertBefore(newNote,document.getElementById('regionCnxDetailNotesMyNotebookFlex').firstChild);
+
+					//save note to connection
+					for(var i=0; i<window.connections.length; i++)
+					{
+						if(window.connections[i].bamsID == payload.itemID)
+						{
+							var newNoteObj = {
+								UID: response.UID,
+								dateTime: response.dateTime,
+								id: response.noteID,
+								itemID: payload.itemID,
+								itemType: 2,
+								note: payload.note
+							};
+							window.connections[i].notes.unshift(newNoteObj);
+						}
+					}
+				}
+			});
+		}
+		else
+		{
+			alert("The note you've entered contains none of the following characters: ' \" / \\ ; & $ : ! # % ( ) { }. Please remove all illegals characters and resubmit.");
+		}
+	}
 }
 
 function mapDataActivateConnection()
@@ -649,7 +727,6 @@ function mapDataActivateConnection()
 							//found it! Instantiate new region
 							var newRegion = window.searchResults[ll];
 							window.regions[window.regions.length] = new Region(newRegion.bamsID, newRegion.name, newRegion.abbrev, newRegion.nomenclature, newRegion.species, newRegion.otherNomenclatures, newRegion.dataSets, newRegion.coordinateInteraction, newRegion.dimensions, newRegion.coordinatePlot, newRegion.notes, "regions", false);
-							// document.getElementById(window.layerData[0] + "_" + newRegion.bamsID).src = "img/ui/pin/" + window.currentZoom + "_r_x.png";
 							mapCheckPinStatus(newRegion.bamsID);
 						}
 					}
@@ -682,6 +759,9 @@ function mapDataActivateConnection()
 		alert("Please select at least one connection.");
 	}
 }
+
+
+
 
 //	Molecules! (Finally..)
 
@@ -789,7 +869,7 @@ function mapDataActivateMolecule()
 			if(!(isPresent))
 			{
 				//instantiate molecule
-				var instantiatedMolecule = new Molecule(thisMolecule.bamsID, thisMolecule.name, thisMolecule.regionID, thisMolecule.regionName, thisMolecule.regionAbbrev, thisMolecule.distribution, thisMolecule.strength, thisMolecule.annotation, thisMolecule.referenceName, thisMolecule.referenceURL, thisMolecule.detailsURL, "molecules", false);
+				var instantiatedMolecule = new Molecule(thisMolecule.bamsID, thisMolecule.name, thisMolecule.regionID, thisMolecule.regionName, thisMolecule.regionAbbrev, thisMolecule.distribution, thisMolecule.strength, thisMolecule.annotation, thisMolecule.referenceName, thisMolecule.referenceURL, thisMolecule.detailsURL, thisMolecule.notes, "molecules", false);
 				window.molecules.push(instantiatedMolecule);
 				mapCheckPinStatus(thisMolecule.regionID);
 			}
@@ -862,6 +942,8 @@ function mapDataMoleculesModal()
 			document.getElementById('regionMolsDetailMolsBox').appendChild(newMolecule);
 		}
 	}
+
+	$('#regionMolsDetailNotes').hide();
 	$('#regionMolsDetails').modal('toggle');
 }
 
@@ -869,7 +951,8 @@ function mapDataMoleculesModalViewMolecule(moleculeID)
 {
 	console.log("in mapDataMoleculesModalViewMolecule():");
 	var thisMolecule = window.molecules[moleculeID];
-	
+	document.getElementById('regionMolsDetailNotes').molecule = thisMolecule;
+
 	console.log("Working with: ");
 	console.log(thisMolecule);
 
@@ -898,10 +981,88 @@ function mapDataMoleculesModalViewMolecule(moleculeID)
 	detailsText = detailsText + " distribution in the " + thisMolecule.regionName + ". Specific case details <a target='_blank' href='" + thisMolecule.detailsURL + "'>can be found here.</a>";
 
 
+	document.getElementById('regionMolsDetailNotesMyNotebookFlex').innerHTML = "";
+
+	if(window.logged)
+	{
+		for(j=0; j<thisMolecule.notes.length; j++)
+		{
+			var thisNote = thisMolecule.notes[j];
+			console.log(thisNote);
+			var newNote = document.createElement('div');
+			newNote.className = "searchMyNotebookItem";
+			newNote.id = thisNote.id;
+			newNote.innerHTML = "On " + thisNote.dateTime + ", you recorded: <br>" + thisNote.note;
+			document.getElementById('regionMolsDetailNotesMyNotebookFlex').appendChild(newNote);
+		}
+		$('#regionMolsDetailNotesMyNotebookNew').show();
+		$('#regionMolsDetailNotesMyNotebookNewBtn').show();
+		document.getElementById('regionMolsDetailNotesMyNotebookNew').placeholder = "Record a note about " + thisMolecule.name;
+	}
+	else
+	{
+		document.getElementById('regionMolsDetailNotesMyNotebook').innerHTML = "To save notes, log in or create an account.";
+	}
+
+	$('#regionMolsDetailNotes').show();
+
 	document.getElementById('regionMolsDetailDescriptionText').innerHTML = detailsText;
 	document.getElementById('regionMolsDetailLabelsName').innerHTML = thisMolecule.name;
 	document.getElementById('regionMolsDetailDescription').style.display = "inline";
 }
+
+function regionMolsDetailNotesSaveNote()
+{
+	if(window.logged)
+	{
+		if(scrub(document.getElementById("regionMolsDetailNotesMyNotebookNew").value))
+		{
+			var payload = {
+				note : document.getElementById("regionMolsDetailNotesMyNotebookNew").value,
+				itemID: document.getElementById('regionMolsDetailNotes').molecule.bamsID
+			};
+			$.post( "../php/account/notebook/molecule/", payload)
+			.done(function( data ) {
+				var response = JSON.parse(data);
+				if(response.status == 200)
+				{
+					//success. Add to list
+					var newNote = document.createElement('div');
+					newNote.className = "searchMyNotebookItem";
+					newNote.innerHTML = "Newly added: <br>" + payload.note;
+					document.getElementById('regionMolsDetailNotesMyNotebookFlex').insertBefore(newNote,document.getElementById('regionMolsDetailNotesMyNotebookFlex').firstChild);
+
+					//save note to cell
+					for(var i=0; i<window.molecules.length; i++)
+					{
+						if(window.molecules[i].bamsID == payload.itemID)
+						{
+							var newNoteObj = {
+								UID: response.UID,
+								dateTime: response.dateTime,
+								id: response.noteID,
+								itemID: payload.itemID,
+								itemType: 3,
+								note: payload.note
+							};
+							window.molecules[i].notes.unshift(newNoteObj);
+						}
+					}
+				}
+			});
+		}
+		else
+		{
+			alert("The note you've entered contains none of the following characters: ' \" / \\ ; & $ : ! # % ( ) { }. Please remove all illegals characters and resubmit.");
+		}
+	}
+}
+
+
+
+
+
+
 
 //	Cells! (Finally..)
 
@@ -1010,7 +1171,7 @@ function mapDataActivateCells()
 			if(!(isPresent))
 			{
 				//instantiate molecule
-				var instantiatedCell = new Cell(thisCell.bamsID, thisCell.name, thisCell.regionID, thisCell.regionName, thisCell.regionAbbrev, thisCell.detailsURL, "cells", false);
+				var instantiatedCell = new Cell(thisCell.bamsID, thisCell.name, thisCell.regionID, thisCell.regionName, thisCell.regionAbbrev, thisCell.detailsURL, thisCell.notes, "cells", false);
 				window.cells.push(instantiatedCell);
 				mapCheckPinStatus(thisCell.regionID);
 			}
@@ -1061,21 +1222,91 @@ function mapDataCellsModal()
 			document.getElementById('regionCellsDetailCellsBox').appendChild(newCell);
 		}
 	}
+
+	$('#regionCellsDetailNotes').hide();
 	$('#regionCellsDetails').modal('toggle');
 }
 
 function mapDataCellsModalViewCell(cellID)
 {
-	console.log("in mapDataCellsModalViewCell():");
 	var thisCell = window.cells[cellID];
-	
-	console.log("Working with: ");
-	console.log(thisCell);
-
+	document.getElementById('regionCellsDetailNotes').cell = thisCell;
 	var detailsText = "The " + thisCell.name + " has been observed within the " + thisCell.regionName + ". Specific details including nomenclature and references <a target='_blank' href='" + thisCell.detailsURL + "'>can be found here.</a>";
+
+	document.getElementById('regionCellsDetailNotesMyNotebookFlex').innerHTML = "";
+
+	if(window.logged)
+	{
+		for(j=0; j<thisCell.notes.length; j++)
+		{
+			var thisNote = thisCell.notes[j];
+			var newNote = document.createElement('div');
+			newNote.className = "searchMyNotebookItem";
+			newNote.id = thisNote.id;
+			newNote.innerHTML = "On " + thisNote.dateTime + ", you recorded: <br>" + thisNote.note;
+			document.getElementById('regionCellsDetailNotesMyNotebookFlex').appendChild(newNote);
+		}
+		$('#regionCellsDetailNotesMyNotebookNew').show();
+		$('#regionCellsDetailNotesMyNotebookNewBtn').show();
+		document.getElementById('regionCellsDetailNotesMyNotebookNew').placeholder = "Record a note about " + thisCell.name;
+	}
+	else
+	{
+		document.getElementById('regionCellsDetailNotesMyNotebook').innerHTML = "To save notes, log in or create an account.";
+	}
+
+	$('#regionCellsDetailNotes').show();
 
 
 	document.getElementById('regionCellsDetailDescriptionText').innerHTML = detailsText;
 	document.getElementById('regionCellsDetailLabelsName').innerHTML = thisCell.name;
 	document.getElementById('regionCellsDetailDescription').style.display = "inline";
+}
+
+function regionCellsDetailNotesSaveNote()
+{
+	if(window.logged)
+	{
+		if(scrub(document.getElementById("regionCellsDetailNotesMyNotebookNew").value))
+		{
+			var payload = {
+				note : document.getElementById("regionCellsDetailNotesMyNotebookNew").value,
+				itemID: document.getElementById('regionCellsDetailNotes').cell.bamsID
+			};
+			$.post( "../php/account/notebook/cell/", payload)
+			.done(function( data ) {
+				var response = JSON.parse(data);
+				console.log(response);
+				if(response.status == 200)
+				{
+					//success. Add to list
+					var newNote = document.createElement('div');
+					newNote.className = "searchMyNotebookItem";
+					newNote.innerHTML = "Newly added: <br>" + payload.note;
+					document.getElementById('regionCellsDetailNotesMyNotebookFlex').insertBefore(newNote,document.getElementById('regionCellsDetailNotesMyNotebookFlex').firstChild);
+
+					//save note to cell
+					for(var i=0; i<window.cells.length; i++)
+					{
+						if(window.cells[i].bamsID == payload.itemID)
+						{
+							var newNoteObj = {
+								UID: response.UID,
+								dateTime: response.dateTime,
+								id: response.noteID,
+								itemID: payload.itemID,
+								itemType: 4,
+								note: payload.note
+							};
+							window.cells[i].notes.unshift(newNoteObj);
+						}
+					}
+				}
+			});
+		}
+		else
+		{
+			alert("The note you've entered contains none of the following characters: ' \" / \\ ; & $ : ! # % ( ) { }. Please remove all illegals characters and resubmit.");
+		}
+	}
 }
