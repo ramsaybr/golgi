@@ -20,7 +20,7 @@ include_once('php/header.php');
 
 ?>
 
-		<div id="masterDiv" style="background-color: #F00;">
+		<div id="masterDiv">
 		<!-- Begin master div -->
 
 			
