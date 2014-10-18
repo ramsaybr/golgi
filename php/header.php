@@ -12,4 +12,4 @@
 
 		
 	</head>
-	<body style="font-family: 'Open Sans' sans-serif; font-weight:300;">
+	<body style="font-family: 'Open Sans' sans-serif; font-weight:300; background-image:url('img/bench.png'); background-size:100% 100%; background-repeat: no-repeat; overflow:hidden;">

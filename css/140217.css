@@ -533,7 +533,7 @@
 	left:10px;
 	width:180px;
 	top:5px;
-	background-color:#FFF;
+	/*background-color:#FFF;*/
 	height:auto;
 	/*margin-bottom:10px;*/
 	/*border-right: 20px solid #3D3C42;*/
@@ -1386,7 +1386,7 @@ Cells
 	height:960px;
 	top:0px;
 	left:0px;
-	background-color: #FFF;
+	/*background-color: #FFF;*/
 	/*z-index:7;*/
 }
 
@@ -1396,7 +1396,7 @@ Cells
 	height:10%;
 	top:0px;
 	left:0px;
-	background-color: #FFF;
+	/*background-color: #FFF;*/
 	z-index:7;
 }
 

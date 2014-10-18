@@ -507,8 +507,6 @@ include_once('php/header.php');
 		  </div>
 		</div>
 
-		//
-		//
 		<!-- Credentials -->
 		<div class="modal fade" id="credentialsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog" style="height:450px;">
