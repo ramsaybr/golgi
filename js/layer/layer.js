@@ -59,7 +59,7 @@ function Layer (layerID)
 		layerHeadVis.style.cursor = "pointer";
 		layerHeadVis.onclick = function(){toggleLayerVis(layerID);};
 		layerHeadVis.style.width = "20px";
-		layerHeadVis.title = "Click to hide this layer";
+		layerHeadVis.title = "Click to show/hide this layer";
 
 		//icon for delete layer
 		var layerHeadDelete = document.createElement('span');
@@ -76,35 +76,35 @@ function Layer (layerID)
 	newLayerRegion.className = "layerCtrl layerSubheader layer" + this.id + " layerRegionHeader";
 	newLayerRegion.id = "layer" + this.id + "RegionList";
 	newLayerRegion.innerHTML = "0 Regions";
-	newLayerRegion.title = "Show Region Details";
-	newLayerRegion.style.cursor = "pointer";
-	newLayerRegion.onclick = function(){showLayerDetails(1, this.id);};
+	// newLayerRegion.title = "Show Region Details";
+	// newLayerRegion.style.cursor = "pointer";
+	// newLayerRegion.onclick = function(){showLayerDetails(1, this.id);};
 
 	var newLayerConnection = document.createElement('div');
 	newLayerConnection.className = "layerCtrl layerSubheader layer" + this.id + " layerMoleculeHeader";
 	newLayerConnection.id = "layer" + this.id + "ConnectionList";
 	newLayerConnection.innerHTML = "0 Connections";
-	newLayerConnection.title = "Show Connection Details";
-	newLayerConnection.style.cursor = "pointer";
-	newLayerConnection.onclick = function(){showLayerDetails(2, this.id);};
+	// newLayerConnection.title = "Show Connection Details";
+	// newLayerConnection.style.cursor = "pointer";
+	// newLayerConnection.onclick = function(){showLayerDetails(2, this.id);};
 	
 	//Layer Molecules
 	var newLayerMolecule = document.createElement('div');
 	newLayerMolecule.className = "layerCtrl layerSubheader layer" + this.id + " layerMoleculeHeader";
 	newLayerMolecule.id = "layer" + this.id + "MoleculeList";
 	newLayerMolecule.innerHTML = "0 Molecules";
-	newLayerMolecule.title = "Show Molecular Details";
-	newLayerMolecule.style.cursor = "pointer";
-	newLayerMolecule.onclick = function(){showLayerDetails(3, this.id);};
+	// newLayerMolecule.title = "Show Molecular Details";
+	// newLayerMolecule.style.cursor = "pointer";
+	// newLayerMolecule.onclick = function(){showLayerDetails(3, this.id);};
 
 	//Layer Cell Types
 	var newLayerCellType = document.createElement('div');
 	newLayerCellType.className = "layerCtrl layerSubheader layer" + this.id + " layerCellTypeHeader";
 	newLayerCellType.id = "layer" + this.id + "CellTypeList";
 	newLayerCellType.innerHTML = "0 Cell Types";
-	newLayerCellType.title = "Show Cell Type Details";
-	newLayerCellType.style.cursor = "pointer";
-	newLayerCellType.onclick = function(){showLayerDetails(4, this.id);};
+	// newLayerCellType.title = "Show Cell Type Details";
+	// newLayerCellType.style.cursor = "pointer";
+	// newLayerCellType.onclick = function(){showLayerDetails(4, this.id);};
 
 	
 
@@ -152,14 +152,14 @@ function layerToggleHead(layerID)
 	{
 		$('.layer' + layerID + '.layerSubheader').fadeOut(250);
 		window.layerData[1][layerID].collapsed = true;
-		document.getElementById("layer"+layerID+"Arrow").className="icon-chevron-right";
+		document.getElementById("layer"+layerID+"Arrow").className="glyphicon glyphicon-chevron-right";
 		document.getElementById("layer"+layerID+"Arrow").title="Click to expand this layer";
 	}
 	else
 	{
 		$('.layer' + layerID + '.layerSubheader').fadeIn(0);
 		window.layerData[1][layerID].collapsed = false;
-		document.getElementById("layer"+layerID+"Arrow").className="icon-chevron-down";
+		document.getElementById("layer"+layerID+"Arrow").className="glyphicon glyphicon-chevron-down";
 		document.getElementById("layer"+layerID+"Arrow").title="Click to collapse this layer";
 	}
 }
@@ -174,7 +174,7 @@ function layerActive(ID)
 //show / hide all components in this layer
 function toggleLayerVis(ID)
 {
-	$('#layer'+ID+'Vis').toggleClass('icon-eye-open').toggleClass('icon-eye-close');
+	$('#layer'+ID+'Vis').toggleClass('glyphicon glyphicon-eye-open').toggleClass('glyphicon glyphicon-eye-close');
 	$('.layer' + ID + '.region').toggle();
 	$('.layer' + ID + '.connection').toggle();
 	$('.layer' + ID + '.pin').toggle();
@@ -374,4 +374,110 @@ function getConnectionDetailsViewReport(index, ref)
 function hideConnectionDetails()
 {
 	$('#connectionDetails').fadeOut(500);
+}
+
+function deleteLayer(layerID)
+{
+	var removeRegion = [];
+	var removePin = [];
+	for(var i=(window.regions.length)-1; i>=0; i--)
+	{
+		var thisRegion = window.regions[i];
+		if(thisRegion.layer == layerID)
+		{
+			removeRegion.push(i);
+		}
+	}
+	for(var j=0; j<removeRegion.length; j++)
+	{
+		window.regions.splice(removeRegion[j], 1);
+		window.layerData[1][layerID].numRegions--;
+		document.getElementById('layer' + layerID + 'RegionList').innerHTML = (window.layerData[1][layerID].numRegions) + " Regions";
+	}
+
+	//remove region, pin from map
+	$('.layer' + layerID + ".region").remove();
+	for(var k=(document.getElementById('pins').childNodes.length - 1); k>=0; k--)
+	{
+		var thisPin = document.getElementById('pins').childNodes[k];
+		var pinID = thisPin.id.split("_");
+		// conso
+		if(pinID[0] == layerID)
+		{
+			removePin.push(thisPin.id);
+		}
+	}
+	for(l=0; l<removePin.length; l++)
+	{
+		$('#' + removePin[l]).remove();
+	}
+
+	//remove connections
+	var removeConnection = [];
+	for(var i=(window.connections.length)-1; i>=0; i--)
+	{
+		var thisConnection = window.connections[i];
+		if(thisConnection.layer == layerID)
+		{
+			removeConnection.push(i);
+		}
+	}
+	for(var j=0; j<removeConnection.length; j++)
+	{
+		console.log("here:");
+		console.log(window.layerData[1][layerID]);
+		window.connections.splice(removeConnection[j], 1);
+		window.layerData[1][layerID].numConnection--;
+		document.getElementById('layer' + layerID + 'ConnectionList').innerHTML = (window.layerData[1][layerID].numConnection) + " Connections";
+	}
+
+	//remove connection from map
+	$('.layer' + layerID + ".connection").remove();
+
+
+	//remove molecules
+	var removeMolecule = [];
+	for(var i=(window.molecules.length)-1; i>=0; i--)
+	{
+		var thisMolecule = window.molecules[i];
+		if(thisMolecule.layer == layerID)
+		{
+			removeMolecule.push(i);
+		}
+	}
+	for(var j=0; j<removeMolecule.length; j++)
+	{
+		console.log("here:");
+		console.log(window.layerData[1][layerID]);
+		window.molecules.splice(removeMolecule[j], 1);
+		window.layerData[1][layerID].numMolecules--;
+		document.getElementById('layer' + layerID + 'MoleculeList').innerHTML = (window.layerData[1][layerID].numMolecules) + " Molecules";
+	}
+
+
+	//remove cells
+	var removeCell = [];
+	for(var i=(window.cells.length)-1; i>=0; i--)
+	{
+		var thisCell = window.cells[i];
+		if(thisCell.layer == layerID)
+		{
+			removeCell.push(i);
+		}
+	}
+	for(var j=0; j<removeCell.length; j++)
+	{
+		console.log("here:");
+		console.log(window.layerData[1][layerID]);
+		window.cells.splice(removeCell[j], 1);
+		window.layerData[1][layerID].numCellTypes--;
+		document.getElementById('layer' + layerID + 'MoleculeList').innerHTML = (window.layerData[1][layerID].numCellTypes) + " Cell Types";
+	}
+
+
+	//remove layer from layerCtrl interface
+	$('.layer' + layerID + ".layerCtrl").remove();
+	document.getElementById('currentLayer').innerHTML = "None";
+	window.layerData[0] = -1;
+
 }

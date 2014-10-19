@@ -6,7 +6,9 @@ window.searchable = [];
 
 //jQuery for bootstrap typeahead
 $('#searchInput').typeahead({
-	source: searchable
+	source: searchable,
+	items: 20,
+	minLength: 1
 });
 
 function clearSearch()
@@ -311,7 +313,7 @@ function closeSearch()
 
 function addRegion()
 {
-	closeSearch();
+	
 	//retrieve Region object from search interface DOM (see line 52)
 	//instantiate new Region object as most recent member of window.regions[] (see line 9)
 	//region constructor needs test statement for whether or not to create DOM <img> object, create if called from here and not from search()
@@ -323,36 +325,44 @@ function addRegion()
 	var sameLayerIndex = 0;
 	var otherLayer = false;
 	var otherLayers = [];
-	for(i=0; i<window.regions.length; i++)
+	if(window.layerData[0] != -1)
 	{
-		if((window.regions[i].name == newRegion.name)&&(window.regions[i].nomenclature == newRegion.nomenclature)&&(window.regions[i].layer == window.layerData[0]))
+		closeSearch();
+		for(i=0; i<window.regions.length; i++)
 		{
-			//it is already in this layer
-			sameLayer = true;
-			sameLayerIndex = i;
+			if((window.regions[i].name == newRegion.name)&&(window.regions[i].nomenclature == newRegion.nomenclature)&&(window.regions[i].layer == window.layerData[0]))
+			{
+				//it is already in this layer
+				sameLayer = true;
+				sameLayerIndex = i;
+			}
+			else if((window.regions[i].name == newRegion.name)&&(window.regions[i].nomenclature == newRegion.nomenclature))
+			{
+				//it is already in another layer
+				otherLayer = true;
+				otherLayers[otherLayers.length] = window.regions[i].layer;
+				console.log('in other layer');
+			}
 		}
-		else if((window.regions[i].name == newRegion.name)&&(window.regions[i].nomenclature == newRegion.nomenclature))
+		if(sameLayer)
 		{
-			//it is already in another layer
-			otherLayer = true;
-			otherLayers[otherLayers.length] = window.regions[i].layer;
-			console.log('in other layer');
+			alert("This region is already in this layer!");
+			return sameLayerIndex;
 		}
-	}
-	if(sameLayer)
-	{
-		alert("This region is already in this layer!");
-		return sameLayerIndex;
+		else
+		{
+			//instantiate new region object in window.regions[]
+			//pass otherLayer to constructor to determine whether or not to add DOM element for region <img>
+			var instantiatedRegion = new Region(newRegion.bamsID, newRegion.name, newRegion.abbrev, newRegion.nomenclature, newRegion.species, newRegion.otherNomenclatures, newRegion.dataSets, newRegion.coordinateInteraction, newRegion.dimensions, newRegion.coordinatePlot, newRegion.notes, "regions", otherLayers);
+			window.regions[window.regions.length] = instantiatedRegion;
+			return instantiatedRegion;
+		}
+
 	}
 	else
 	{
-		//instantiate new region object in window.regions[]
-		//pass otherLayer to constructor to determine whether or not to add DOM element for region <img>
-		var instantiatedRegion = new Region(newRegion.bamsID, newRegion.name, newRegion.abbrev, newRegion.nomenclature, newRegion.species, newRegion.otherNomenclatures, newRegion.dataSets, newRegion.coordinateInteraction, newRegion.dimensions, newRegion.coordinatePlot, newRegion.notes, "regions", otherLayers);
-		window.regions[window.regions.length] = instantiatedRegion;
-		return instantiatedRegion;
+		alert("Please activate a layer before adding a region");
 	}
-	
 }
 
 function searchViewCnxs()

@@ -55,3 +55,40 @@ function showAccountInfo()
 	$('#accountInfo').toggle();
 }
 
+function showChangePassword()
+{
+	$('#changePasswordDefault').show();
+	$('#changePasswordSuccess').hide();
+	document.getElementById('changePasswordOriginal').value = "";
+	document.getElementById('changePasswordNew1').value = "";
+	document.getElementById('changePasswordNew2').value = "";
+	$('#changePasswordModal').modal('toggle');
+}
+
+function changePassword()
+{
+	if(document.getElementById('changePasswordNew1').value == document.getElementById('changePasswordNew2').value)
+	{
+		var payload = {
+			originalPwd: sha1(document.getElementById('changePasswordOriginal').value),
+			newPwd: sha1(document.getElementById('changePasswordNew1').value)
+		};
+		$.post( "../php/account/password/", payload)
+		.done(function( data ) {
+			var response = JSON.parse(data);
+			console.log(response);
+			if(response.status == 200)
+			{
+				document.getElementById('changePasswordOriginal').value = "";
+				document.getElementById('changePasswordNew1').value = "";
+				document.getElementById('changePasswordNew2').value = "";
+				$('#changePasswordDefault').hide();
+				$('#changePasswordSuccess').show();
+			}
+		});
+	}
+	else
+	{
+		alert("The passwords you entered do not match. Please enter the same new password in both boxes.");
+	}
+}

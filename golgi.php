@@ -22,10 +22,6 @@ include_once('php/header.php');
 
 		<div id="masterDiv">
 		<!-- Begin master div -->
-
-			
-
-
 			<div id="intxn">
 				<div id="mapData" style="display:none;">
 					<div id="mapDataName">
@@ -173,6 +169,7 @@ include_once('php/header.php');
 						<div id="searchInputIcon"><span class="glyphicon glyphicon-search"></span></div>
 						<div class="btn btn-success" id="searchButton" onclick="search(null)">Search</div>
 					</div>
+
 					<div id="searchResultsDiv">
 						<div id="searchResultsCard1">
 							<div id="searchResultsClose" onclick="closeSearch()">
@@ -234,7 +231,7 @@ include_once('php/header.php');
 						<button class="btn btn-sm btn-success accountInfoBtn" id="accountInfoViewNotebook">
 							<span class="glyphicon glyphicon-eye-open"></span> View my notebook
 						</button><br>
-						<button class="btn btn-xs btn-default accountInfoBtn" id="accountInfoChangePwd">
+						<button class="btn btn-xs btn-default accountInfoBtn" id="accountInfoChangePwd" onclick="showChangePassword()">
 							<span class="glyphicon glyphicon-pencil"></span> Change password
 						</button><br>
 						<button class="btn btn-xs btn-danger accountInfoBtn" id="accountInfoLogout" onclick="accountLogout()">
@@ -250,14 +247,12 @@ include_once('php/header.php');
 						
 					</div>
 					<div id="layers">
-						<div style="position:relative; left:0px; background-color: #3D3C42; top:0px; height:26px; width:100%; border-radius: 0px 0px 0px 4px; box-shadow:-1px 1px 1px 0px #222;">
-							<div id="layersHeader">
-								Active Data Layer: <span id="currentLayer">Layer 1</span>
-							</div>
+						<div id="layersHeader">
+							Active Layer: <span id="currentLayer">Layer 1</span>
 						</div>
 						<div id="layerContainer">
 						</div>
-						<div style="position:relative; top:0px; background-color:#3D3C42; left:0px; width:100%; height:auto; padding-bottom:20px; border-radius: 4px 0px 0px 4px; box-shadow: -1px 1px 1px 0px #222;">
+						<div style="position:relative; top:0px; left:0px; width:100%; height:auto; padding-bottom:10px;">
 							<div id="layerAddLayer" class="btn btn-success" onclick="newLayer()">
 								Add Layer <span class="glyphicon glyphicon-plus"></span>
 							</div>
@@ -299,7 +294,9 @@ include_once('php/header.php');
 
 				</div>
 			</div>
-
+			<div id="compass">
+				<img src="img/ui/compass.png" />
+			</div>
 		<!-- end master div -->
 		</div>
 
@@ -510,36 +507,60 @@ include_once('php/header.php');
 		<!-- Credentials -->
 		<div class="modal fade" id="credentialsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog" style="height:450px;">
+			  <div class="modal-dialog">
+			    <div class="modal-content" style="height:450px;">
+		    		<div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+			        </div>
+			      	<div class="modal-body">
+			      		<div id="credentials">
+							<div id="credentialsSignInDiv">
+								<center>
+									<img src="img/brainMap.png" width="100" height="100"/>
+								</center>
+								<p><b>Returning users:</b> </p>
+								<input type="text" class="form-control credentialsItem" id="credentialsEmail" placeholder="Email"/>
+								<input type="password" class="form-control credentialsItem" id="credentialsPwd" placeholder="Password"/>
+								<button class="btn btn-warning btn-small credentialsItem" style="width:18%; line-height: 0;" onclick="signIn()">Sign in</button>
+								<br><br>
+							</div>
+							<div id="credentialsSignUpDiv">
+								<h3 id="credentialsSignUpHeader">It's fast and free to sign up</h3>
+								<p id="credentialsSignUpDivText">Save your private notes on regions, connections, molecules and cells. <br>It's like scrawling your brilliant ideas in the margin of a paper. But the future.</p>
+								<button class="btn btn-success btn-large" id="credentialsSignUp" onclick="signupShow()">Sign up</button>
+								<input type="text" class="form-control credentialsSignUpHidden" id="credentialsSignUpEmail" placeholder="Email"/>
+								<input type="password" class="form-control credentialsSignUpHidden" id="credentialsSignUpPwd1" placeholder="Password"/>
+								<input type="password" class="form-control credentialsSignUpHidden" id="credentialsSignUpPwd2" placeholder="Password again (y'know - for good measure)"/>
+								<div class="alert alert-danger credentialsSignUpHidden" id="credentialsSignUpAlert" style="display:none;">
+									Oops! That account is already in use. If this error persists or you think there's a mistake, please email us at usegolgi@gmail.com
+								</div>
+								<button class="btn btn-success btn-large credentialsSignUpHidden" id="credentialsSignUpSubmit" onclick="signupSubmit()">Create my account</button>
+							</div>
+						</div>
+	      			</div>
+			    </div>
+			  </div>
+			</div>
+		</div>
+
+		<!-- ChangePassword -->
+		<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		  <div class="modal-dialog">
-		    <div class="modal-content" style="height:450px;">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
 	    		<div class="modal-header">
 			        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 		        </div>
 		      	<div class="modal-body">
-		      		<div id="credentials">
-						<div id="credentialsSignInDiv">
-							<center>
-								<img src="img/brainMap.png" width="100" height="100"/>
-							</center>
-							<p><b>Returning users:</b> </p>
-							<input type="text" class="form-control credentialsItem" id="credentialsEmail" placeholder="Email"/>
-							<input type="password" class="form-control credentialsItem" id="credentialsPwd" placeholder="Password"/>
-							<button class="btn btn-warning btn-small credentialsItem" style="width:18%; line-height: 0;" onclick="signIn()">Sign in</button>
-							<br><br>
-						</div>
-						<div id="credentialsSignUpDiv">
-							<h3 id="credentialsSignUpHeader">It's fast and free to sign up</h3>
-							<p id="credentialsSignUpDivText">Save your private notes on regions, connections, molecules and cells. <br>It's like scrawling your brilliant ideas in the margin of a paper. But the future.</p>
-							<button class="btn btn-success btn-large" id="credentialsSignUp" onclick="signupShow()">Sign up</button>
-							<input type="text" class="form-control credentialsSignUpHidden" id="credentialsSignUpEmail" placeholder="Email"/>
-							<input type="password" class="form-control credentialsSignUpHidden" id="credentialsSignUpPwd1" placeholder="Password"/>
-							<input type="password" class="form-control credentialsSignUpHidden" id="credentialsSignUpPwd2" placeholder="Password again (y'know - for good measure)"/>
-							<div class="alert alert-danger credentialsSignUpHidden" id="credentialsSignUpAlert" style="display:none;">
-								Oops! That account is already in use. If this error persists or you think there's a mistake, please email us at usegolgi@gmail.com
-							</div>
-							<button class="btn btn-success btn-large credentialsSignUpHidden" id="credentialsSignUpSubmit" onclick="signupSubmit()">Create my account</button>
-						</div>
-					</div>
+		      		<div id="changePasswordDefault">
+			      		<input type="password" class="form-control" id="changePasswordOriginal" placeholder="Current Password"/><br>
+			      		<input type="password" class="form-control" id="changePasswordNew1" placeholder="New Password"/><br>
+			      		<input type="password" class="form-control" id="changePasswordNew2" placeholder="New Password (again for good luck)"/><br>
+			      		<button class="btn btn-success btn-lg" style="position: relative; left:383px;" onclick="changePassword()">Change Password</button>
+			      	</div>
+			      	<div id="changePasswordSuccess" style="display:none">
+			      		<center><h2>Password updated!</h2></center>
+			      	</div>
       			</div>
 		    </div>
 		  </div>
@@ -578,6 +599,20 @@ include_once('php/header.php');
 		echo "window.logged = false;";
 	}
 ?>
+
+var newArray = [];
+for(i=0; i<window.searchable.length; i++)
+{
+	var thisItem = window.searchable[i].split("(");
+	var thisItem2 = thisItem[1].split(")");
+	newArray.push(thisItem2[0]);
+}
+
+newArray.sort();
+for(j=0; j<newArray.length; j++)
+{
+	console.log(newArray[j]);
+}
 
 </script>
 </html>

@@ -272,13 +272,15 @@
 #layers
 {
 	position: fixed;
-	right:0px;
+	right:4px;
 	width:200px;
 	top:40px;
 	height:auto;
-	/*background-color:#34495E;*/
+	background-color:#FFF;
+	padding: 4px;
 	z-index:8;
-	border-radius: 0px 0px 0px 10px;
+	color:#424242;
+	box-shadow: 0px 1px 2px 1px #AAA;
 }
 
 #layerDetails
@@ -288,7 +290,6 @@
 	width:410px;
 	top:40px;
 	height:228px;
-	background-color:#3D3C42;
 	z-index:40;
 	border-radius: 0px 0px 0px 10px;
 }
@@ -299,7 +300,6 @@
 	left:59px;
 	top:0px;
 	font-size:20px;
-	color:#FFF;
 }
 
 #layerDetailsRegionsBox
@@ -310,7 +310,6 @@
 	width:350px;
 	height:170px;
 	font-size:20px;
-	color:#FFF;
 	overflow-y: scroll;
 }
 
@@ -351,7 +350,6 @@
 	width:auto;
 	margin-right:10px;
 	font-size:12px;
-	color:#424242;
 }
 
 #layerDetailsConnectionsBox
@@ -362,7 +360,6 @@
 	width:330px;
 	height:170px;
 	font-size:20px;
-	color:#FFF;
 	overflow-y: scroll;
 }
 
@@ -392,6 +389,86 @@
 	right:10px;
 	top:2px;
 	cursor:pointer;
+}
+
+#layersHeader
+{
+	position: relative;
+	top:0px;
+	left:10px;
+	font-size: 14px;
+	font-weight: 700;
+}
+
+#layerContainer
+{
+	position:relative;
+	left:10px;
+	width:180px;
+	top:5px;
+	/*background-color:#FFF;*/
+	height:auto;
+	/*margin-bottom:10px;*/
+	/*border-right: 20px solid #3D3C42;*/
+	padding-top:5px;
+	padding-bottom:15px;
+}
+
+.layerCtrl
+{
+	position: relative;
+	top:0px;
+	height:16px;
+	width:100%;
+	background-color: #FFF;
+}
+
+.layerHead{
+/*	cursor: pointer;
+*/}
+
+.layerRegionHeader
+{
+	width:90% !important;
+	padding-left:10%;
+
+}
+.layerMoleculeHeader
+{
+	width:90% !important;
+	padding-left:10%;
+}
+.layerCellTypeHeader
+{
+	width:90% !important;
+	padding-left:10%;
+}
+
+.layerRegion
+{
+	width:80% !important;
+	padding-left:20%;
+}
+.layerMolecule
+{
+	width:80% !important;
+	padding-left:20%;
+}
+.layerCellType
+{
+	width:80% !important;
+	padding-left:20%;
+}
+
+#layerAddLayer
+{
+	position:relative;
+	left:10px;
+	width:155px;
+	top:9px;
+	height:30px;
+	margin-bottom:20px;
+	font-size:14px;
 }
 
 #regionDetails
@@ -518,86 +595,6 @@
 }
 
 
-#layersHeader
-{
-	position: relative;
-	top:0px;
-	left:10px;
-	font-size: 16px;
-	color:#FFF;
-}
-
-#layerContainer
-{
-	position:relative;
-	left:10px;
-	width:180px;
-	top:5px;
-	/*background-color:#FFF;*/
-	height:auto;
-	/*margin-bottom:10px;*/
-	/*border-right: 20px solid #3D3C42;*/
-	padding-top:5px;
-	padding-bottom:15px;
-}
-
-.layerCtrl
-{
-	position: relative;
-	top:0px;
-	height:16px;
-	width:100%;
-	background-color: #FFF;
-}
-
-.layerHead{
-/*	cursor: pointer;
-*/}
-
-.layerRegionHeader
-{
-	width:90% !important;
-	padding-left:10%;
-
-}
-.layerMoleculeHeader
-{
-	width:90% !important;
-	padding-left:10%;
-}
-.layerCellTypeHeader
-{
-	width:90% !important;
-	padding-left:10%;
-}
-
-.layerRegion
-{
-	width:80% !important;
-	padding-left:20%;
-}
-.layerMolecule
-{
-	width:80% !important;
-	padding-left:20%;
-}
-.layerCellType
-{
-	width:80% !important;
-	padding-left:20%;
-}
-
-#layerAddLayer
-{
-	position:relative;
-	left:10px;
-	width:155px;
-	top:9px;
-	height:30px;
-	margin-bottom:20px;
-	font-size:14px;
-}
-
 #mapData
 {
 	position:absolute;
@@ -605,10 +602,10 @@
 	width:600px;
 	top:200px;
 	height:400px;
-	background-color:#3D3C42;
-	color:#bdc3c7;
+	background-color:#FFF;
+	color:#424242;
 	z-index:10;
-	border-radius: 5px 5px 5px 0px;
+	box-shadow: 0px 2px 1px 0px #777;
 	display:none;
 }
 
@@ -913,7 +910,7 @@
 	width:500px;
 	height:30px;
 	font-size: 24px;
-	color:#FFF;
+	color:#424242;
 }
 
 
@@ -1106,7 +1103,7 @@ Molecules
 	width:500px;
 	height:30px;
 	font-size: 24px;
-	color:#FFF;
+	color:#424242;
 }
 
 #regionDetailsAddMoleculeHeader
@@ -1256,7 +1253,7 @@ Cells
 	width:500px;
 	height:30px;
 	font-size: 24px;
-	color:#FFF;
+	color:#424242;
 }
 
 #regionDetailsAddCellHeader
@@ -1502,10 +1499,15 @@ Cells
 
 #accountInfo
 {
-	position: absolute; top:40px; left:550px; width:320px; height:130px; background-color:#3D3C42; box-shadow: 0px 2px 2px 0px #222; color:#FFF; padding:10px; border-radius: 0px 0px 5px 5px;
+	position: absolute; top:40px; left:550px; width:320px; height:130px; background-color:#FFF; box-shadow: 0px 1px 2px 0px #AAA; color:#424242; padding:10px;
 }
 
 .accountInfoBtn
 {
 	position:relative; margin-top: 10px; width:300px;
+}
+
+#compass
+{
+	position:fixed; bottom:60px; right:50px; width:100px; height:100px; z-index: 100;
 }
