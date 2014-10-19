@@ -83,6 +83,7 @@ function signupSubmit()
 				{
 					case(200):
 						hideCredentials();
+						$('#credentialsModal').modal('toggle');
 						updateAccount(payload.email);
 						window.logged = true;
 						//successful signup
@@ -117,5 +118,5 @@ function updateAccount(emailAddress)
 {
 	console.log(emailAddress);
 	var grav_url = "http://www.gravatar.com/avatar/" + md5(emailAddress);
-	document.getElementById('userDiv').innerHTML = "<img src='" + grav_url + "' width='40' height='40'/> Logged in as <a style='cursor:pointer' onclick='showAccountInfo()'>" + emailAddress + "</a>";
+	document.getElementById('userDiv').innerHTML = "<img src='" + grav_url + "' width='25' height='25'/> Logged in as <a style='cursor:pointer' onclick='showAccountInfo()'>" + emailAddress + "</a>";
 }

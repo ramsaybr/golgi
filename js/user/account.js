@@ -43,7 +43,7 @@ function accountLogout()
 		console.log(response);
 		if(response.status == 200)
 		{
-			document.getElementById('userDiv').innerHTML = '<div style="padding-top:10px;"><span class="glyphicon glyphicon-user" style="padding-right:10px;"></span><a style="cursor:pointer" onclick="showCredentials()">Log in or sign up free</a></div>';
+			document.getElementById('userDiv').innerHTML = '<div style="padding-top:4px;"><span class="glyphicon glyphicon-user" style="padding-right:10px;"></span><a style="cursor:pointer" onclick="showCredentials()">Log in or sign up free</a></div>';
 			$('#accountInfo').hide();
 			window.logged = false;
 		}
