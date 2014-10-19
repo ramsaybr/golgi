@@ -10,7 +10,7 @@
 			$itemID = mysql_escape_string($_POST['itemID']);
 			$UID = mysql_escape_string($_COOKIE['UID']);
 			$response = array();
-			if(mysql_query("INSERT INTO `rootle5_flat`.`note` (`id`, `UID`, `itemType`, `itemID`, `note`, `dateTime`) VALUES (NULL, $UID, 2, $itemID, '" . $note . "', NOW())")or die("A MySQL error has occurred.<br />Your Query: " . $your_query . "<br /> Error: (" . mysql_errno() . ") " . mysql_error()))
+			if(mysql_query("INSERT INTO `usegol5_flat`.`note` (`id`, `UID`, `itemType`, `itemID`, `note`, `dateTime`) VALUES (NULL, $UID, 2, $itemID, '" . $note . "', NOW())")or die("A MySQL error has occurred.<br />Your Query: " . $your_query . "<br /> Error: (" . mysql_errno() . ") " . mysql_error()))
 			{
 				//get dateTime. Query inserted
 				$timeQuery = mysql_fetch_assoc(mysql_query("SELECT * FROM note WHERE id=" . mysql_insert_id()));

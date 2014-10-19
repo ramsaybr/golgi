@@ -12,7 +12,7 @@
 	if(mysql_num_rows(mysql_query("SELECT * FROM golgiUser WHERE email='" . strtolower($email) . "'")) == 0)
 	{
 		//no. Sign them up!
-		if(mysql_query("INSERT INTO `rootle5_flat`.`golgiUser` (`UID`, `email`, `password`) VALUES (NULL, '" . strtolower($email) . "', '" . strtolower($pwd) . "')"))
+		if(mysql_query("INSERT INTO `usegol5_flat`.`golgiUser` (`UID`, `email`, `password`) VALUES (NULL, '" . strtolower($email) . "', '" . strtolower($pwd) . "')"))
 		{
 			$UID = mysql_insert_id();
 

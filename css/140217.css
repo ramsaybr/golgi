@@ -75,7 +75,8 @@
 	position: absolute;
 	left:10px;
 	top:10px;
-	font-size:18px;
+	font-size:14px;
+	font-weight: 700;
 }
 #searchResultsType{
 	position: absolute;
