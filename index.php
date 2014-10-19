@@ -17,8 +17,6 @@
       <div id="headerContent">
         <img src="img/brainMap.png" width="35" height="35" id="headerImg"/>
         <span id="headerTitle">Golgi</span>
-        <a href="http://dev.usedopamine.com"><span class="headerCrumb">Log in</span></a>
-        <a href="http://dev.usedopamine.com/signup.php"><button class="btn btn-success btn-xs" style="position:relative; top:4px;">Sign up</button></a>
       </div>
     </div>
 
@@ -47,7 +45,7 @@
     			</div>
     		</div>
 
-      		<a href="http://dev.usedopamine.com/signup.php"><button class="btn btn-success" id="mainCTA">Launch Golgi</button></a>
+      		<a href="golgi.php"><button class="btn btn-success" id="mainCTA">Launch Golgi</button></a>
 	    </div>
     </div>
 
