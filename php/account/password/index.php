@@ -10,10 +10,10 @@
 
 	//has this user signed up before?
 
-	$query = mysql_query("SELECT * FROM golgiUser WHERE UID='" . mysql_escape_string($_COOKIE['UID']) . "' AND password='" . strtolower($originalPwd) . "'");
+	$query = mysql_query("SELECT * FROM golgiUser WHERE userID='" . mysql_escape_string($_COOKIE['UID']) . "' AND password='" . strtolower($originalPwd) . "'");
 	if(mysql_num_rows($query) == 1)
 	{
-		if(mysql_query("UPDATE golgiUser SET password='" . strtolower($newPwd) . "' WHERE `UID` = '" . $_COOKIE['UID'] . "'"))
+		if(mysql_query("UPDATE golgiUser SET password='" . strtolower($newPwd) . "' WHERE `userID` = '" . $_COOKIE['UID'] . "'"))
 		{
 			$response['status'] = 200;
 		}

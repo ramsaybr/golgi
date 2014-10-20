@@ -192,11 +192,11 @@ include_once('php/header.php');
 							</div>
 							<div id="searchMolecules">
 								<img id="searchConnectionIcon" src="img/ui/molecule.png" width="33" height="50"/>
-								<div id="searchMoleculesBtn" class="btn btn-warning yellowBtn">Molecules</div>
+								<div id="searchMoleculesBtn" class="btn btn-warning yellowBtn" onclick="searchViewMols()">Molecules</div>
 							</div>
 							<div id="searchCellTypes">
 								<img id="searchConnectionIcon" src="img/ui/cellType-40x60.png" width="33" height="50"/>
-								<div id="searchCellTypesBtn" class="btn btn-warning yellowBtn">Cell Types</div>
+								<div id="searchCellTypesBtn" class="btn btn-warning yellowBtn" onclick="searchViewCells()">Cell Types</div>
 							</div>
 						</div>
 						<div id="searchResultsCard2">
@@ -228,9 +228,9 @@ include_once('php/header.php');
 					</div>
 
 					<div id="accountInfo" style="display:none;">
-						<button class="btn btn-sm btn-success accountInfoBtn" id="accountInfoViewNotebook">
+						<!-- <button class="btn btn-sm btn-success accountInfoBtn" id="accountInfoViewNotebook">
 							<span class="glyphicon glyphicon-eye-open"></span> View my notebook
-						</button><br>
+						</button><br> -->
 						<button class="btn btn-xs btn-default accountInfoBtn" id="accountInfoChangePwd" onclick="showChangePassword()">
 							<span class="glyphicon glyphicon-pencil"></span> Change password
 						</button><br>
@@ -599,20 +599,6 @@ include_once('php/header.php');
 		echo "window.logged = false;";
 	}
 ?>
-
-var newArray = [];
-for(i=0; i<window.searchable.length; i++)
-{
-	var thisItem = window.searchable[i].split("(");
-	var thisItem2 = thisItem[1].split(")");
-	newArray.push(thisItem2[0]);
-}
-
-newArray.sort();
-for(j=0; j<newArray.length; j++)
-{
-	console.log(newArray[j]);
-}
 
 </script>
 </html>

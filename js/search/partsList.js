@@ -7,6 +7,7 @@ window.searchable.push("Agranular insular area ventral part (AIv)");
 window.searchable.push("Ammon Horn (CA)");
 window.searchable.push("Ansiform lobule (AN)");
 window.searchable.push("Anterior amygdaloid area (AAA)");
+window.searchable.push("Anterior cingulate area (ACA)");
 window.searchable.push("Anterior cingulate area dorsal part (ACAd)");
 window.searchable.push("Anterior cingulate area ventral part (ACAv)");
 window.searchable.push("Anterior hypothalamic central part (AHNc)");

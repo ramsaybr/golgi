@@ -16,7 +16,7 @@
 		$result = mysql_fetch_assoc($query);
 		$response['status']=200;
 		$cookieDate = 60 * 60 * 24 * 30 + time();
-        setcookie('UID', $result['UID'], $cookieDate, '/');
+        setcookie('UID', $result['userID'], $cookieDate, '/');
         setcookie('email', $email, $cookieDate, '/');
 	}
 	else

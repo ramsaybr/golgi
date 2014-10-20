@@ -12,13 +12,14 @@
 	if(mysql_num_rows(mysql_query("SELECT * FROM golgiUser WHERE email='" . strtolower($email) . "'")) == 0)
 	{
 		//no. Sign them up!
-		if(mysql_query("INSERT INTO `usegol5_flat`.`golgiUser` (`UID`, `email`, `password`) VALUES (NULL, '" . strtolower($email) . "', '" . strtolower($pwd) . "')"))
+		$newUserId = sha1(mt_rand() . strtolower($email) . strtolower($pwd));
+		if(mysql_query("INSERT INTO `usegol5_flat`.`golgiUser` (`UID`, `email`, `password`, `userID`) VALUES (NULL, '" . strtolower($email) . "', '" . strtolower($pwd) . "', '" . $newUserId . "')"))
 		{
 			$UID = mysql_insert_id();
 
 			$response['status']=200;
 			$cookieDate = 60 * 60 * 24 * 30 + time();
-            setcookie('UID', $UID, $cookieDate, '/');
+            setcookie('UID', $newUserId, $cookieDate, '/');
             setcookie('email', $email, $cookieDate, '/');
 		}
 		else

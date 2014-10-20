@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta property="og:image" content="img/brainMap.png"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Golgi</title>
 
-    <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/landing.css" rel="stylesheet">
     <link href='http://fonts.googleapis.com/css?family=Oxygen:400,300,700' rel='stylesheet' type='text/css'>
@@ -20,38 +20,38 @@
       </div>
     </div>
 
-    <div style="position: absolute; left:0px; min-width:1200px; width:100%; z-index:1; background-image: url('img/landing1.png'); background-size: 100%; background-repeat: no-repeat; background-color: #FFF;">
-    	<div style="float:left; width:10%; height:100%;">
-    		<div style="position: relative; left:0px; width:100%; background-color:#FFF; top:240px; height:80px;"></div>
-
-    		<div style="position: relative; left:0px; width:100%; background-color:#FFF; top:280px; height:75px;"></div>
+    <div id="intro">
+    	<div id="floatBanners">
+    		<div id="floatBannerTop"></div>
+    		<div id="floatBannerBottom"></div>
     	</div>
-    	<div class="" style="float:left; width:80%; top:70px; height:900px; margin-bottom: 20px;">
-    		<div style="position:relative; left:100px; top:110px; width:120px; height:120px;">
-    			<img src="img/brainMap.png" width="120" height="120"/>
-    		</div>
-    		<div style="position:relative; left:0px; top:120px; background-color:#FFF; width:320px; height:80px;">
+    	<div id="introTextArea">
+    		<!-- <div style=""> -->
+    			<img src="img/brainMap.png" width="120" height="120" id="introLogo"/>
+    		<!-- </div> -->
+    		<div id="introText1">
     			<span style="float:right; width:270px; font-size: 26px; line-height: 1; padding-top:15px;">
     				A Modern Way to<br>
             Explore the Brain
     			</span>
     		</div>
 
-    		<div style="position:relative; left:0px; top:160px; background-color:#FFF; width:470px; height:75px; padding-top:10px;">
-    			<div style="padding-left:50px; width:470px; font-size: 14px; line-height: 1; padding-top:10px;">
+    		<div id="introText2">
+    			<div id="introText2Padding">
     				Do better neuroscience:
-            Use Golgi to easily navigate thousands of reports of the brain’s anatomy, connectivity, more.
+            use Golgi to easily navigate thousands of reports of the brain’s anatomy, connectivity, more.
     			</div>
     		</div>
 
       		<a href="golgi.php"><button class="btn btn-success" id="mainCTA">Launch Golgi</button></a>
 	    </div>
-      <img src="img/arrowDown.png" style="position: absolute; left:1000px; top:650px;"/>
-      <div style="position: absolute; left:984px; top:600px; background-color:rgba(255,255,255,.4); padding:10px; font-size: 18px;">Learn more</div>
+
+      <img src="img/arrowDown.png" id="arrowDown"/>
+      <div id="introArrowPrompt">Learn more</div>
     </div>
 
-    <div style="position: absolute; left:0px; top:900px; width:100%; height:900px; z-index:10; color:#424242;">
-    	<div style="position: relative; margin-left:auto; margin-right:auto; width:1280px; height:900px; padding-top:100px; margin-top:50px;">
+    <div id="page2">
+    	<div id="page2center">
     		<div id="player"></div>
     		<div id="overlay">
     			<span style="font-size:30px">
@@ -67,7 +67,9 @@
           What does this have to do with Schizophrenia?
         </span><br><br><br><br>
 				
-				<p style="font-size:18px; padding-left:0px; width:1100px;"><br>Systems-level questions like these will define the next 50 years of neuroscience. <br>
+				<p id="page2Text">
+          <br>
+          Systems-level questions like these will define the next 50 years of neuroscience. <br>
           <b>We built Golgi to help people answer these kinds of questions.</b><br><br><br>
           Golgi makes it easy for scientists to aggregate data about the brain into high-level explanations.<br>
 					<b>This lets them do better science faster. For free.</b>
@@ -78,24 +80,23 @@
     		</div>
     	</div>
     </div>
-    <div style="position: absolute; left:0px; top:1800px; width:100%; z-index:10;">
-    	<div style="position: relative; margin-left:auto; margin-right:auto; width:1280px; height:700px; padding-top:100px;">
-
-        <p style="font-size:18px; padding-left:0px; width:1100px;">
+    <div id="page3">
+    	<div id="page3center">
+        <p id="page3title">
     		  Golgi combines sourced data about the brain's connectivity, cellular makeup, and molecular profile onto a streamlined anatomical map.
         </p>
-        <img src="img/screenshot/1_thumb.png" width="100" height="100" style="position: absolute; left:150px; top:250px; border-radius: 100px; cursor:pointer;" onclick="showScreen(1)"/>
-        <img src="img/screenshot/2_thumb.png" width="100" height="100" style="position: absolute; left:350px; top:250px; border-radius: 100px; cursor:pointer;" onclick="showScreen(2)"/>
-        <img src="img/screenshot/3_thumb.png" width="100" height="100" style="position: absolute; left:550px; top:250px; border-radius: 100px; cursor:pointer;" onclick="showScreen(3)"/>
-        <img src="img/screenshot/4_thumb.png" width="100" height="100" style="position: absolute; left:750px; top:250px; border-radius: 100px; cursor:pointer;" onclick="showScreen(4)"/>
-        <img src="img/screenshot/5_thumb.png" width="100" height="100" style="position: absolute; left:950px; top:250px; border-radius: 100px; cursor:pointer;" onclick="showScreen(5)"/>
-        <span style="position: absolute; left:140px; top:370px; width:140px; height:30px; font-weight: 700;">Start by searching for a brain region</span>
-        <span style="position: absolute; left:340px; top:370px; width:140px; height:30px; font-weight: 700;">Find its input and output connections</span>
-        <span style="position: absolute; left:540px; top:370px; width:140px; height:30px; font-weight: 700;">Get a clear story about the real data</span>
-        <span style="position: absolute; left:740px; top:370px; width:140px; height:30px; font-weight: 700;">Visualize selected data on the map</span>
-        <span style="position: absolute; left:940px; top:370px; width:140px; height:30px; font-weight: 700;">Save private notes and ideas for later</span>
+        <img src="img/screenshot/1_thumb.png" width="100" height="100" class="page3Img" style="left:150px;" onclick="showScreen(1)"/>
+        <img src="img/screenshot/2_thumb.png" width="100" height="100" class="page3Img" style="left:350px;" onclick="showScreen(2)"/>
+        <img src="img/screenshot/3_thumb.png" width="100" height="100" class="page3Img" style="left:550px;" onclick="showScreen(3)"/>
+        <img src="img/screenshot/4_thumb.png" width="100" height="100" class="page3Img" style="left:750px;" onclick="showScreen(4)"/>
+        <img src="img/screenshot/5_thumb.png" width="100" height="100" class="page3Img" style="left:950px;" onclick="showScreen(5)"/>
+        <span style="left:140px;" class="page3description">Start by searching for a brain region</span>
+        <span style="left:340px;" class="page3description">Find its input and output connections</span>
+        <span style="left:540px;" class="page3description">Get a clear story about the real data</span>
+        <span style="left:740px;" class="page3description">Visualize selected data on the map</span>
+        <span style="left:940px;" class="page3description">Save private notes and ideas for later</span>
 
-        <p style="position:absolute; top:520px; font-size:18px; padding-left:0px; width:1100px;">
+        <p id="page3conclusion">
           Now researchers have a tool that helps them synthesize reports of different types of data in one common framework.<br>
           This makes it easier for them to explore the type of nuanced systems-level questions that lie underneath many diseases.<br><br><br>
           <a href="golgi.php"><button class="btn btn-success" style="margin-left:950px;"><span class="glyphicon glyphicon-hand-up"></span> Try it out </button></a>
@@ -104,8 +105,8 @@
     	</div>
     </div>
 
-    <div style="position: absolute; left:0px; top:2500px; width:100%; z-index:10;">
-      <div style="position: relative; margin-left:auto; margin-right:auto; width:1280px; height:900px; padding-top:100px;">
+    <div id="page4">
+      <div id="page4center">
         <h3>Some questions we often get about Golgi:</h3><br>
         <p>
           <i>Why does the map look the way it does?</i>
@@ -166,71 +167,6 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script>
-      function showScreen(pass)
-      {
-        document.getElementById('screenShotImg').src = "img/screenshot/" + pass + ".png";
-        $('#screenShotModal').modal('toggle');
-      }
-      
-
-      // 2. This code loads the IFrame Player API code asynchronously.
-      var tag = document.createElement('script');
-
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      // 3. This function creates an <iframe> (and YouTube player)
-      //    after the API code downloads.
-      var player;
-      function onYouTubeIframeAPIReady() {
-        window.player = new YT.Player('player', {
-          height: '720',
-          width: '1280',
-          videoId: 't0Hl3R3QoZA',
-          events: {
-            // 'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-          }
-        });
-      }
-
-      // 4. The API will call this function when the video player is ready.
-      function onPlayerReady(event) {
-        // event.target.playVideo();
-        window.player.playVideo();
-      }
-
-      // 5. The API calls this function when the player's state changes.
-      //    The function indicates that when playing a video (state=1),
-      //    the player should play for six seconds and then stop.
-      var done = false;
-      function onPlayerStateChange(event) {
-        // if (event.data == YT.PlayerState.PLAYING && !done) {
-        //   done = true;
-        // }
-        if (event.data == YT.PlayerState.PAUSED) {
-          $('#overlay').fadeIn(500);
-        }
-      }
-      function stopVideo() {
-        player.stopVideo();
-      }
-
-      function toggleOverlay()
-      {
-      	if(document.getElementById('overlay').style.display != "none")
-      	{
-      		$('#overlay').fadeOut(500);	
-      	}
-      	else
-      	{
-      		$('#overlay').fadeIn(500);
-      	}
-      	
-      	onPlayerReady(window.player);
-      }
-    </script>
+    <script src="js/landing.js"></script>
   </body>
 </html>

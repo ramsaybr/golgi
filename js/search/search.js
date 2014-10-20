@@ -374,6 +374,24 @@ function searchViewCnxs()
 	mapDataAddConnections();
 }
 
+function searchViewMols()
+{
+	//hide searchResultsDiv
+	//closeSearch();
+	clickedRegion(addRegion());
+	mapDataAddData();
+	mapDataAddMolecules();
+}
+
+function searchViewCells()
+{
+	//hide searchResultsDiv
+	//closeSearch();
+	clickedRegion(addRegion());
+	mapDataAddData();
+	mapDataAddCells();
+}
+
 function searchSaveNote()
 {
 	if(window.logged)

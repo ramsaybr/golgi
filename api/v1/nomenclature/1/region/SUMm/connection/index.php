@@ -31,8 +31,20 @@ while($thisConnection = mysql_fetch_array($connectionQuery))
 	$thisResponse['targetAbbrev'] = $targetQ['abbreviation'];
 	$thisResponse['species'] = $speciesQ['name'];
 	$thisResponse['nomenclature'] = $nomenclatureQ['name'];
-	$thisResponse['dimensions'] = array($thisConnection['width'], $thisConnection['height']);
-	$thisResponse['coordinatePlot'] = array($thisConnection['X'], $thisConnection['Y']);
+
+	$responseDimensions = array();
+	$responseDimensions[0] = $thisConnection['width'];
+	$responseDimensions[1] = $thisConnection['height'];
+	$thisResponse['dimensions'] = $responseDimensions;
+
+	$responsePlot = array();
+	$responsePlot[0] = $thisConnection['X'];
+	$responsePlot[1] = $thisConnection['Y'];
+	$thisResponse['coordinatePlot'] = $responsePlot;
+
+
+	// $thisResponse['dimensions'] = array($thisConnection['width'], $thisConnection['height']);
+	// $thisResponse['coordinatePlot'] = array($thisConnection['X'], $thisConnection['Y']);
 	$thisResponse['destination'] = "searchResults";
 	$thisResponse['otherLayers'] = false;
 	
@@ -69,7 +81,10 @@ while($thisConnection = mysql_fetch_array($connectionQuery))
 		if($_COOKIE['UID'] != "")
 		{
 			//user is logged in. find notes
-			$notesQuery = mysql_query("SELECT * FROM note WHERE UID='" . $_COOKIE['UID'] . "' AND itemType=2 AND itemID=" . $thisResponse['bamsID'] . " ORDER BY dateTime DESC");
+			//get real UID first
+			$UIDQ = mysql_fetch_assoc(mysql_query("SELECT * FROM golgiUser WHERE userID='" . $_COOKIE['UID'] . "'"));
+			$UID = $UIDQ['UID'];
+			$notesQuery = mysql_query("SELECT * FROM note WHERE UID='" . $UID . "' AND itemType=2 AND itemID=" . $thisResponse['bamsID'] . " ORDER BY dateTime DESC");
 			while($thisNote = mysql_fetch_assoc($notesQuery))
 			{
 				$newNote = array();

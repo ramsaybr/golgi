@@ -2,17 +2,15 @@
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="8.127px" height="13.008px" viewBox="0 0 8.127 13.008" enable-background="new 0 0 8.127 13.008" xml:space="preserve">
+	 width="9.716px" height="10.549px" viewBox="-2.011 -1.406 9.716 10.549" enable-background="new -2.011 -1.406 9.716 10.549"
+	 xml:space="preserve">
 <g>
 	<g>
+		<path fill="none" stroke="#58B658" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M-0.595,0.066
+			c1.98,1.641,6.194,5.364,7.363,8.248"/>
 		<g>
-			<path fill="none" stroke="#07B9D4" stroke-miterlimit="10" d="M2,1.901c0,0,1.764,1.258,0.976,2.428L1.566,6.021
-				c0,0-0.584,0.624,0.806,2.015l4.86,3.865"/>
-			<g>
-				<polygon fill="#07B9D4" points="4.618,11.987 7.001,11.716 6.729,9.333 7.855,10.229 8.127,12.611 5.745,12.883 				"/>
-			</g>
+			<circle fill="#58B658" cx="-0.54" cy="0.113" r="1.41"/>
 		</g>
 	</g>
-	<circle fill="#07B9D4" cx="2" cy="2" r="2"/>
 </g>
 </svg>

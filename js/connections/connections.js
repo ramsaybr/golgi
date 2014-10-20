@@ -23,6 +23,8 @@ function Connection(bamsID, sourceID, sourceName, sourceAbbrev, targetID, target
 	this.dimensions = dimensions;
 	this.notes = notes;
 	this.fileToDraw1 = "img/connections/zoom1/" + this.sourceAbbrev + "-" + this.targetAbbrev + ".svg";
+
+	console.log(this);
 	
 	this.evidence = [];
 	//instantiate evidence reports for this connection

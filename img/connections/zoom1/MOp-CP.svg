@@ -2,20 +2,15 @@
 <!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="78.188px" height="35.36px" viewBox="0 0 78.188 35.36" enable-background="new 0 0 78.188 35.36" xml:space="preserve">
+	 width="81.14px" height="37.86px" viewBox="0 0 81.14 37.86" enable-background="new 0 0 81.14 37.86" xml:space="preserve">
 <g>
-	<circle fill="#07B9D4" cx="242" cy="362" r="2"/>
 	<g>
+		<path fill="none" stroke="#59B657" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M1.339,1.201
+			C43.969,0.208,48.007,2.886,65.265,9.28c0,0,0.012,0.012,0.016,0.016c4.779,4.784,7.465,8.63,11.975,12.261
+			c0.465,0.375,1.666,0.871,1.967,1.363c0.379,0.621,0.027,1.204-1.348,1.476c-5.6,1.107-21.881,8.898-25.278,11.742"/>
 		<g>
-			<g>
-				<path fill="none" stroke="#07B9D4" stroke-miterlimit="10" d="M2,2c0,0,1.649,5.734,5.575,5.734c0,0,15.839-1.439,26.592-0.946
-					c10.753,0.493,27.513,2.188,31.298,3.2l11.752,12.055c0,0,1.658,2.145-0.914,2.969c0,0-6.784,0.69-20.764,9.108"/>
-				<g>
-					<polygon fill="#07B9D4" points="56.416,31.67 55.804,33.989 58.124,34.6 56.88,35.325 54.562,34.714 55.172,32.396 					"/>
-				</g>
-			</g>
+			<circle fill="#59B657" cx="1.41" cy="1.211" r="1.41"/>
 		</g>
-		<circle fill="#07B9D4" cx="2" cy="2" r="2"/>
 	</g>
 </g>
 </svg>
