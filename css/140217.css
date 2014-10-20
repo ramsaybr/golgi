@@ -74,14 +74,15 @@
 #searchResultsName{
 	position: absolute;
 	left:10px;
-	top:10px;
+	top:22px;
+	line-height: 1;
 	font-size:14px;
 	font-weight: 700;
 }
 #searchResultsType{
 	position: absolute;
 	left:10px;
-	top:40px;
+	top:55px;
 	font-size:12px;
 }
 
