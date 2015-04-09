@@ -123,6 +123,7 @@ window.searchable.push("Interstitial nucleus of Cajal (INC)");
 window.searchable.push("Lateral cervical nucleus (LCN)");
 window.searchable.push("Lateral dorsal nucleus of thalamus (LD)");
 window.searchable.push("Lateral habenula (LH)");
+window.searchable.push("Lateral Hypothalamic Area, anterior division (LHAa)");
 window.searchable.push("Lateral mammillary nucleus (LM)");
 window.searchable.push("Lateral posterior nucleus of the thalamus (LP)");
 window.searchable.push("Lateral preoptic area (LPO)");
