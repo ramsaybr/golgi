@@ -203,6 +203,7 @@ window.searchable.push("Paramedian reticular nucleus (PMR)");
 window.searchable.push("Parasolitary nucleus (PAS)");
 window.searchable.push("Parastrial nucleus (PS)");
 window.searchable.push("Parasubiculum (PAR)");
+window.searchable.push("Paratenial Nucleus (PT)");
 window.searchable.push("Paratrigeminal nucleus (PAT)");
 window.searchable.push("Paraventricular nucleus of the hypothalamus, descending division (PVHd)");
 window.searchable.push("Paraventricular nucleus of the hypothalamus, magnocellular division (PVHm)");
